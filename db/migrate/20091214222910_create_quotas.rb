@@ -2,7 +2,6 @@ class CreateQuotas < ActiveRecord::Migration
   def self.up
     create_table :quotas do |t|
       t.column :user_id, :integer
-      t.column :project_id, :integer
       t.column :quota, :decimal
     end
   end

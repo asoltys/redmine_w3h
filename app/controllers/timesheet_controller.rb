@@ -28,6 +28,15 @@ class TimesheetController < ApplicationController
     end
   end
 
+  def mytimesheet
+    timesheet = {} 
+    timesheet[:sort] = 'user'
+    timesheet[:users] = [User.current.id]
+    timesheet[:period_type] = 1
+    timesheet[:period] = 'current_week'
+    redirect_to :action => 'report', :params => {:timesheet => timesheet}
+  end
+
   def report
     if params && params[:timesheet]
       @timesheet = Timesheet.new( params[:timesheet] )
@@ -35,7 +44,7 @@ class TimesheetController < ApplicationController
       redirect_to :action => 'index'
       return
     end
-    
+      
     @timesheet.allowed_projects = allowed_projects
     
     if @timesheet.allowed_projects.empty?

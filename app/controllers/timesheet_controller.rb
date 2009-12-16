@@ -95,7 +95,17 @@ class TimesheetController < ApplicationController
       format.csv  { send_data @timesheet.to_csv, :filename => 'timesheet.csv', :type => "text/csv" }
     end
   end
-  
+
+  def settings
+    @user = User.current
+    if request.post?
+      @user.quota = params[:user][:quota]
+      if @user.save
+        flash[:notice] = l(:notice_account_updated)
+      end
+    end
+  end
+
   def context_menu
     @time_entries = TimeEntry.find(:all, :conditions => ['id IN (?)', params[:ids]])
     render :layout => false

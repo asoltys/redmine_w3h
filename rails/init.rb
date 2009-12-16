@@ -1,4 +1,5 @@
 require 'redmine'
+require_dependency 'view_my_account_contextual_hook'
 
 unless Redmine::Plugin.registered_plugins.keys.include?(:timesheet_plugin)
   Redmine::Plugin.register :timesheet_plugin do

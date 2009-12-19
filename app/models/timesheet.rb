@@ -22,6 +22,8 @@ class Timesheet
     :free_period => 0,
     :default => 1
   }
+
+  WORKING_HOURS = 7.5
   
   def initialize(options = { })
     self.projects = [ ]
@@ -106,6 +108,29 @@ class Timesheet
       self.date_from = self.date_to = nil
     end
     self
+  end
+
+  def quota
+    if self.date_from.is_a?(String)
+      self.date_from = Date.parse(self.date_from)
+      self.date_to = Date.parse(self.date_to)
+    end
+
+    unless self.date_from.nil?
+      return self.date_from.weekdays_until(self.date_to) * WORKING_HOURS
+    end
+  end
+
+  def required
+    return quota * users.length unless quota.nil?
+  end
+
+  def spent
+    time_entries.map do |project,entries| 
+      entries[:logs].map do |e| 
+        e.hours
+      end
+    end.flatten.sum
   end
 
   def to_param

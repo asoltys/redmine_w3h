@@ -1,4 +1,5 @@
 require 'redmine'
+require 'weekdays'
 require_dependency 'view_my_account_contextual_hook'
 
 unless Redmine::Plugin.registered_plugins.keys.include?(:timesheet_plugin)
@@ -28,3 +29,4 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:timesheet_plugin)
 
   end
 end
+

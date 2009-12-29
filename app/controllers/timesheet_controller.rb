@@ -32,8 +32,9 @@ class TimesheetController < ApplicationController
     timesheet = {} 
     timesheet[:sort] = 'user'
     timesheet[:users] = [User.current.id]
-    timesheet[:period_type] = 1
-    timesheet[:period] = 'current_week'
+    timesheet[:period_type] = 9
+    timesheet[:date_from] = 10.weekdays_ago.strftime('%Y-%m-%d')
+    timesheet[:date_to] = Date.today
     redirect_to :action => 'report', :params => {:timesheet => timesheet}
   end
 

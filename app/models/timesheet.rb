@@ -133,6 +133,14 @@ class Timesheet
     end.flatten.sum
   end
 
+  def billed
+    time_entries.map do |project,entries| 
+      entries[:logs].map do |e| 
+        (e.issue.nil? || e.issue.deliverable.nil?) ? 0 : e.hours
+      end
+    end.flatten.sum
+  end
+
   def to_param
     {
       :projects => projects.collect(&:id),

@@ -1,5 +1,6 @@
 module TimesheetHelper
   def showing_users(users)
+    return '' if users.nil? || users.empty?
     l(:timesheet_showing_users) + users.collect(&:name).join(', ')
   end
 

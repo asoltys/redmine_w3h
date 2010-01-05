@@ -19,11 +19,6 @@
   </span>
 </p>
 
-<p>
-  <label for="timesheet_sort"><%= l(:timesheet_group_by) %>:</label><br />
-  <%= select_tag("timesheet[sort]", options_for_select(Timesheet::ValidSortOptions.invert, @timesheet.sort)) %>
-
-</p>
 
 <p>
   <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
@@ -32,7 +27,6 @@
     { :multiple => true, :size => @list_size}
   %>
 </p>
-
 
 <p>
   <label for="timesheet[activities][]" class="select_all"><%= l(:timesheet_activities_label)%>:</label><br />

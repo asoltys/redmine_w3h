@@ -30,10 +30,9 @@ class TimesheetController < ApplicationController
 
   def mytimesheet
     timesheet = {} 
-    timesheet[:sort] = 'user'
     timesheet[:users] = [User.current.id]
     timesheet[:period_type] = 9
-    timesheet[:date_from] = 10.weekdays_ago.strftime('%Y-%m-%d')
+    timesheet[:date_from] = 4.weekdays_ago.strftime('%Y-%m-%d')
     timesheet[:date_to] = Date.today
     redirect_to :action => 'report', :params => {:timesheet => timesheet}
   end
@@ -69,22 +68,12 @@ class TimesheetController < ApplicationController
 
     # Sums
     @total = { }
-    unless @timesheet.sort == :issue
-      @timesheet.time_entries.each do |project,logs|
-        @total[project] = 0
-        if logs[:logs]
-          logs[:logs].each do |log|
-            @total[project] += log.hours
-          end
-        end
-      end
-    else
-      @timesheet.time_entries.each do |project, project_data|
-        @total[project] = 0
-        if project_data[:issues]
-          project_data[:issues].each do |issue, issue_data|
-            @total[project] += issue_data.collect(&:hours).sum
-          end
+
+    @timesheet.time_entries.each do |project,logs|
+      @total[project] = 0
+      if logs[:logs]
+        logs[:logs].each do |log|
+          @total[project] += log.hours
         end
       end
     end

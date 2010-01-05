@@ -1,51 +1,46 @@
-<div class="contextual">
-  <%= link_to_csv_export(@timesheet) %>
-  <%= permalink_to_timesheet(@timesheet) %>
-</div>
+<% content_for(:header_tags) do %>
+<%= javascript_include_tag 'timesheet', :plugin => "timesheet_plugin" %>
+<%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
+<% end %>
 
 <h2><%= l(:timesheet_title)%></h2>
 
-<%= render :partial => 'form' %>
+<p><a href="#" id="form-toggle">Show Form</a></p>
+<%= render :partial=> 'form' %>
 
-<%= call_hook(:plugin_timesheet_views_timesheets_report_before_time_entries, { :timesheet => @timesheet }) %>
+<div class="totals">
+  <h2>Summary</h2>
+  <table>
+    <tr>
+      <td>Non-Billable Hours:</td>
+      <td><%= h(number_with_precision(@timesheet.unbilled, @precision)) -%></td>
+    </tr>
+    <tr>
+      <td>Billable Hours:</td>
+      <td><%= h(number_with_precision(@timesheet.billed)) %></td>
+    </tr>
+    <tr>
+      <td>Total:</td>
+      <td><%= h(number_with_precision(@timesheet.total)) %></td>
+    </tr>
+    <tr>
+      <td>Required:</td>
+      <td><%= h(number_with_precision(@timesheet.required)) %></td>
+    </tr>
+  </table>
+</div>
 
-<% form_tag({}, { :id => 'time_entries'}) do -%>
-<% if @timesheet.time_entries.length > 0 %>
-<h2><%= l(:label_spent_time) %>: <%= h(number_with_precision(@timesheet.spent, @precision)) -%></h2>
-<h2>Billed time: <%= h(number_with_precision(@timesheet.billed)) %></h2>
-<h2>Required time: <%= h(number_with_precision(@timesheet.required)) %></h2>
+<% @timesheet.time_entries.each do |entryname,entry| %>
+   <h3>
+    <%= h entryname -%> 
+    (<%= h number_with_precision(@total[entryname], @precision) %> hours)
+   </h3> 
 
-<% @timesheet.time_entries.each do |entryname,entry|
-    case @timesheet.sort
-    when :user %>
-   <h3><%= h entryname -%> (<%= h number_with_precision(@total[entryname], @precision) %> / <%= @timesheet.quota %> <%= h(l(:field_hours)) -%>)</h3>
-   <%= render :partial => 'timesheet_group', :locals => {:entry => entry, :name => entryname, :total => @total[entryname] } %>
-<% when :issue %>
-   <h3><%= h entryname -%> (<%= h number_with_precision(@total[entryname], @precision) %> <%= h(l(:field_hours)) -%>)</h3>
-   <%= render :partial => 'by_issue', :locals => {:entry => entry, :name => entryname, :total => 0 } %>
-<% else %>
-<%# Default to :project %>
-   <h3><%= h entryname -%> (<%= h number_with_precision(@total[entryname], @precision) %> <%= h(l(:field_hours)) -%>) <%= showing_users(entry[:users]) %></h3> 
-   <%= render :partial => 'timesheet_group', :locals => {:entry => entry, :name => entryname, :total => @total[entryname] } %>
+   <%= render :partial => 'timesheet_group', 
+    :locals => {
+      :entry => entry, 
+      :name => entryname, 
+      :total => @total[entryname]
+     } %>
+<% end -%>
 
-<% end
-end # each
-end # length
-end # form_tag
--%>
-
-<% content_for(:header_tags) do %>
-<%= javascript_include_tag 'context_menu' %>
-<%= stylesheet_link_tag 'context_menu' %>
-<%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
-<%# TODO: Typo on hook %>
-<%= call_hook(:plugin_timesheet_view_timesheets_report_header_tags, { :timesheet => @timesheet }) %>
-<%= call_hook(:plugin_timesheet_views_timesheets_report_header_tags, { :timesheet => @timesheet }) %>
-<% end %>
-
-<div id="context-menu" style="display: none;"></div>
-<%= javascript_tag "new ContextMenu('#{url_for(:controller => 'timesheet', :action => 'context_menu')}')" %>
-
-<%# TODO: Typo on hook %>
-<%= call_hook(:plugin_timesheet_view_timesheets_report_bottom, { :timesheet => @timesheet }) %>
-<%= call_hook(:plugin_timesheet_views_timesheets_report_bottom, { :timesheet => @timesheet }) %>

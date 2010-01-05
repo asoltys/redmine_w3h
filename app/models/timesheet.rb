@@ -1,5 +1,5 @@
 class Timesheet
-  attr_accessor :date_from, :date_to, :projects, :activities, :users, :allowed_projects, :period, :period_type
+  attr_accessor :date_from, :date_to, :projects, :activities, :agreements, :users, :allowed_projects, :period, :period_type
 
   # Time entries on the Timesheet in the form of:
   #   project.name => {:logs => [time entries], :users => [users shown in logs] }
@@ -117,7 +117,7 @@ class Timesheet
     end
 
     unless self.date_from.nil?
-      return self.date_from.weekdays_until(self.date_to) * WORKING_HOURS
+      return (self.date_from.weekdays_until(self.date_to) + 1) * WORKING_HOURS
     end
   end
 
@@ -125,7 +125,7 @@ class Timesheet
     return quota * users.length unless quota.nil?
   end
 
-  def spent
+  def total 
     time_entries.map do |project,entries| 
       entries[:logs].map do |e| 
         e.hours
@@ -139,6 +139,10 @@ class Timesheet
         (e.issue.nil? || e.issue.deliverable.nil?) ? 0 : e.hours
       end
     end.flatten.sum
+  end
+
+  def unbilled
+    total - billed
   end
 
   def to_param

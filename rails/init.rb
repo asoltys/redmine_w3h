@@ -2,6 +2,12 @@ require 'redmine'
 require 'weekdays'
 require_dependency 'view_my_account_contextual_hook'
 
+# Patches to the Redmine core.
+require 'timesheet_issue_patch'
+Dispatcher.to_prepare do
+  Issue.send(:include, TimesheetIssuePatch)
+end
+
 unless Redmine::Plugin.registered_plugins.keys.include?(:timesheet_plugin)
   Redmine::Plugin.register :timesheet_plugin do
     name 'Timesheet Plugin'

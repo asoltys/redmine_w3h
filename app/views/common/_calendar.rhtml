@@ -1,0 +1,50 @@
+<% content_for(:header_tags) do %>
+<%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
+<% end %>
+
+<table class="cal">
+<thead>
+<tr><td></td><% 7.times do |i| %><th><%= day_name( (calendar.first_wday+i)%7 ) %></th><% end %></tr>
+</thead>
+<tbody>
+<tr>
+<% day = calendar.startdt
+while day <= calendar.enddt %>
+<% issues = calendar.events_on(day).select{|i| i.is_a?(Issue) && i.assigned_to == User.current} %>
+
+<%= "<th>#{day.cweek}</th>" if day.cwday == calendar.first_wday %>
+<td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %>">
+<p class="day-num"><%= day.day %></p>	
+<% logged_time = TimeEntry.find(:all, :conditions => ["time_entries.user_id = ? AND time_entries.spent_on = ?", User.current.id, day]).map{|e| e.hours}.sum  %>
+<% if day.weekday? || logged_time > 0 %>
+<div class="logged-time <%= 'delinquent' if day.weekday? && logged_time < Timesheet::WORKING_HOURS %>">
+  Logged <a href="<%= "/timesheet/report?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=9" %>"><%= logged_time %> hours</a>
+</div>
+<% end %>
+<% issues.each do |i| %>
+  <% if ((i.is_a? Issue) && (i.assigned_to == User.current)) %>
+  <div class="<%= i.css_classes %> tooltip">
+  <%= if day == i.start_date && day == i.due_date
+        image_tag('arrow_bw.png')
+      elsif day == i.start_date
+        image_tag('arrow_from.png') 
+      elsif day == i.due_date
+		image_tag('arrow_to.png') 
+      end %>
+  <%= h("#{i.project} -") unless @project && @project == i.project %>
+  <%= link_to_issue i, :truncate => 30 %>
+  </div>
+  <% else %>
+  <span class="icon icon-package">  
+    <%= h("#{i.project} -") unless @project && @project == i.project %>
+    <%= link_to_version i%>
+  </span>
+  <% end %>
+<% end %>
+</td>
+<%= '</tr><tr>' if day.cwday==calendar.last_wday and day!=calendar.enddt %>
+<% day = day + 1
+end %>
+</tr>
+</tbody>
+</table>

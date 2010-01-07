@@ -17,7 +17,10 @@ while day <= calendar.enddt %>
 <p class="day-num"><%= day.day %></p>	
 <% logged_time = TimeEntry.find(:all, :conditions => ["time_entries.user_id = ? AND time_entries.spent_on = ?", User.current.id, day]).map{|e| e.hours}.sum  %>
 <% if day.weekday? || logged_time > 0 %>
-<div class="logged-time <%= 'delinquent' if day.weekday? && logged_time < Timesheet::WORKING_HOURS %>">
+<% logged_time_class = '' %>
+<% logged_time_class = 'delinquent' if day.past? && logged_time < Timesheet::WORKING_HOURS %>
+<% logged_time_class = 'overtime' if logged_time >= Timesheet::WORKING_HOURS %>
+<div class="logged-time <%= logged_time_class %>">
   Logged <a href="<%= "/timesheet/report?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=9" %>"><%= logged_time %> hours</a>
 </div>
 <% end %>

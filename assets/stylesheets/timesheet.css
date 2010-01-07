@@ -10,6 +10,10 @@ div.totals {
   font-style: none;
 }
 
-div.logged-time {background:#eeffee; padding:6px; margin-bottom:6px;border: 1px solid #d7d7d7;}
+div.logged-time {background:#ffffdd; padding:6px; margin-bottom:6px;border: 1px solid #d7d7d7;}
 div.logged-time.delinquent{background: #ffeeee;}
+div.logged-time.overtime{background: #eeffee;}
 div.issue img.gravatar { padding: 0; }
+table.cal td.today { background: none; }
+div.issue.closed { background: #eeffee; }
+div.issue.overdue { background: #ffeeee; }

@@ -5,8 +5,8 @@
     <th><%= l(:label_project) %></th>
     <th><%= l(:label_issue) %></th>
     <th><%= l(:field_comments) %></th>
-    <th><%= l(:field_hours) %>
-    <%= Redmine::Hook.call_hook(:plugin_timesheet_views_timesheet_group_header, { }) %>
+    <th><%= l(:field_hours) %></th>
+    <th></th>
   </thead>
   <tbody>
     <%= render :partial => "time_entry", :collection => entry[:logs] %>

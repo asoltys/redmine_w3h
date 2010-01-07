@@ -117,7 +117,7 @@ class Timesheet
     end
 
     unless self.date_from.nil?
-      return (self.date_from.weekdays_until(self.date_to) + 1) * WORKING_HOURS
+      return (self.date_from.weekdays_until(self.date_to) + (self.date_to.weekday? ? 1 : 0)) * WORKING_HOURS
     end
   end
 

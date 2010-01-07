@@ -24,6 +24,8 @@ while day <= calendar.enddt %>
 <% issues.each do |i| %>
   <% if ((i.is_a? Issue) && (i.assigned_to == User.current)) %>
   <div class="<%= i.css_classes %> tooltip">
+	<%= avatar(i.assigned_to, :size => "24") %>
+
   <%= if day == i.start_date && day == i.due_date
         image_tag('arrow_bw.png')
       elsif day == i.start_date

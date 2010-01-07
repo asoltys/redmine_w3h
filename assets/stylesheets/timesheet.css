@@ -12,3 +12,4 @@ div.totals {
 
 div.logged-time {background:#eeffee; padding:6px; margin-bottom:6px;border: 1px solid #d7d7d7;}
 div.logged-time.delinquent{background: #ffeeee;}
+div.issue img.gravatar { padding: 0; }

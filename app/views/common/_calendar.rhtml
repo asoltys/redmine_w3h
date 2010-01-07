@@ -10,7 +10,7 @@
 <tr>
 <% day = calendar.startdt
 while day <= calendar.enddt %>
-<% issues = calendar.events_on(day).select{|i| i.is_a?(Issue) && i.assigned_to == User.current} %>
+<% issues = calendar.events_on(day).select{|i| i.is_a?(Issue)} %>
 
 <%= "<th>#{day.cweek}</th>" if day.cwday == calendar.first_wday %>
 <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %>">
@@ -22,7 +22,7 @@ while day <= calendar.enddt %>
 </div>
 <% end %>
 <% issues.each do |i| %>
-  <% if ((i.is_a? Issue) && (i.assigned_to == User.current)) %>
+  <% if (i.is_a? Issue) %>
   <div class="<%= i.css_classes %> tooltip">
 	<%= avatar(i.assigned_to, :size => "24") %>
 

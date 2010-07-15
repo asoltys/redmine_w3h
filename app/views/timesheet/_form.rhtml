@@ -41,8 +41,15 @@
   <%= select_tag 'timesheet[users][]',
     options_from_collection_for_select(User.find(:all, :conditions => ['status = ?', User::STATUS_ACTIVE]).sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }, :id, :name, @timesheet.users),
     { :multiple => true, :size => @list_size}
+   %>
+</p>
 
-           %>
+<p>
+  <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_agreements_label)%>:</label><br />
+  <%= select_tag 'timesheet[deliverables][]',
+    options_from_collection_for_select(Deliverable.find(:all), :id, :name, @timesheet.deliverables),
+    { :multiple => true, :size => @list_size}
+   %>
 </p>
 
 <%# TODO: Typo on hook %>

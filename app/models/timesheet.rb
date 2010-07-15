@@ -1,5 +1,5 @@
 class Timesheet
-  attr_accessor :date_from, :date_to, :projects, :activities, :agreements, :users, :allowed_projects, :period, :period_type
+  attr_accessor :deliverables, :date_from, :date_to, :projects, :activities, :agreements, :users, :allowed_projects, :period, :period_type
 
   # Time entries on the Timesheet in the form of:
   #   project.name => {:logs => [time entries], :users => [users shown in logs] }
@@ -41,6 +41,12 @@ class Timesheet
       self.users = options[:users].collect { |u| u.to_i }
     else
       self.users = User.find(:all).collect(&:id)
+    end
+
+    unless options[:deliverables].nil?
+      self.deliverables = options[:deliverables].collect { |d| d.to_i }
+    else
+      self.deliverables = []
     end
 
     if !options[:sort].nil? && options[:sort].respond_to?(:to_sym) && ValidSortOptions.keys.include?(options[:sort].to_sym)
@@ -151,6 +157,7 @@ class Timesheet
       :date_from => date_from,
       :date_to => date_to,
       :activities => activities,
+      :deliverables => deliverables,
       :users => users,
       :sort => sort
     }
@@ -223,22 +230,30 @@ class Timesheet
                         :to => self.date_to,
                         :projects => self.projects,
                         :activities => self.activities,
-                        :users => users
+                        :users => users,
+                        :deliverables => deliverables
                       }]
       else # All time
         conditions = ["#{TimeEntry.table_name}.project_id IN (:projects) AND user_id IN (:users) AND (activity_id IN (:activities) OR (#{Enumeration.table_name}.parent_id IN (:activities) AND #{Enumeration.table_name}.project_id IN (:projects)))",
                       {
                         :projects => self.projects,
                         :activities => self.activities,
-                        :users => users
+                        :users => users,
+                        :deliverables => deliverables
                       }]
       end
     else
       conditions = ["user_id IN (:users) AND #{TimeEntry.table_name}.id IN (:potential_time_entries)",
                     {
                       :users => users,
+                      :deliverables => deliverables,
                       :potential_time_entries => self.potential_time_entry_ids
                     }]
+    end
+
+    unless self.deliverables.empty?
+      conditions[0] += " AND #{TimeEntry.table_name}.deliverable_id IN (:deliverables)"
+      conditions[1][:deliverables] = deliverables
     end
       
     Redmine::Hook.call_hook(:plugin_timesheet_model_timesheet_conditions, { :timesheet => self, :conditions => conditions})

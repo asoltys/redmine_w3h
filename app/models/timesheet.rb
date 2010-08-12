@@ -142,7 +142,7 @@ class Timesheet
   def billed
     time_entries.map do |project,entries| 
       entries[:logs].map do |e| 
-        (e.issue.nil? || e.issue.deliverable.nil?) ? 0 : e.hours
+        e.billable_hours
       end
     end.flatten.sum
   end

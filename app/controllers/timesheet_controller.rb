@@ -38,6 +38,11 @@ class TimesheetController < ApplicationController
   end
 
   def report
+    unless params[:deliverable_id].nil?
+      params[:timesheet] = {}
+      params[:timesheet][:deliverables] = [params[:deliverable_id]] 
+    end
+
     if params && params[:timesheet]
       @timesheet = Timesheet.new( params[:timesheet] )
     else

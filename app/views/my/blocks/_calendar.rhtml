@@ -1,6 +1,6 @@
 <h3><%= l(:label_calendar) %></h3>
 
-<% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :week)
+<% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :month)
    calendar.events = Issue.find :all,
                      :conditions => ["((start_date>=? and start_date<=?) or (due_date>=? and due_date<=?)) and #{Issue.table_name}.assigned_to_id = ?", calendar.startdt, calendar.enddt, calendar.startdt, calendar.enddt,@user.id],
                      :include => [:project, :tracker, :priority, :assigned_to] unless @user.projects.empty? %>

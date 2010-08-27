@@ -3,22 +3,28 @@
 <% form_for :timesheet, :url =>{:action => 'report'} do |f|  %>
 
 <p id="date-options">
-  <label><%= l(:label_date)%>:</label><br />
   <%= radio_button_tag 'timesheet[period_type]', '1', @timesheet.period_type == Timesheet::ValidPeriodType[:default] %>
+  <label><%= l(:label_date)%>:</label>
   <%= select_tag 'timesheet[period]', options_for_period_select((params[:timesheet].nil? ? nil : params[:timesheet][:period])),
                            :onfocus => '$("timesheet_period_type_1").checked = true;' %>
-  <br /><br />
+</p>
 
+<p>
   <%= radio_button_tag 'timesheet[period_type]', '2', @timesheet.period_type  == Timesheet::ValidPeriodType[:free_period] %>
   <span onclick="$('timesheet_period_type_2').checked = true;">
-    <label for="timesheet_date_from"><%= l(:timesheet_date_from_label)%>:</label><br />
+    <label for="timesheet_date_from"><%= l(:timesheet_date_from_label)%>:</label>
     <%= f.text_field "date_from", :size => 10 %><%= calendar_for('timesheet_date_from') %><br />
+  </span>
+</p>
 
-    <label for="timesheet_date_to"><%= l(:timesheet_date_to_label)%>:</label><br />
+<p>
+  <span onclick="$('timesheet_period_type_2').checked = true;">
+    <label for="timesheet_date_to"><%= l(:timesheet_date_to_label)%>:</label>
     <%= f.text_field "date_to", :size => 10 %><%= calendar_for('timesheet_date_to') %><br /><br />
   </span>
 </p>
 
+<br style="clear: both;" />
 
 <p>
   <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
@@ -36,10 +42,11 @@
   %>
 </p>
 
+
 <p>
   <label for="timesheet[users][]" class="select_all"><%= l(:timesheet_users_label)%>:</label><br />
   <%= select_tag 'timesheet[users][]',
-    options_from_collection_for_select(User.find(:all, :conditions => ['status = ?', User::STATUS_ACTIVE]).sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }, :id, :name, @timesheet.users),
+    options_from_collection_for_select(@timesheet.allowed_users, :id, :name, @timesheet.users),
     { :multiple => true, :size => @list_size}
    %>
 </p>
@@ -47,7 +54,7 @@
 <p>
   <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_agreements_label)%>:</label><br />
   <%= select_tag 'timesheet[deliverables][]',
-    options_from_collection_for_select(Deliverable.find(:all), :id, :name, @timesheet.deliverables),
+    options_from_collection_for_select(@timesheet.allowed_agreements, :id, :name, @timesheet.deliverables),
     { :multiple => true, :size => @list_size}
    %>
 </p>
@@ -62,30 +69,3 @@
 <% end %>
 </fieldset>
 </div>
-
-<% content_for(:header_tags) do %>
-<style type="text/css">
-#date-options { margin-left: 10px; }
-#date-options input[type='radio'] { margin-left: -20px; }
-</style>
-<script type="text/javascript">
-
-function targetField(label_element) {
-  return  $(label_element.attributes.for.value);
-}
-
-function selectAllOptions(element) {
-  for (var i = 0; i < element.options.length; i++) {
-    element.options[i].selected = true;
-  }
-}
-
-Event.observe(window, 'load',
-  function() { 
-    $$('label.select_all').each(function(element) {
-      Event.observe(element, 'click', function (e) { selectAllOptions(targetField(this)); });
-    });
-  }
-);
-</script>
-<% end %>

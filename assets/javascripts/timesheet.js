@@ -1,8 +1,17 @@
-Event.observe(window, 'load', function() {
-  $('timesheet-form').hide();
+function targetField(label_element) {
+  return  $(label_element.attributes.for.value);
+}
 
-  $('form-toggle').observe('click', function(e) {
-    $('timesheet-form').show();
-    e.element().hide();
-  });
-});
+function selectAllOptions(element) {
+  for (var i = 0; i < element.options.length; i++) {
+    element.options[i].selected = true;
+  }
+}
+
+Event.observe(window, 'load',
+  function() { 
+    $$('label.select_all').each(function(element) {
+      Event.observe(element, 'click', function (e) { selectAllOptions(targetField(this)); });
+    });
+  }
+);

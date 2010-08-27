@@ -40,7 +40,7 @@ class Timesheet
     unless options[:users].nil?
       self.users = options[:users].collect { |u| u.to_i }
     else
-      self.users = User.find(:all).collect(&:id)
+      self.users = allowed_users
     end
 
     unless options[:deliverables].nil?
@@ -114,6 +114,14 @@ class Timesheet
       self.date_from = self.date_to = nil
     end
     self
+  end
+
+  def allowed_users
+    User.find(:all, :conditions => ['status = ? AND id IN (SELECT DISTINCT user_id FROM time_entries)', User::STATUS_ACTIVE]).sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }
+  end
+
+  def allowed_agreements
+    Deliverable.current
   end
 
   def quota
@@ -405,5 +413,4 @@ class Timesheet
       end
     end
   end
-  
 end

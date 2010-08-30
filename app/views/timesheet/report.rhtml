@@ -30,16 +30,12 @@
 </div>
 
 <% @timesheet.time_entries.each do |entryname,entry| %>
-   <h3>
-    <%= h entryname -%> 
-    (<%= h number_with_precision(@total[entryname], @precision) %> hours)
-   </h3> 
+   <h3> <%= h entryname -%> </h3> 
 
    <%= render :partial => 'timesheet_group', 
     :locals => {
       :entry => entry, 
-      :name => entryname, 
-      :total => @total[entryname]
+      :name => entryname 
      } %>
 <% end -%>
 

@@ -29,13 +29,37 @@
   </table>
 </div>
 
-<% @timesheet.time_entries.each do |entryname,entry| %>
-   <h3> <%= h entryname -%> </h3> 
+<% @timesheet.users.each do |u| %>
+  <h3><%= u.name %></h3>
+  <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
+  <% @deliverables = Deliverable.find(@user_entries.map(&:deliverable_id)) %>
+  
+  <% @deliverables.each do |d| %>
+    <% @deliverable_entries = @user_entries.reject{|e| e.deliverable_id != d.id } %>
+    <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>
 
-   <%= render :partial => 'timesheet_group', 
-    :locals => {
-      :entry => entry, 
-      :name => entryname 
-     } %>
+    <h3 style="margin-left: 30px"><%= d.name %></h3>
+
+    <% @activities.each do |a| %>
+      <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
+      <h3 style="margin-left: 60px"><%= a.name %></h3>
+
+      <div style="margin-left: 60px">
+        <table class="list issues">
+          <thead>
+            <th><%= l(:label_date) %></th>
+            <th><%= l(:label_project) %></th>
+            <th><%= l(:label_issue) %></th>
+            <th><%= l(:field_comments) %></th>
+            <th><%= l(:field_hours) %></th>
+            <th></th>
+          </thead>
+          <tbody>
+          <%= render :partial => "time_entry", :collection => @activity_entries  %>
+          </tbody>
+        </table>
+      </div>
+      <br />
+    <% end %>
+  <% end %>
 <% end -%>
-

@@ -51,7 +51,85 @@ class Timesheet
     end
     self.period = options[:period] || nil
 
-    fetch_time_entries
+    self.time_entries = TimeEntry.find(
+      :all,
+      :conditions => conditions,
+      :include => [:activity, :user, :project, {:issue => [:tracker, :assigned_to, :priority]}],
+      :order => "spent_on ASC")
+  end
+
+  def available_projects
+    if User.current.admin?
+      return Project.find(:all, :order => 'name ASC')
+    else
+      return User.current.projects.find(:all, :order => 'name ASC')
+    end
+  end
+
+  def available_activities
+    TimesheetCompatibility::Enumeration::activities
+  end
+
+  def available_users
+    User.active.time_recorders.sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }
+  end
+
+  def available_deliverables
+    Deliverable.current
+  end
+
+  def required
+    return quota * users.length unless quota.nil?
+  end
+
+  def total 
+    time_entries.map(&:hours).sum
+  end
+
+  def billed
+    self.time_entries.map(&:billable_hours).sum
+  end
+
+  def unbilled
+    total - billed
+  end
+
+  private
+
+  def quota
+    if self.date_from.is_a?(String)
+      self.date_from = Date.parse(self.date_from)
+      self.date_to = Date.parse(self.date_to)
+    end
+
+    unless self.date_from.nil?
+      return (self.date_from.weekdays_until(self.date_to) + (self.date_to.weekday? ? 1 : 0)) * WORKING_HOURS
+    end
+  end
+
+  def conditions
+    conditions = [
+      "#{TimeEntry.table_name}.project_id IN (:projects)" +
+      " AND #{TimeEntry.table_name}.user_id IN (:users) " +
+      " AND #{TimeEntry.table_name}.activity_id IN (:activities)",
+      {
+        :projects => self.selected_projects,
+        :activities => self.selected_activities,
+        :users => self.selected_users
+      }]
+
+    if self.date_from && self.date_to
+      conditions[0] += " AND #{TimeEntry.table_name}.spent_on BETWEEN :from AND :to"
+      conditions[1][:from] = self.date_from
+      conditions[1][:to] = self.date_to
+    end
+
+    unless self.deliverables.empty?
+      conditions[0] += " AND #{TimeEntry.table_name}.deliverable_id IN (:deliverables)"
+      conditions[1][:deliverables] = self.selected_deliverables
+    end
+
+    return conditions
   end
 
   def period=(period)
@@ -87,106 +165,6 @@ class Timesheet
       self.date_from = self.date_to = nil
     end
 
-    self
-  end
-
-  def available_projects
-    if User.current.admin?
-      return Project.find(:all, :order => 'name ASC')
-    else
-      return User.current.projects.find(:all, :order => 'name ASC')
-    end
-  end
-
-  def available_activities
-    TimesheetCompatibility::Enumeration::activities
-  end
-
-  def available_users
-    User.active.time_recorders.sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }
-  end
-
-  def available_deliverables
-    Deliverable.current
-  end
-
-  def quota
-    if self.date_from.is_a?(String)
-      self.date_from = Date.parse(self.date_from)
-      self.date_to = Date.parse(self.date_to)
-    end
-
-    unless self.date_from.nil?
-      return (self.date_from.weekdays_until(self.date_to) + (self.date_to.weekday? ? 1 : 0)) * WORKING_HOURS
-    end
-  end
-
-  def required
-    return quota * users.length unless quota.nil?
-  end
-
-  def total 
-    time_entries.map do |project,entries| 
-      entries[:logs].map do |e| 
-        e.hours
-      end
-    end.flatten.sum
-  end
-
-  def billed
-    time_entries.map do |project,entries| 
-      entries[:logs].map do |e| 
-        e.billable_hours
-      end
-    end.flatten.sum
-  end
-
-  def unbilled
-    total - billed
-  end
-
-  protected
-
-  def conditions
-    conditions = [
-      "#{TimeEntry.table_name}.project_id IN (:projects)" +
-      " AND #{TimeEntry.table_name}.user_id IN (:users) " +
-      " AND #{TimeEntry.table_name}.activity_id IN (:activities)",
-      {
-        :projects => self.selected_projects,
-        :activities => self.selected_activities,
-        :users => self.selected_users
-      }]
-
-    if self.date_from && self.date_to
-      conditions[0] += " AND #{TimeEntry.table_name}.spent_on BETWEEN :from AND :to"
-      conditions[1][:from] = self.date_from
-      conditions[1][:to] = self.date_to
-    end
-
-    unless self.deliverables.empty?
-      conditions[0] += " AND #{TimeEntry.table_name}.deliverable_id IN (:deliverables)"
-      conditions[1][:deliverables] = self.selected_deliverables
-    end
-
-    return conditions
-  end
-
-  private
-  
-  def fetch_time_entries
-    self.time_entries = {}
-    self.projects.each do |project|
-      logs = project.time_entries.find(
-        :all,
-        :conditions => self.conditions,
-        :include => [:activity, :user, :project, {:issue => [:tracker, :assigned_to, :priority]}],
-        :order => "spent_on ASC")
-      users = logs.collect(&:user).uniq.sort
-
-      unless logs.empty?
-        self.time_entries[project.name] = { :logs => logs, :users => users }
-      end
-    end
+    return self
   end
 end

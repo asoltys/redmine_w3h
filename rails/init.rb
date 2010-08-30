@@ -5,9 +5,11 @@ require_dependency 'view_my_account_contextual_hook'
 # Patches to the Redmine core.
 require 'timesheet_issue_patch'
 require 'user_patch'
+require 'time_entry_patch'
 Dispatcher.to_prepare do
   Issue.send(:include, TimesheetIssuePatch)
-  User.send(:include, UserPatch)
+  User.send(:include, TimesheetUserPatch)
+  TimeEntry.send(:include, TimesheetTimeEntryPatch)
 end
 
 unless Redmine::Plugin.registered_plugins.keys.include?(:timesheet_plugin)

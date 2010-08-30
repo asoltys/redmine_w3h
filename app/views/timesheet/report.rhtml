@@ -40,26 +40,69 @@
 
     <h3 style="margin-left: 30px"><%= d.name %></h3>
 
-    <% @activities.each do |a| %>
-      <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
-      <h3 style="margin-left: 60px"><%= a.name %></h3>
-
-      <div style="margin-left: 60px">
-        <table class="list issues">
-          <thead>
-            <th><%= l(:label_date) %></th>
-            <th><%= l(:label_project) %></th>
-            <th><%= l(:label_issue) %></th>
-            <th><%= l(:field_comments) %></th>
-            <th><%= l(:field_hours) %></th>
-            <th></th>
-          </thead>
-          <tbody>
-          <%= render :partial => "time_entry", :collection => @activity_entries  %>
-          </tbody>
-        </table>
-      </div>
+    <div style="margin-left: 30px">
+      <table class="list issues">
+        <thead>
+          <th><%= l(:label_date) %></th>
+          <th><%= l(:label_issue) %></th>
+          <th><%= l(:field_comments) %></th>
+          <th><%= l(:field_hours) %></th>
+          <th><%= l(:field_cost) %></th>
+          <th></th>
+        </thead>
+        <tbody>
+          <% @activities.each do |a| %>
+            <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
+            <tr class="odd">
+              <td colspan="3"><strong><%= a.name %></strong></td>
+              <td align="center"><strong><%= number_with_precision(@activity_entries.map(&:hours).sum, :precision => 1) %></strong></td>
+              <td align="center"><strong><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></strong></td>
+              <td></td>
+            </tr>
+            <%= render :partial => "time_entry", :collection => @activity_entries  %>
+          <% end %>
+        </tbody>
+        <tfoot style="padding-top: 5px; padding-bottom: 5px; font-size: 14px">
+          <td colspan="3"><strong>Total:</strong></td>
+          <td align="center"><strong><%= number_with_precision(@deliverable_entries.map(&:hours).sum, :precision => 1) %></strong></td>
+          <td align="center"><strong><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></strong></td>
+        </tfoot>
+      </table>
       <br />
-    <% end %>
+    </div>
   <% end %>
+
+  <h3 style="margin-left: 30px">Non-Billable Time</h3>
+  <% @non_billable_entries = @user_entries.reject{|e| !e.deliverable_id.nil?} %>
+  <% @activities = Enumeration.find(@non_billable_entries.map(&:activity_id)) %>
+    
+  <div style="margin-left: 30px">
+    <table class="list issues">
+      <thead>
+        <th><%= l(:label_date) %></th>
+        <th><%= l(:label_issue) %></th>
+        <th><%= l(:field_comments) %></th>
+        <th><%= l(:field_hours) %></th>
+        <th><%= l(:field_cost) %></th>
+        <th></th>
+      </thead>
+      <tbody>
+        <% @activities.each do |a| %>
+          <% @activity_entries = @non_billable_entries.reject{|e| e.activity_id != a.id } %>
+          <tr class="odd">
+            <td colspan="3"><strong><%= a.name %></strong></td>
+            <td align="center"><strong><%= number_with_precision(@activity_entries.map(&:hours).sum, :precision => 1) %></strong></td>
+            <td align="center"><strong><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></strong></td>
+            <td></td>
+          </tr>
+          <%= render :partial => "time_entry", :collection => @activity_entries  %>
+        <% end %>
+      </tbody>
+      <tfoot style="padding-top: 5px; padding-bottom: 5px; font-size: 14px">
+        <td colspan="3"><strong>Total:</strong></td>
+        <td align="center"><strong><%= number_with_precision(@non_billable_entries.map(&:hours).sum, :precision => 1) %></strong></td>
+        <td align="center"><strong><%= number_to_currency(@non_billable_entries.map(&:value).sum, :precision => 2) %></strong></td>
+      </tfoot>
+    </table>
+  </div>
 <% end -%>

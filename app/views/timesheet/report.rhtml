@@ -14,14 +14,14 @@
   <% @users.each do |u| %>
     <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
 
-    <thead class="user">
+    <tbody class="user">
       <tr style="font-size: 24px;">
         <th colspan="4"></th>
         <th><%= l(:field_hours) %></th>
-        <th><%= l(:field_vwd) %></th>
+        <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
         <th></th>
       </tr>
-    </thead>
+    </tbody>
     <tbody>
       <tr style="font-size: 24px; color: #2A5685; font-weight: bold;">
         <td colspan="4">
@@ -58,8 +58,8 @@
 
       <% @activities.each do |a| %>
         <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
-        <tbody>
-          <tr style="font-weight: bold" class="activity <%= @row_class %>">
+        <tbody style="display: none;">
+          <tr style="font-weight: bold;" class="activity <%= @row_class %>">
             <td colspan="4"><%= a.name %></td>
             <td align="center"><%= number_with_precision(@activity_entries.map(&:hours).sum, :precision => 1) %></td>
             <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
@@ -73,16 +73,23 @@
             <th><%= l(:label_issue) %></th>
             <th><%= l(:field_comments) %></th>
             <th><%= l(:field_hours) %></th>
-            <th><%= l(:field_cost) %></th>
+            <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
             <th></th>
           </tr>
           <%= render :partial => "time_entry", :collection => @activity_entries  %>
         </tbody>
       <% end %>
+      <tbody class="deliverable_end">
+        <tr>
+          <td colspan="7" style="height: 10px">&nbsp;</td>
+        </tr>
+      </tbody>
     <% end %>
-    <tr>
-      <td colspan="7" style="height: 30px">&nbsp;</td>
-    </tr>
+    <tbody class="user_end">
+      <tr>
+        <td colspan="7" style="height: 30px">&nbsp;</td>
+      </tr>
+    </tbody>
   <% end %>
 </table>
 

@@ -4,6 +4,8 @@ div#timesheet-form p { padding:0px 10px; float:left; }
 table.list thead.user th { background: #fff; }
 tbody.time_entries th { background: #eee; }
 
+img.gravatar { padding: 0; margin-bottom: -5px; }
+
 div.totals {
   background-image:url('../images/header.png');
   margin-top: 10px;

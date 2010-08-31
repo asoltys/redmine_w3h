@@ -17,6 +17,16 @@ module TimesheetIssuePatch
         filtered_entries = filtered_entries.select{|e| e.spent_on == date} unless date.nil?
         filtered_entries.map!{|e| e.hours}.sum
       end
+
+      def image_tag(day)
+        if day == start_date && day == due_date
+          image_tag('bullet_diamond.png')
+        elsif day == start_date
+          image_tag('bullet_go.png') 
+        elsif day == due_date
+          image_tag('bullet_end.png') 
+        end
+      end
     end
 
   end

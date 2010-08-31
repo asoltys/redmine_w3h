@@ -8,31 +8,66 @@
 <%= render :partial=> 'form' %>
 
 <% @users = @timesheet.time_entries.map(&:user_id) %>
-<% @users = User.find(@users) %>
+<% @users = User.find(@users, :order=> 'firstname ASC') %>
 
-<% @users.each do |u| %>
-  <h3>
-    <%= avatar(u, :size => "30") %>
-    <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
-  </h3>
+<table class="list issues">
+  <% @users.each do |u| %>
+    <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
 
-  <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
-  <% @deliverables = Deliverable.find(@user_entries.map(&:deliverable_id).reject!{|d| d == nil || d == 0}) %>
+    <thead class="user">
+      <tr style="font-size: 24px;">
+        <th colspan="4"></th>
+        <th><%= l(:field_hours) %></th>
+        <th><%= l(:field_vwd) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="font-size: 24px; color: #2A5685; font-weight: bold;">
+        <td colspan="4">
+          <span class="float: left;"><%= avatar(u, :size => "30") %></span>
+          <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
+        </td>
+        <td align="center"><%= number_with_precision(@user_entries.map(&:hours).sum, :precision => 1) %></td>
+        <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
+        <td></td>
+      </tr>
+    </tbody>
 
-  <% # Define a temporary object to represent a fictitious Non-Billable Time deliverable that responds to #id and #name %>
-  <% fake_deliverable = "Non-Billable Time"; class <<fake_deliverable; def id; nil; end; def name; self; end; end %>
-  <% @deliverables.push(fake_deliverable).uniq! %>
-  
-  <% @deliverables.each do |d| %>
-    <% @deliverable_entries = @user_entries.reject{|e| e.deliverable_id != d.id } %>
-    <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>
+    <% @deliverable_ids = @user_entries.map(&:deliverable_id).reject{|d| d == 0 || d.nil?} %>
+    <% @deliverables = @deliverable_ids = [] if @deliverable_ids.nil? %>
+    <% @deliverables = Deliverable.find(@deliverable_ids) unless @deliverable_ids.empty? %>
 
-    <div style="margin-left: 30px">
-      <h3><%= d.name %></h3>
+    <% # Define a temporary object to represent a fictitious Non-Billable Time deliverable that responds to #id and #name %>
+    <% fake_deliverable = "Non-Billable Time"; class <<fake_deliverable; def id; nil; end; def name; self; end; end %>
+    <% @deliverables.push(fake_deliverable).uniq! if @user_entries.map(&:deliverable_id).include? nil %>
+    
+    <% @deliverables.each do |d| %>
+      <% @deliverable_entries = @user_entries.reject{|e| e.deliverable_id != d.id } %>
+      <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>
+      <% @row_class = cycle("odd", "even") %>
 
-      <table class="list issues">
-        <thead>
-          <tr>
+      <tbody>
+        <tr style="font-weight: bold; font-size: 18px" class="deliverable <%= @row_class %>">
+          <td colspan="4"><%= d.name %></td>
+          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:hours).sum, :precision => 1) %></td>
+          <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
+          <td></td>
+        </tr>
+      </tbody>
+
+      <% @activities.each do |a| %>
+        <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
+        <tbody>
+          <tr style="font-weight: bold" class="activity <%= @row_class %>">
+            <td colspan="4"><%= a.name %></td>
+            <td align="center"><%= number_with_precision(@activity_entries.map(&:hours).sum, :precision => 1) %></td>
+            <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
+            <td></td>
+          </tr>
+        </tbody>
+        <tbody class="time_entries" style="display: none;">
+          <tr class="<%= @row_class %>">
             <th><%= l(:label_date) %></th>
             <th><%= l(:label_project) %></th>
             <th><%= l(:label_issue) %></th>
@@ -41,33 +76,15 @@
             <th><%= l(:field_cost) %></th>
             <th></th>
           </tr>
-        </thead>
-        <% @activities.each do |a| %>
-          <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
-          <tbody>
-            <tr class="activity odd">
-              <td colspan="4"><strong><%= a.name %></strong></td>
-              <td align="center"><strong><%= number_with_precision(@activity_entries.map(&:hours).sum, :precision => 1) %></strong></td>
-              <td align="center"><strong><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></strong></td>
-              <td></td>
-            </tr>
-          </tbody>
-          <tbody class="time_entries">
-            <%= render :partial => "time_entry", :collection => @activity_entries  %>
-          </tbody>
-        <% end %>
-        <tfoot style="padding-top: 5px; padding-bottom: 5px; font-size: 14px">
-          <tr>
-            <td colspan="4"><strong>Total:</strong></td>
-            <td align="center"><strong><%= number_with_precision(@deliverable_entries.map(&:hours).sum, :precision => 1) %></strong></td>
-            <td align="center"><strong><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></strong></td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+          <%= render :partial => "time_entry", :collection => @activity_entries  %>
+        </tbody>
+      <% end %>
+    <% end %>
+    <tr>
+      <td colspan="7" style="height: 30px">&nbsp;</td>
+    </tr>
   <% end %>
-<% end %>
+</table>
 
 
 <% if @users.empty? %>

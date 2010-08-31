@@ -15,7 +15,7 @@
     <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
 
     <tbody class="user">
-      <tr style="font-size: 24px;">
+      <tr>
         <th colspan="4"></th>
         <th><%= l(:field_hours) %></th>
         <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
@@ -23,9 +23,9 @@
       </tr>
     </tbody>
     <tbody>
-      <tr style="font-size: 24px; color: #2A5685; font-weight: bold;">
+      <tr class="snowcone hiding">
         <td colspan="4">
-          <span class="float: left;"><%= avatar(u, :size => "30") %></span>
+          <%= avatar(u, :size => "30") %>
           <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
         </td>
         <td align="center"><%= number_with_precision(@user_entries.map(&:hours).sum, :precision => 1) %></td>
@@ -35,7 +35,7 @@
     </tbody>
 
     <% @deliverable_ids = @user_entries.map(&:deliverable_id).reject{|d| d == 0 || d.nil?} %>
-    <% @deliverables = @deliverable_ids = [] if @deliverable_ids.nil? %>
+    <% @deliverables = @deliverable_ids = [] if @deliverable_ids.empty? %>
     <% @deliverables = Deliverable.find(@deliverable_ids) unless @deliverable_ids.empty? %>
 
     <% # Define a temporary object to represent a fictitious Non-Billable Time deliverable that responds to #id and #name %>
@@ -48,7 +48,7 @@
       <% @row_class = cycle("odd", "even") %>
 
       <tbody>
-        <tr style="font-weight: bold; font-size: 18px" class="deliverable <%= @row_class %>">
+        <tr class="deliverable <%= @row_class %>">
           <td colspan="4"><%= d.name %></td>
           <td align="center"><%= number_with_precision(@deliverable_entries.map(&:hours).sum, :precision => 1) %></td>
           <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
@@ -58,8 +58,8 @@
 
       <% @activities.each do |a| %>
         <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
-        <tbody style="display: none;">
-          <tr style="font-weight: bold;" class="activity <%= @row_class %>">
+        <tbody>
+          <tr class="activity <%= @row_class %>">
             <td colspan="4"><%= a.name %></td>
             <td align="center"><%= number_with_precision(@activity_entries.map(&:hours).sum, :precision => 1) %></td>
             <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
@@ -81,13 +81,13 @@
       <% end %>
       <tbody class="deliverable_end">
         <tr>
-          <td colspan="7" style="height: 10px">&nbsp;</td>
+          <td colspan="7"></td>
         </tr>
       </tbody>
     <% end %>
     <tbody class="user_end">
       <tr>
-        <td colspan="7" style="height: 30px">&nbsp;</td>
+        <td colspan="7"></td>
       </tr>
     </tbody>
   <% end %>

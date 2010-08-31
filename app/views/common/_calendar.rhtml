@@ -17,19 +17,21 @@
       <% issues = calendar.events_on(day).select{|i| i.is_a?(Issue)} %>
       <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %>">
         <p class="day-num"><%= day.day %></p>	
-        
-        <div class="logged-time <%= User.current.logged_time_class(day) %>">
-          <a style="font-size: 18px" href="<%= "/timesheet/report?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>"><%= User.current.logged_time(day) %></a>
-          <br />
-          <small style="font-size: 11px">hours</small>
-        </div>
+       
+        <% if day.weekday? %> 
+          <div class="logged-time <%= User.current.logged_time_class(day) %>">
+            <a style="font-size: 18px" href="<%= "/timesheet/report?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>"><%= User.current.logged_time(day) %></a>
+            <br />
+            <small style="font-size: 11px">hours</small>
+          </div>
+        <% end %>
 
         <% issues.each do |i| %>
           <br style="clear: both;" />
           <% if (i.is_a? Issue) %>
             <div class="<%= i.css_classes %> tooltip">
               <%= avatar(i.assigned_to, :size => "24") %>
-              <%= i.image_tag(day) %>
+              <%= image_tag(i.get_image(day)) if i.get_image(day) %>
               <%= h("#{i.project} -") unless @project && @project == i.project %>
               <%= link_to_issue i, :truncate => 30 %>
             </div>

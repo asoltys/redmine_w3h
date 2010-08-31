@@ -18,13 +18,13 @@ module TimesheetIssuePatch
         filtered_entries.map!{|e| e.hours}.sum
       end
 
-      def image_tag(day)
+      def get_image(day)
         if day == start_date && day == due_date
-          image_tag('bullet_diamond.png')
+          'bullet_diamond.png'
         elsif day == start_date
-          image_tag('bullet_go.png') 
+          'bullet_go.png'
         elsif day == due_date
-          image_tag('bullet_end.png') 
+          'bullet_end.png'
         end
       end
     end

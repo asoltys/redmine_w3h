@@ -75,7 +75,7 @@ class Timesheet
   end
 
   def available_deliverables
-    Deliverable.current.sort { |a,b| a.name <=> b.name }
+    Deliverable.current.sort { |a,b| a.to_s <=> b.to_s }
   end
 
   def required

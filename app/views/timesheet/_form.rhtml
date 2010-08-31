@@ -53,7 +53,7 @@
   <p>
     <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_deliverables_label)%>:</label><br />
     <%= select_tag 'timesheet[deliverables][]',
-      options_from_collection_for_select(@timesheet.available_deliverables, :id, :name, @timesheet.selected_deliverables),
+      options_from_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
       { :multiple => true, :size => @list_size}
      %>
   </p>

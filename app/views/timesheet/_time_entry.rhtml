@@ -1,10 +1,11 @@
 <%# TODO: Typo on hook %>
-    <tr id="time_entry_<%= time_entry.id %>" class="<%= call_hook(:plugin_timesheet_view_timesheets_time_entry_row_class, {:time_entry => time_entry }) %> <%= call_hook(:plugin_timesheet_views_timesheets_time_entry_row_class, {:time_entry => time_entry }) %>">
+    <tr id="time_entry_<%= time_entry.id %>" class="<%= call_hook(:plugin_timesheet_view_timesheets_time_entry_row_class, {:time_entry => time_entry }) %> <%= call_hook(:plugin_timesheet_views_timesheets_time_entry_row_class, {:time_entry => time_entry }) %>" style="display: none;">
     <td align="center"><%= format_date(time_entry.spent_on) %></td>
+    <td align="center"><%= link_to time_entry.project.name, :controller => 'projects', :action => 'show', :id => time_entry.project %></td>
     <td align="center">
       <% if time_entry.issue %>
       <div class="tooltip">
-        <%= time_entry.issue.id.to_s %>
+        <%= link_to time_entry.issue.id.to_s, :controller => 'issues', :action => 'show', :id => time_entry.issue %>
         <span class="tip">
           <%= render_issue_tooltip time_entry.issue %>
         </span>
@@ -23,7 +24,5 @@
                                            :method => :post,
                                            :title => l(:button_delete) %>
      <% end -%>
-    </td>
-
     </td>
   </tr>

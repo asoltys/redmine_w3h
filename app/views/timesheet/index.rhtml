@@ -3,5 +3,6 @@
 <%= render :partial => 'form' %>
 
 <% content_for(:header_tags) do %>
+<%= javascript_include_tag 'timesheet', :plugin => "timesheet_plugin" %>
 <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
 <% end %>

@@ -24,7 +24,7 @@ div.totals {
   margin-top: 10px;
   margin-bottom: 10px;
   padding: 20px 10px 10px 10px; 
-  border: 1px solid #DDDDDD;
+  border: 1px solid #dddddd;
   font-style: none;
 }
 
@@ -32,7 +32,7 @@ div.totals {
 #date-options input[type='radio'] { margin-left: -20px; }
 
 div.logged-time {
-  background:#ffffdd; 
+  background:#ffc; 
   padding: 6px; 
   margin-bottom:6px;
   border: 1px solid #d7d7d7; 
@@ -44,9 +44,9 @@ div.logged-time {
 
 p.day-num { float: right; }
 
-div.logged-time.delinquent{background: #ffeeee;}
-div.logged-time.overtime{background: #eeffee;}
+div.logged-time.delinquent{background: #ffc;}
+div.logged-time.overtime{background: #cfc;}
 div.issue img.gravatar { padding: 0; }
 table.cal td.today { background: none; }
-div.issue.closed { background: #eeffee; }
-div.issue.overdue { background: #ffeeee; }
+div.issue.closed { background: #cfc; }
+div.issue.overdue { background: #fcc; }

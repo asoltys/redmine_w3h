@@ -3,53 +3,31 @@
 <% end %>
 
 <table class="cal">
-<thead>
-<tr><td></td><% 7.times do |i| %><th><%= day_name( (calendar.first_wday+i)%7 ) %></th><% end %></tr>
-</thead>
-<tbody>
-<tr>
-<% day = calendar.startdt
-while day <= calendar.enddt %>
-<% issues = calendar.events_on(day).select{|i| i.is_a?(Issue)} %>
+  <thead>
+    <tr>
+      <% 7.times do |i| %>
+        <th><%= day_name((calendar.first_wday + i) % 7) %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <% day = calendar.startdt %>
+    <% while day <= calendar.enddt %>
+      <% issues = calendar.events_on(day).select{|i| i.is_a?(Issue)} %>
+      <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %>">
+        <p class="day-num"><%= day.day %></p>	
+        
+        <div class="logged-time <%= User.current.logged_time_class(day) %>">
+          <a style="font-size: 18px" href="<%= "/timesheet/report?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>"><%= User.current.logged_time(day) %></a>
+          <br />
+          <small style="font-size: 11px">hours</small>
+        </div>
 
-<%= "<th>#{day.cweek}</th>" if day.cwday == calendar.first_wday %>
-<td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %>">
-<p class="day-num"><%= day.day %></p>	
-<% logged_time = TimeEntry.find(:all, :conditions => ["time_entries.user_id = ? AND time_entries.spent_on = ?", User.current.id, day]).map{|e| e.hours}.sum  %>
-<% if day.weekday? || logged_time > 0 %>
-<% logged_time_class = '' %>
-<% logged_time_class = 'delinquent' if day.past? && logged_time < Timesheet::WORKING_HOURS %>
-<% logged_time_class = 'overtime' if logged_time >= Timesheet::WORKING_HOURS %>
-<div class="logged-time <%= logged_time_class %>">
-  Logged <a href="<%= "/timesheet/report?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=9" %>"><%= logged_time %> hours</a>
-</div>
-<% end %>
-<% issues.each do |i| %>
-  <% if (i.is_a? Issue) %>
-  <div class="<%= i.css_classes %> tooltip">
-	<%= avatar(i.assigned_to, :size => "24") %>
-
-  <%= if day == i.start_date && day == i.due_date
-        image_tag('bullet_diamond.png')
-      elsif day == i.start_date
-        image_tag('bullet_go.png') 
-      elsif day == i.due_date
-		image_tag('bullet_end.png') 
-      end %>
-  <%= h("#{i.project} -") unless @project && @project == i.project %>
-  <%= link_to_issue i, :truncate => 30 %>
-  </div>
-  <% else %>
-  <span class="icon icon-package">  
-    <%= h("#{i.project} -") unless @project && @project == i.project %>
-    <%= link_to_version i%>
-  </span>
-  <% end %>
-<% end %>
-</td>
-<%= '</tr><tr>' if day.cwday==calendar.last_wday and day!=calendar.enddt %>
-<% day = day + 1
-end %>
-</tr>
-</tbody>
+      </td>
+      <%= '</tr><tr>' if day.cwday==calendar.last_wday and day!=calendar.enddt %>
+      <% day = day + 1 %>
+    <% end %>
+    </tr>
+  </tbody>
 </table>

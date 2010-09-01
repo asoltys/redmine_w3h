@@ -7,7 +7,7 @@ module TimesheetTimeEntryPatch
       named_scope :by_user, lambda { |user_id| { :conditions => ["user_id = ?", user_id]}}
 
       def value
-        return (hours/7.5) * 445
+        return (hours / 7.5) * (overtime ? 810 : 540)
       end
     end
   end

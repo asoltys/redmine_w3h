@@ -13,7 +13,8 @@
       <% end %>
     </td>
     <td><%=h time_entry.comments %></td>
-    <td align="center"><%= number_with_precision(time_entry.hours, :precision => 1) %></td>
+    <td align="center"><%= number_with_precision(time_entry.regular_hours, :precision => 1) %></td>
+    <td align="center"><%= number_with_precision(time_entry.overtime_hours, :precision => 1) %></td>
     <td align="center"><%= number_to_currency(time_entry.value, :precision => 2) %></td>
     <td align="center">
       <% if time_entry.editable_by?(User.current) -%>

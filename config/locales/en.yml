@@ -11,4 +11,4 @@ en:
   timesheet_permalink: '(Permalink to this timesheet)'
   timesheet_group_by: Group by
   field_cost: Cost
-  field_vwd: VWD
+  field_vwd: Value

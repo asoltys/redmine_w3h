@@ -18,6 +18,7 @@
       <tr>
         <th colspan="4"></th>
         <th><%= l(:field_hours) %></th>
+        <th><%= l(:field_overtime) %></th>
         <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
         <th></th>
       </tr>
@@ -28,7 +29,8 @@
           <%= avatar(u, :size => "30") %>
           <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
         </td>
-        <td align="center"><%= number_with_precision(@user_entries.map(&:hours).sum, :precision => 1) %></td>
+        <td align="center"><%= number_with_precision(@user_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+        <td align="center"><%= number_with_precision(@user_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
         <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
         <td></td>
       </tr>
@@ -50,7 +52,8 @@
       <tbody>
         <tr class="deliverable <%= @row_class %>">
           <td colspan="4"><%= d.to_s %></td>
-          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:hours).sum, :precision => 1) %></td>
+          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
           <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
           <td></td>
         </tr>
@@ -61,7 +64,8 @@
         <tbody>
           <tr class="activity <%= @row_class %>">
             <td colspan="4"><%= a.name %></td>
-            <td align="center"><%= number_with_precision(@activity_entries.map(&:hours).sum, :precision => 1) %></td>
+            <td align="center"><%= number_with_precision(@activity_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+            <td align="center"><%= number_with_precision(@activity_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
             <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
             <td></td>
           </tr>
@@ -73,6 +77,7 @@
             <th><%= l(:label_issue) %></th>
             <th><%= l(:field_comments) %></th>
             <th><%= l(:field_hours) %></th>
+            <th><%= l(:field_overtime) %></th>
             <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
             <th></th>
           </tr>

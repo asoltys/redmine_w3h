@@ -98,29 +98,3 @@
   <% end %>
 </table>
 
-
-<% if @users.empty? %>
-  <p>No time entries were found with the selected criteria</p>
-<% else %>
-  <div class="totals">
-    <h2>Summary</h2>
-    <table>
-      <tr>
-        <td>Non-Billable Hours:</td>
-        <td><%= h(number_with_precision(@timesheet.unbilled, @precision)) -%></td>
-      </tr>
-      <tr>
-        <td>Billable Hours:</td>
-        <td><%= h(number_with_precision(@timesheet.billed)) %></td>
-      </tr>
-      <tr>
-        <td>Total:</td>
-        <td><%= h(number_with_precision(@timesheet.total)) %></td>
-      </tr>
-      <tr>
-        <td>Required:</td>
-        <td><%= h(number_with_precision(@timesheet.required)) %></td>
-      </tr>
-    </table>
-  </div>
-<% end %>

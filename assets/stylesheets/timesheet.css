@@ -1,16 +1,16 @@
 div#timesheet-form p { padding:0px 10px; float:left; }
 .icon-timesheet { background-image: url(../../../images/csv.png); }
 
-table.list tbody.user th { background: #fff; font-size: 24px; }
+table.list tbody.user_header th { background: #fff; font-size: 24px; }
 tbody.time_entries tr.even th { background: #fff; }
 tbody.time_entries tr.odd th { background: #F6F7F8; }
-tr.deliverable, tr.activity, tr.snowcone { cursor: pointer; font-weight: bold; }
+tr.deliverable, tr.activity, tr.user { cursor: pointer; font-weight: bold; }
 
 tr.deliverable {
   font-size: 18px;
 }
 
-tr.snowcone {
+tr.user {
   font-size: 24px; 
 }
 

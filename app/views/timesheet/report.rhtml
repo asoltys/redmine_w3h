@@ -14,7 +14,7 @@
   <% @users.each do |u| %>
     <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
 
-    <tbody class="user">
+    <tbody class="user_header">
       <tr>
         <th colspan="4"></th>
         <th><%= l(:field_hours) %></th>
@@ -24,8 +24,9 @@
       </tr>
     </tbody>
     <tbody>
-      <tr class="snowcone hiding">
+      <tr class="user">
         <td colspan="4">
+          <img class="toggle" src="/images/arrow_expanded.png" />
           <%= avatar(u, :size => "30") %>
           <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
         </td>
@@ -51,7 +52,10 @@
 
       <tbody>
         <tr class="deliverable <%= @row_class %>">
-          <td colspan="4"><%= d.to_s %></td>
+          <td colspan="4">
+            <img class="toggle" src="/images/arrow_expanded.png" />
+            <%= d.to_s %>
+          </td>
           <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
           <td align="center"><%= number_with_precision(@deliverable_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
           <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
@@ -63,7 +67,10 @@
         <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
         <tbody>
           <tr class="activity <%= @row_class %>">
-            <td colspan="4"><%= a.name %></td>
+            <td colspan="4">
+              <img class="toggle" src="/images/arrow_expanded.png" />
+              <%= a.name %>
+            </td>
             <td align="center"><%= number_with_precision(@activity_entries.map(&:regular_hours).sum, :precision => 1) %></td>
             <td align="center"><%= number_with_precision(@activity_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
             <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>

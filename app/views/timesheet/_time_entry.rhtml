@@ -1,29 +1,28 @@
-<%# TODO: Typo on hook %>
-    <tr id="time_entry_<%= time_entry.id %>" class="<%= call_hook(:plugin_timesheet_view_timesheets_time_entry_row_class, {:time_entry => time_entry }) %> <%= call_hook(:plugin_timesheet_views_timesheets_time_entry_row_class, {:time_entry => time_entry }) %>">
-    <td align="center"><%= format_date(time_entry.spent_on) %></td>
-    <td align="center"><%= link_to time_entry.project.name, :controller => 'projects', :action => 'show', :id => time_entry.project %></td>
-    <td align="center">
-      <% if time_entry.issue %>
-      <div class="tooltip">
-        <%= link_to time_entry.issue.id.to_s, :controller => 'issues', :action => 'show', :id => time_entry.issue %>
-        <span class="tip">
-          <%= render_issue_tooltip time_entry.issue %>
-        </span>
-      </div>
-      <% end %>
-    </td>
-    <td><%=h time_entry.comments %></td>
-    <td align="center"><%= number_with_precision(time_entry.regular_hours, :precision => 1) %></td>
-    <td align="center"><%= number_with_precision(time_entry.overtime_hours, :precision => 1) %></td>
-    <td align="center"><%= number_to_currency(time_entry.value, :precision => 2) %></td>
-    <td align="center">
-      <% if time_entry.editable_by?(User.current) -%>
-        <%= link_to image_tag('edit.png'), {:controller => 'timelog', :action => 'edit', :id => time_entry},
-                                         :title => l(:button_edit) %>
-        <%= link_to image_tag('delete.png'), {:controller => 'timelog', :action => 'destroy', :id => time_entry},
-                                           :confirm => l(:text_are_you_sure),
-                                           :method => :post,
-                                           :title => l(:button_delete) %>
-     <% end -%>
-    </td>
-  </tr>
+<tr id="time_entry_<%= time_entry.id %>" class="time_entry" style="display: none">
+  <td align="center"><%= format_date(time_entry.spent_on) %></td>
+  <td align="center"><%= link_to time_entry.project.name, :controller => 'projects', :action => 'show', :id => time_entry.project %></td>
+  <td align="center">
+    <% if time_entry.issue %>
+    <div class="tooltip">
+      <%= link_to time_entry.issue.id.to_s, :controller => 'issues', :action => 'show', :id => time_entry.issue %>
+      <span class="tip">
+        <%= render_issue_tooltip time_entry.issue %>
+      </span>
+    </div>
+    <% end %>
+  </td>
+  <td><%=h time_entry.comments %></td>
+  <td align="center"><%= number_with_precision(time_entry.regular_hours, :precision => 1) %></td>
+  <td align="center"><%= number_with_precision(time_entry.overtime_hours, :precision => 1) %></td>
+  <td align="center"><%= number_to_currency(time_entry.value, :precision => 2) %></td>
+  <td align="center">
+    <% if time_entry.editable_by?(User.current) -%>
+      <%= link_to image_tag('edit.png'), {:controller => 'timelog', :action => 'edit', :id => time_entry},
+                                       :title => l(:button_edit) %>
+      <%= link_to image_tag('delete.png'), {:controller => 'timelog', :action => 'destroy', :id => time_entry},
+                                         :confirm => l(:text_are_you_sure),
+                                         :method => :post,
+                                         :title => l(:button_delete) %>
+   <% end -%>
+  </td>
+</tr>

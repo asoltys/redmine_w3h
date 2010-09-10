@@ -1,20 +1,31 @@
 div#timesheet-form p { padding:0px 10px; float:left; }
 .icon-timesheet { background-image: url(../../../images/csv.png); }
 
-table.list tbody.user_header th { background: #fff; font-size: 24px; }
-tbody.time_entries tr.even th { background: #fff; }
-tbody.time_entries tr.odd th { background: #F6F7F8; }
+div#controls { font-size: 18px; width: 100; text-align: center; }
+div#controls a { cursor: pointer; }
+table.list th { background: #fff; font-size: 24px; }
+tr.time_entry.odd th { background: #ddd; }
 tr.deliverable, tr.activity, tr.user { cursor: pointer; font-weight: bold; }
 
-tr.deliverable {
+tr.deliverable td {
   font-size: 18px;
 }
 
-tr.user {
+tr.deliverable td.first {
+  padding-left: 10px;
+}
+
+tr.activity td.first {
+  padding-left: 20px;
+}
+
+tr.user td {
+  white-space: auto;
+  width: auto;
   font-size: 24px; 
 }
 
-tbody.deliverable_end, tbody.user_end { height: 15px; }
+tr.deliverable_end, tr.user_end { height: 15px; }
 
 
 img.gravatar { padding: 0; margin-bottom: -5px; }

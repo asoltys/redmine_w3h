@@ -1,12 +1,10 @@
 Event.observe(window, 'load', function() { 
-  $$('tr.user td, tr.deliverable td, tr.activity td').each(function(e) { 
-    e.observe('click', function(e) {
-      toggleRow(e.element().up('tr'));
-    });
+  $$('tr.user td, tr.deliverable td, tr.activity td').each(function(td) { 
+    td.observe('click', toggleRow);
   });
 
   $('expand').observe('click', function(e) {
-    $$('table.list tr').invoke('show');
+    $$('table.list tr').each(expand);
   });
 
   $('collapse').observe('click', function(e) {
@@ -15,39 +13,25 @@ Event.observe(window, 'load', function() {
   });
 });
 
-function toggleRow(row) {
-  var img = row.select('img.toggle').first();
+function toggleRow(e) {
+  var row = e.element().up('tr');
+  var types = ['user', 'deliverable', 'activity', 'time_entry'];
+  var child_row_class, ending_row_class;
 
-  if (row.classNames().include('collapsed')) {
-    row.removeClassName('collapsed');
-    img.src = '/images/arrow_expanded.png';
-  } else {
-    row.addClassName('collapsed');
-    img.src = '/images/arrow_collapsed.png';
-  }
+  row.classNames().include('collapsed') ? expand(row) : collapse(row);
+  row.show();
 
-  if (row.classNames().include('user')) { 
-    until = 'user_end'; 
-    child = 'deliverable'; 
+  for (i = 0; i < types.length - 1; ++i) {
+    if (row.classNames().include(types[i])) {
+      child_row_class = types[i+1];
+      ending_row_class = types[i] + '_end';
+    }
   }
-  if (row.classNames().include('deliverable')) { 
-    until = 'deliverable_end'; 
-    child = 'activity'; 
-  }
-  if (row.classNames().include('activity')) { 
-    until = 'activity_end';
-    child = 'time_entry';
-  } 
 
   row.nextSiblings().each(function(e) {
-    if (e.classNames().include(until)) throw $break; 
-    if(row.classNames().include('collapsed')) {
-      collapse(e);
-    } else { 
-      if (e.classNames().include(child)) {
-        e.show();
-      }
-    }
+    if (e.classNames().include(ending_row_class)) throw $break; 
+    if (row.classNames().include('collapsed')) collapse(e);
+    else if (e.classNames().include(child_row_class)) e.show();
   });
 }
 
@@ -58,6 +42,15 @@ function collapse(row) {
   if (!img) return;
 
   row.addClassName('collapsed');
-  row.select('img.toggle').first().src = '/images/arrow_collapsed.png';
+  img.src = '/images/arrow_collapsed.png';
 }
 
+function expand(row) {
+  var img = row.select('img.toggle').first();
+  row.show();
+
+  if (!img) return;
+
+  row.removeClassName('collapsed');
+  img.src = '/images/arrow_expanded.png';
+}

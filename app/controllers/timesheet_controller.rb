@@ -5,6 +5,7 @@ class TimesheetController < ApplicationController
   before_filter :get_list_size
   before_filter :get_precision
   before_filter :get_activities
+  before_filter :get_timesheet
 
   helper :sort
   include SortHelper
@@ -24,28 +25,27 @@ class TimesheetController < ApplicationController
     end
   end
 
-  def mytimesheet
-    timesheet = {} 
-    timesheet[:users] = [User.current.id]
-    timesheet[:period_type] = Timesheet::ValidPeriodType[:free_period]
-    timesheet[:date_from] = 4.weekdays_ago.strftime('%Y-%m-%d')
-    timesheet[:date_to] = Date.today
-    redirect_to :action => 'report', :params => {:timesheet => timesheet}
+  def get_timesheet
+    unless params[:timesheet]
+      params[:timesheet] = {} 
+      params[:timesheet][:users] = User.current.groups.length > 0 ? User.current.groups.first.users.map(&:id) : [User.current.id]
+      params[:timesheet][:period_type] = Timesheet::ValidPeriodType[:free_period]
+      params[:timesheet][:date_from] = 9.weekdays_ago.strftime('%Y-%m-%d')
+      params[:timesheet][:date_to] = Date.today
+
+      if params[:user_id]
+        params[:timesheet][:users] = [params[:user_id]] 
+      end
+
+      if params[:deliverable_id]
+        params[:timesheet][:deliverables] = [params[:deliverable_id]] 
+      end
+    end
+
+    @timesheet = Timesheet.new(params[:timesheet])
   end
 
   def report
-    unless params[:deliverable_id].nil?
-      params[:timesheet] = {}
-      params[:timesheet][:deliverables] = [params[:deliverable_id]] 
-    end
-
-    if params && params[:timesheet]
-      @timesheet = Timesheet.new( params[:timesheet] )
-    else
-      redirect_to :action => 'index'
-      return
-    end
-
     if @timesheet.available_projects.empty?
       render :action => 'no_projects'
       return
@@ -57,11 +57,6 @@ class TimesheetController < ApplicationController
   end
 
   def delinquency
-    timesheet = {}
-    timesheet[:date_from] = 10.weekdays_ago.to_date
-    timesheet[:date_to] = Date.today
-    @timesheet = Timesheet.new(timesheet)
-
     respond_to do |format|
       format.html { render :action => 'delinquency' }
     end

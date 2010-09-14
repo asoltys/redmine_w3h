@@ -1,94 +1,96 @@
 <% content_for(:header_tags) do %>
+  <%= javascript_include_tag 'reports', :plugin => "timesheet_plugin" %>
   <%= javascript_include_tag 'timesheet', :plugin => "timesheet_plugin" %>
   <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
 <% end %>
 
-<h2><%= l(:timesheet_title)%></h2>
-
 <%= render :partial=> 'menu' %>
 <%= render :partial=> 'form' %>
 
-<div id="controls">
-  <a id="expand">Expand</a> | <a id="collapse">Collapse</a>
-</div>
+<% if @timesheet.time_entries.empty? %>
+  <h2>No time entries were found with the selected parameters</h2>
+<% else %>
+  <div id="controls">
+    <a id="expand">Expand</a> | <a id="collapse">Collapse</a>
+  </div>
 
-<% @users = @timesheet.time_entries.map(&:user_id) %>
-<% @users = User.find(@users, :order=> 'firstname ASC') %>
+  <% @users = @timesheet.time_entries.map(&:user_id) %>
+  <% @users = User.find(@users, :order=> 'firstname ASC') %>
 
-<table class="list issues">
-  <tbody>
-    <% @users.each do |u| %>
-      <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
+  <table class="list issues">
+    <tbody>
+      <% @users.each do |u| %>
+        <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
 
-      <tr>
-        <th colspan="4"></th>
-        <th><%= l(:field_hours) %></th>
-        <th><%= l(:field_overtime) %></th>
-        <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
-        <th></th>
-      </tr>
+        <tr>
+          <th colspan="4"></th>
+          <th><%= l(:field_hours) %></th>
+          <th><%= l(:field_overtime) %></th>
+          <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
+          <th></th>
+        </tr>
 
-      <tr class="user">
-        <td colspan="4">
-          <img class="toggle" src="/images/arrow_expanded.png" />
-          <%= avatar(u, :size => "30") %>
-          <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
-        </td>
-        <td align="center"><%= number_with_precision(@user_entries.map(&:regular_hours).sum, :precision => 1) %></td>
-        <td align="center"><%= number_with_precision(@user_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
-        <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
-        <td></td>
-      </tr>
-
-      <% @deliverable_ids = @user_entries.map(&:deliverable_id).reject{|d| d == 0 || d.nil?} %>
-      <% @deliverables = @deliverable_ids = [] if @deliverable_ids.empty? %>
-      <% @deliverables = Deliverable.find(@deliverable_ids) unless @deliverable_ids.empty? %>
-
-      <% # Define a temporary object to represent a fictitious Non-Billable Time deliverable that responds to #id and #name %>
-      <% fake_deliverable = "Non-Billable Time"; class <<fake_deliverable; def id; nil; end; def name; self; end; end %>
-      <% @deliverables.push(fake_deliverable).uniq! if @user_entries.map(&:deliverable_id).include? nil %>
-      
-      <% @deliverables.each do |d| %>
-        <% @deliverable_entries = @user_entries.reject{|e| e.deliverable_id != d.id } %>
-        <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>
-        <% @row_class = cycle("odd", "even") %>
-
-        <tr class="deliverable <%= @row_class %>">
-          <td colspan="4" class="first">
+        <tr class="user">
+          <td colspan="4">
             <img class="toggle" src="/images/arrow_expanded.png" />
-            <%= d.to_s %>
+            <%= avatar(u, :size => "30") %>
+            <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
           </td>
-          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
-          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
-          <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
+          <td align="center"><%= number_with_precision(@user_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+          <td align="center"><%= number_with_precision(@user_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
+          <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
           <td></td>
         </tr>
 
-        <% @activities.each do |a| %>
-          <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
-          <tr class="activity collapsed <%= @row_class %>">
+        <% @deliverable_ids = @user_entries.map(&:deliverable_id).reject{|d| d == 0 || d.nil?} %>
+        <% @deliverables = @deliverable_ids = [] if @deliverable_ids.empty? %>
+        <% @deliverables = Deliverable.find(@deliverable_ids) unless @deliverable_ids.empty? %>
+
+        <% # Define a temporary object to represent a fictitious Non-Billable Time deliverable that responds to #id and #name %>
+        <% fake_deliverable = "Non-Billable Time"; class <<fake_deliverable; def id; nil; end; def name; self; end; end %>
+        <% @deliverables.push(fake_deliverable).uniq! if @user_entries.map(&:deliverable_id).include? nil %>
+        
+        <% @deliverables.each do |d| %>
+          <% @deliverable_entries = @user_entries.reject{|e| e.deliverable_id != d.id } %>
+          <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>
+          <% @row_class = cycle("odd", "even") %>
+
+          <tr class="deliverable <%= @row_class %>">
             <td colspan="4" class="first">
-              <img class="toggle" src="/images/arrow_collapsed.png" />
-              <%= a.name %>
+              <img class="toggle" src="/images/arrow_expanded.png" />
+              <%= d.to_s %>
             </td>
-            <td align="center"><%= number_with_precision(@activity_entries.map(&:regular_hours).sum, :precision => 1) %></td>
-            <td align="center"><%= number_with_precision(@activity_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
-            <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
+            <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+            <td align="center"><%= number_with_precision(@deliverable_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
+            <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
             <td></td>
           </tr>
-          <%= render :partial => "time_entry", :collection => @activity_entries  %>
-          <tr class="activity_end">
+
+          <% @activities.each do |a| %>
+            <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
+            <tr class="activity collapsed <%= @row_class %>">
+              <td colspan="4" class="first">
+                <img class="toggle" src="/images/arrow_collapsed.png" />
+                <%= a.name %>
+              </td>
+              <td align="center"><%= number_with_precision(@activity_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+              <td align="center"><%= number_with_precision(@activity_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
+              <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
+              <td></td>
+            </tr>
+            <%= render :partial => "time_entry", :collection => @activity_entries  %>
+            <tr class="activity_end">
+              <td colspan="7"></td>
+            </tr>
+          <% end %>
+          <tr class="deliverable_end">
             <td colspan="7"></td>
           </tr>
         <% end %>
-        <tr class="deliverable_end">
+        <tr class="user_end">
           <td colspan="7"></td>
         </tr>
       <% end %>
-      <tr class="user_end">
-        <td colspan="7"></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
+    </tbody>
+  </table>
+<% end %>

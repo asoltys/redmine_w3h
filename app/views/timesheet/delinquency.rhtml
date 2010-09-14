@@ -1,11 +1,13 @@
 <% content_for(:header_tags) do %>
-  <%= javascript_include_tag 'timesheet', :plugin => "timesheet_plugin" %>
+  <%= javascript_include_tag 'reports', :plugin => "timesheet_plugin" %>
   <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
+  <style>
+    #activity_selection, #project_selection, #deliverable_selection { display: none; }
+  </style>
 <% end %>
 
-<h2><%= l(:timesheet_title)%></h2>
-
 <%= render :partial=> 'menu' %>
+<%= render :partial=> 'form' %>
 
 <table class="list issues">
   <tbody>
@@ -15,7 +17,7 @@
       <th>Unbilled</th>
       <th>Total</th>
       <th>Required</th>
-      <th>Delinquent</th>
+      <th>Missing</th>
       <th>Billable Ratio</th>
     </tr>
 
@@ -24,7 +26,7 @@
       <% @billable_hours = @user_entries.map(&:billable_hours).sum %>
       <% @non_billable_hours = @user_entries.map(&:non_billable_hours).sum %>
       <% @total_hours = @billable_hours + @non_billable_hours %>
-      <% @required_hours = u.quota * @timesheet.date_from.weekdays_until(@timesheet.date_to) %>
+      <% @required_hours = u.quota * (@timesheet.date_from.to_date.weekdays_until(@timesheet.date_to.to_date) + 1) %>
       <% @delinquent_hours = [@required_hours - @total_hours, 0].max %>
       <% @billable_ratio = (@total_hours > 0 ? @billable_hours / @total_hours : 0) * 100 %>
 
@@ -33,12 +35,12 @@
           <%= avatar(u, :size => "30") %>
           <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
         </td>
-        <td class="<%= 'good' if @billable_ratio > 75; 'bad' if @billable_ratio < 25; %>" align="center"><%= number_with_precision(@billable_hours, 2) %></td>
-        <td class="<%= 'good' if @billable_ratio > 75; 'bad' if @billable_ratio < 25; %>"  align="center"><%= number_with_precision(@non_billable_hours, 2) %></td>
+        <td align="center"><%= number_with_precision(@billable_hours, 2) %></td>
+        <td align="center"><%= number_with_precision(@non_billable_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@total_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@required_hours, 2) %></td>
-        <td class="<%= 'bad' if @delinquent_hours > 0 %>"  align="center"><%= number_with_precision(@delinquent_hours,2) %></td>
-        <td class="<%= 'good' if @billable_ratio > 75; 'bad' if @billable_ratio < 25; %>"  align="center"><%= number_with_precision(@billable_ratio,2)%>%</td>
+        <td align="center"><%= number_with_precision(@delinquent_hours,2) %></td>
+        <td align="center"><%= number_with_precision(@billable_ratio,2)%>%</td>
       </tr>
     <% end %>
   </tbody>

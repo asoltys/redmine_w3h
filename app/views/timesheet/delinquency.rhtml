@@ -1,0 +1,48 @@
+<% content_for(:header_tags) do %>
+  <%= javascript_include_tag 'timesheet', :plugin => "timesheet_plugin" %>
+  <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
+<% end %>
+
+<h2><%= l(:timesheet_title)%></h2>
+
+<%= render :partial=> 'menu' %>
+<%= render :partial=> 'form' %>
+
+<div id="controls">
+  <a id="expand">Expand</a> | <a id="collapse">Collapse</a>
+</div>
+
+<% @users = @timesheet.time_entries.map(&:user_id) %>
+<% @users = User.find(@users, :order=> 'firstname ASC') %>
+
+<table class="list issues">
+  <tbody>
+    <tr>
+      <th></th>
+      <th>Billed</th>
+      <th>Unbilled</th>
+      <th>Total</th>
+      <th>Required</th>
+      <th>Delinquent</th>
+      <th>Billable Ratio</th>
+    </tr>
+
+    <% @users.each do |u| %>
+      <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
+
+      <tr class="user">
+        <td>
+          <%= avatar(u, :size => "30") %>
+          <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
+        </td>
+        <td align="center"><%= number_with_precision(15) %></td>
+        <td align="center"><%= number_with_precision(15) %></td>
+        <td align="center"><%= number_with_precision(15) %></td>
+        <td align="center"><%= number_with_precision(15) %></td>
+        <td align="center"><%= number_with_precision(15) %></td>
+        <td align="center">15%</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

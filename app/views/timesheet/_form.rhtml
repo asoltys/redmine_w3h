@@ -1,70 +1,67 @@
 <div id="timesheet-form">
-<fieldset>
-<% form_for :timesheet, :url =>{:action => 'report'} do |f|  %>
-  <p id="date-options">
-    <%= radio_button_tag 'timesheet[period_type]', '0', @timesheet.period_type == Timesheet::ValidPeriodType[:default] %>
-    <label><%= l(:label_date)%>:</label>
-    <%= select_tag 'timesheet[period]', options_for_period_select((params[:timesheet].nil? ? nil : params[:timesheet][:period])),
-                             :onfocus => '$("timesheet_period_type_0").checked = true;' %>
-  </p>
+  <fieldset>
+    <% form_for :timesheet, :url =>{:action => params[:action]} do |f|  %>
+      <p id="date-options">
+        <%= radio_button_tag 'timesheet[period_type]', '0', @timesheet.period_type == Timesheet::ValidPeriodType[:default] %>
+        <label><%= l(:label_date)%>:</label>
+        <%= select_tag('timesheet[period]', 
+          options_for_period_select((params[:timesheet].nil? ? nil : params[:timesheet][:period])),
+          :onfocus => '$("timesheet_period_type_0").checked = true;')
+        %>
+      </p>
 
-  <p>
-    <%= radio_button_tag 'timesheet[period_type]', '1', @timesheet.period_type  == Timesheet::ValidPeriodType[:free_period] %>
-    <span onclick="$('timesheet_period_type_1').checked = true;">
-      <label for="timesheet_date_from"><%= l(:timesheet_date_from_label)%>:</label>
-      <%= f.text_field "date_from", :size => 10 %><%= calendar_for('timesheet_date_from') %><br />
-    </span>
-  </p>
+      <p>
+        <%= radio_button_tag 'timesheet[period_type]', '1', @timesheet.period_type  == Timesheet::ValidPeriodType[:free_period] %>
+        <span onclick="$('timesheet_period_type_1').checked = true;">
+          <label for="timesheet_date_from"><%= l(:timesheet_date_from_label)%>:</label>
+          <%= f.text_field "date_from", :size => 10 %><%= calendar_for('timesheet_date_from') %><br />
+        </span>
+      </p>
 
-  <p>
-    <span onclick="$('timesheet_period_type_1').checked = true;">
-      <label for="timesheet_date_to"><%= l(:timesheet_date_to_label)%>:</label>
-      <%= f.text_field "date_to", :size => 10 %><%= calendar_for('timesheet_date_to') %><br /><br />
-    </span>
-  </p>
+      <p>
+        <span onclick="$('timesheet_period_type_1').checked = true;">
+          <label for="timesheet_date_to"><%= l(:timesheet_date_to_label)%>:</label>
+          <%= f.text_field "date_to", :size => 10 %><%= calendar_for('timesheet_date_to') %><br /><br />
+        </span>
+      </p>
 
-  <br style="clear: both;" />
+      <br style="clear: both;" />
 
-  <p>
-    <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
-    <%= select_tag 'timesheet[projects][]',
-      options_from_collection_for_select(@timesheet.available_projects, :id, :name, @timesheet.selected_projects),
-      { :multiple => true, :size => @list_size}
-    %>
-  </p>
+      <p>
+        <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
+        <%= select_tag ('timesheet[projects][]',
+          options_from_collection_for_select(@timesheet.available_projects, :id, :name, @timesheet.selected_projects),
+          { :multiple => true, :size => @list_size}) 
+        %>
+      </p>
 
-  <p>
-    <label for="timesheet[activities][]" class="select_all"><%= l(:timesheet_activities_label)%>:</label><br />
-    <%= select_tag 'timesheet[activities][]',
-      options_from_collection_for_select(@activities, :id, :name, @timesheet.selected_activities),
-      { :multiple => true, :size => @list_size}
-    %>
-  </p>
+      <p>
+        <label for="timesheet[activities][]" class="select_all"><%= l(:timesheet_activities_label)%>:</label><br />
+        <%= select_tag 'timesheet[activities][]',
+          options_from_collection_for_select(@activities, :id, :name, @timesheet.selected_activities),
+          { :multiple => true, :size => @list_size}
+        %>
+      </p>
 
+      <p>
+        <label for="timesheet[users][]" class="select_all"><%= l(:timesheet_users_label)%>:</label><br />
+        <%= select_tag 'timesheet[users][]',
+          options_from_collection_for_select(@timesheet.available_users, :id, :name, @timesheet.selected_users),
+          { :multiple => true, :size => @list_size}
+         %>
+      </p>
 
-  <p>
-    <label for="timesheet[users][]" class="select_all"><%= l(:timesheet_users_label)%>:</label><br />
-    <%= select_tag 'timesheet[users][]',
-      options_from_collection_for_select(@timesheet.available_users, :id, :name, @timesheet.selected_users),
-      { :multiple => true, :size => @list_size}
-     %>
-  </p>
+      <p>
+        <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_deliverables_label)%>:</label><br />
+        <%= select_tag 'timesheet[deliverables][]',
+          options_from_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
+          { :multiple => true, :size => @list_size}
+         %>
+      </p>
 
-  <p>
-    <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_deliverables_label)%>:</label><br />
-    <%= select_tag 'timesheet[deliverables][]',
-      options_from_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
-      { :multiple => true, :size => @list_size}
-     %>
-  </p>
+      <div class="clear"></div>
+      <%= submit_tag l(:button_apply),:class => 'button-small' -%>
 
-  <%# TODO: Typo on hook %>
-  <%= call_hook(:plugin_timesheet_view_timesheet_form, { :timesheet => @timesheet, :params => params, :list_size => @list_size }) %>
-  <%= call_hook(:plugin_timesheet_views_timesheet_form, { :timesheet => @timesheet, :params => params, :list_size => @list_size }) %>
-
-  <div class="clear"></div>
-  <%= submit_tag l(:button_apply),:class => 'button-small' -%>
-
-<% end %>
-</fieldset>
+    <% end %>
+  </fieldset>
 </div>

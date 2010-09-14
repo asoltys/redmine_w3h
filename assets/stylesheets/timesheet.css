@@ -1,8 +1,8 @@
 div#timesheet-form p { padding:0px 10px; float:left; }
 .icon-timesheet { background-image: url(../../../images/csv.png); }
 
-div#controls { font-size: 18px; width: 100; text-align: center; }
-div#controls a { cursor: pointer; }
+div#menu, div#controls { font-size: 18px; width: 100; text-align: center; }
+div#menu a, div#controls a { cursor: pointer; }
 table.list th { background: #fff; font-size: 24px; }
 tr.time_entry.odd th { background: #ddd; }
 tr.deliverable, tr.activity, tr.user { cursor: pointer; font-weight: bold; }

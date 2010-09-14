@@ -56,6 +56,17 @@ class TimesheetController < ApplicationController
     end
   end
 
+  def delinquency
+    timesheet = {}
+    timesheet[:date_from] = 60.weekdays_ago.strftime('%Y-%m-%d')
+    timesheet[:date_to] = Date.today
+    @timesheet = Timesheet.new(timesheet)
+
+    respond_to do |format|
+      format.html { render :action => 'delinquency' }
+    end
+  end
+
   def settings
     @user = User.current
     if request.post?

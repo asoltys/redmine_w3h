@@ -12,9 +12,6 @@
   <a id="expand">Expand</a> | <a id="collapse">Collapse</a>
 </div>
 
-<% @users = @timesheet.time_entries.map(&:user_id) %>
-<% @users = User.find(@users, :order=> 'firstname ASC') %>
-
 <table class="list issues">
   <tbody>
     <tr>
@@ -27,20 +24,26 @@
       <th>Billable Ratio</th>
     </tr>
 
-    <% @users.each do |u| %>
+    <% @timesheet.users.each do |u| %>
       <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
+      <% @billable_hours = @user_entries.map(&:billable_hours).sum %>
+      <% @non_billable_hours = @user_entries.map(&:non_billable_hours).sum %>
+      <% @total_hours = @billable_hours + @non_billable_hours %>
+      <% @required_hours = u.quota * @timesheet.date_from.weekdays_until(@timesheet.date_to) %>
+      <% @delinquent_hours = [@required_hours - @total_hours, 0].max %>
+      <% @billable_ratio = (@total_hours > 0 ? @billable_hours / @total_hours : 0) * 100 %>
 
-      <tr class="user">
+      <tr class="user <%= cycle("odd", "even") %>">
         <td>
           <%= avatar(u, :size => "30") %>
           <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
         </td>
-        <td align="center"><%= number_with_precision(15) %></td>
-        <td align="center"><%= number_with_precision(15) %></td>
-        <td align="center"><%= number_with_precision(15) %></td>
-        <td align="center"><%= number_with_precision(15) %></td>
-        <td align="center"><%= number_with_precision(15) %></td>
-        <td align="center">15%</td>
+        <td align="center"><%= number_with_precision(@billable_hours, 2) %></td>
+        <td align="center"><%= number_with_precision(@non_billable_hours, 2) %></td>
+        <td align="center"><%= number_with_precision(@total_hours, 2) %></td>
+        <td align="center"><%= number_with_precision(@required_hours, 2) %></td>
+        <td align="center"><%= number_with_precision(@delinquent_hours,2) %></td>
+        <td align="center"><%= number_with_precision(@billable_ratio,2)%>%</td>
       </tr>
     <% end %>
   </tbody>

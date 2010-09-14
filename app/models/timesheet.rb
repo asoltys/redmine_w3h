@@ -30,7 +30,7 @@ class Timesheet
     unless options[:users].nil?
       self.selected_users = options[:users].map(&:to_i)
     else
-      self.selected_users = available_users.map(&:id)
+      self.selected_users = User.current.groups.first.users.map(&:id)
     end
     self.users = User.find(self.selected_users)
 

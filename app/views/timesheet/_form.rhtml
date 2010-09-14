@@ -1,6 +1,6 @@
 <div id="timesheet-form">
   <fieldset>
-    <% form_for :timesheet, :url =>{:action => params[:action]} do |f|  %>
+    <% form_for :timesheet, :url =>{:action => 'report'} do |f|  %>
       <p id="date-options">
         <%= radio_button_tag 'timesheet[period_type]', '0', @timesheet.period_type == Timesheet::ValidPeriodType[:default] %>
         <label><%= l(:label_date)%>:</label>

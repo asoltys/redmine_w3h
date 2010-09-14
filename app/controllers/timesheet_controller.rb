@@ -58,7 +58,7 @@ class TimesheetController < ApplicationController
 
   def delinquency
     timesheet = {}
-    timesheet[:date_from] = 60.weekdays_ago.strftime('%Y-%m-%d')
+    timesheet[:date_from] = 10.weekdays_ago.to_date
     timesheet[:date_to] = Date.today
     @timesheet = Timesheet.new(timesheet)
 

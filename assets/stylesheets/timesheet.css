@@ -25,6 +25,9 @@ tr.user td {
   font-size: 24px; 
 }
 
+td.good { color: green; }
+td.bad { color: red; }
+
 tr.deliverable_end, tr.user_end { height: 15px; }
 
 

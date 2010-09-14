@@ -6,11 +6,6 @@
 <h2><%= l(:timesheet_title)%></h2>
 
 <%= render :partial=> 'menu' %>
-<%= render :partial=> 'form' %>
-
-<div id="controls">
-  <a id="expand">Expand</a> | <a id="collapse">Collapse</a>
-</div>
 
 <table class="list issues">
   <tbody>
@@ -38,12 +33,12 @@
           <%= avatar(u, :size => "30") %>
           <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
         </td>
-        <td align="center"><%= number_with_precision(@billable_hours, 2) %></td>
-        <td align="center"><%= number_with_precision(@non_billable_hours, 2) %></td>
+        <td class="<%= 'good' if @billable_ratio > 75; 'bad' if @billable_ratio < 25; %>" align="center"><%= number_with_precision(@billable_hours, 2) %></td>
+        <td class="<%= 'good' if @billable_ratio > 75; 'bad' if @billable_ratio < 25; %>"  align="center"><%= number_with_precision(@non_billable_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@total_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@required_hours, 2) %></td>
-        <td align="center"><%= number_with_precision(@delinquent_hours,2) %></td>
-        <td align="center"><%= number_with_precision(@billable_ratio,2)%>%</td>
+        <td class="<%= 'bad' if @delinquent_hours > 0 %>"  align="center"><%= number_with_precision(@delinquent_hours,2) %></td>
+        <td class="<%= 'good' if @billable_ratio > 75; 'bad' if @billable_ratio < 25; %>"  align="center"><%= number_with_precision(@billable_ratio,2)%>%</td>
       </tr>
     <% end %>
   </tbody>

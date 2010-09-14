@@ -33,13 +33,8 @@ class TimesheetController < ApplicationController
       params[:timesheet][:date_from] = 9.weekdays_ago.strftime('%Y-%m-%d')
       params[:timesheet][:date_to] = Date.today
 
-      if params[:user_id]
-        params[:timesheet][:users] = [params[:user_id]] 
-      end
-
-      if params[:deliverable_id]
-        params[:timesheet][:deliverables] = [params[:deliverable_id]] 
-      end
+      params[:timesheet][:users] = [params[:user_id]] unless params[:user_id].nil?
+      params[:timesheet][:deliverables] = [params[:deliverable_id]] unless params[:deliverable_id].nil?
     end
 
     @timesheet = Timesheet.new(params[:timesheet])

@@ -4,7 +4,15 @@ Event.observe(window, 'load', function() {
   });
 
   $('expand').observe('click', function(e) {
-    $$('table.list tr').each(expand);
+    if ($$('tr.user:not(.collapsed)').length == 0) { 
+      $$('tr.user').each(expand);
+      $$('tr.deliverable').invoke('show');
+    } else if ($$('tr.deliverable:not(.collapsed)').length == 0) { 
+      $$('tr.deliverable').each(expand);
+      $$('tr.activity').invoke('show');
+    } else { 
+      $$('table.list tr').each(expand);
+    }
   });
 
   $('collapse').observe('click', function(e) {

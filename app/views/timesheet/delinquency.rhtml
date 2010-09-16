@@ -26,7 +26,7 @@
       <% @billable_hours = @user_entries.map(&:billable_hours).sum %>
       <% @non_billable_hours = @user_entries.map(&:non_billable_hours).sum %>
       <% @total_hours = @billable_hours + @non_billable_hours %>
-      <% @required_hours = u.quota * (@timesheet.date_from.to_date.weekdays_until(@timesheet.date_to.to_date) + 1) %>
+      <% @required_hours = u.quota * (@timesheet.date_from.to_date.weekdays_until(@timesheet.date_to.to_date + 1)) %>
       <% @delinquent_hours = [@required_hours - @total_hours, 0].max %>
       <% @billable_ratio = (@total_hours > 0 ? @billable_hours / @total_hours : 0) * 100 %>
 

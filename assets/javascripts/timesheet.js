@@ -17,7 +17,8 @@ Event.observe(window, 'load', function() {
 
   $('collapse').observe('click', function(e) {
     $$('table.list tr').each(collapse);
-    $$('table.list tr.user').invoke('show');
+    $$('tr.header').invoke('show');
+    $$('tr.user').invoke('show');
   });
 });
 

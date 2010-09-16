@@ -19,17 +19,16 @@
 
   <table class="list issues">
     <tbody>
+      <tr class="header">
+        <th colspan="4"></th>
+        <th><%= l(:field_hours) %></th>
+        <th><%= l(:field_overtime) %></th>
+        <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
+        <th></th>
+      </tr>
+
       <% @users.each do |u| %>
         <% @user_entries = @timesheet.time_entries.reject{|e| e.user_id != u.id } %>
-
-        <tr>
-          <th colspan="4"></th>
-          <th><%= l(:field_hours) %></th>
-          <th><%= l(:field_overtime) %></th>
-          <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
-          <th></th>
-        </tr>
-
         <tr class="user">
           <td colspan="4">
             <img class="toggle" src="/images/arrow_expanded.png" />
@@ -55,9 +54,9 @@
           <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>
           <% @row_class = cycle("odd", "even") %>
 
-          <tr class="deliverable <%= @row_class %>">
+          <tr class="deliverable collapsed  <%= @row_class %>">
             <td colspan="4" class="first">
-              <img class="toggle" src="/images/arrow_expanded.png" />
+              <img class="toggle" src="/images/arrow_collapsed.png" />
               <%= d.to_s %>
             </td>
             <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
@@ -68,7 +67,7 @@
 
           <% @activities.each do |a| %>
             <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
-            <tr class="activity collapsed <%= @row_class %>">
+            <tr class="activity collapsed <%= @row_class %>" style="display: none">
               <td colspan="4" class="first">
                 <img class="toggle" src="/images/arrow_collapsed.png" />
                 <%= a.name %>
@@ -83,11 +82,11 @@
               <td colspan="7"></td>
             </tr>
           <% end %>
-          <tr class="deliverable_end">
+          <tr class="deliverable_end" style="display: none">
             <td colspan="7"></td>
           </tr>
         <% end %>
-        <tr class="user_end">
+        <tr class="user_end" style="display: none">
           <td colspan="7"></td>
         </tr>
       <% end %>

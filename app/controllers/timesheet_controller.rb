@@ -51,6 +51,12 @@ class TimesheetController < ApplicationController
     end
   end
 
+  def daily
+    respond_to do |format|
+      format.html { render :action => 'daily' }
+    end
+  end
+
   def delinquency
     respond_to do |format|
       format.html { render :action => 'delinquency' }

@@ -1,0 +1,26 @@
+<% content_for(:header_tags) do %>
+  <%= javascript_include_tag 'reports', :plugin => "timesheet_plugin" %>
+  <%= javascript_include_tag 'daily', :plugin => "timesheet_plugin" %>
+  <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
+<% end %>
+
+<%= render :partial=> 'menu' %>
+<%= render :partial=> 'form' %>
+
+<% if @timesheet.time_entries.empty? %>
+  <h2>No time entries were found with the selected parameters</h2>
+<% else %>
+  <% dates = @timesheet.time_entries.map(&:spent_on) %>
+  <% (dates.min..dates.max).each do |d| %>
+    <% @entries = @timesheet.time_entries.select{|t| t.spent_on == d} %>
+    <table class="list issues">
+      <tbody>
+        <tr class="header">
+          <th colspan="9"><%= d %></th>
+        </tr>
+        <%= render :partial => "time_entry", :collection => @entries  %>
+      </tbody>
+    </table>
+  <% end %>
+<% end %>
+

@@ -2,9 +2,8 @@ class TimesheetController < ApplicationController
   unloadable
 
   layout 'base'
+  before_filter :get_user, :only => :daily
   before_filter :get_list_size
-  before_filter :get_precision
-  before_filter :get_activities
   before_filter :get_timesheet
 
   helper :sort
@@ -83,18 +82,7 @@ class TimesheetController < ApplicationController
     @list_size = Setting.plugin_timesheet_plugin['list_size'].to_i
   end
 
-  def get_precision
-    precision = Setting.plugin_timesheet_plugin['precision']
-    
-    if precision.blank?
-      # Set precision to a high number
-      @precision = 10
-    else
-      @precision = precision.to_i
-    end
-  end
-
-  def get_activities
-    @activities = TimesheetCompatibility::Enumeration::activities
+  def get_user
+    params[:user_id] = User.current.id unless params[:user_id]
   end
 end

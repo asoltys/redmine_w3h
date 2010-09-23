@@ -2,6 +2,7 @@
   <%= javascript_include_tag 'reports', :plugin => "timesheet_plugin" %>
   <%= javascript_include_tag 'daily', :plugin => "timesheet_plugin" %>
   <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
+  <%= stylesheet_link_tag "daily.css", :plugin => "timesheet_plugin", :media => 'all' %>
 <% end %>
 
 <%= render :partial=> 'menu' %>
@@ -11,16 +12,42 @@
   <h2>No time entries were found with the selected parameters</h2>
 <% else %>
   <% dates = @timesheet.time_entries.map(&:spent_on) %>
+
   <% (dates.min..dates.max).each do |d| %>
-    <% @entries = @timesheet.time_entries.select{|t| t.spent_on == d} %>
-    <table class="list issues">
-      <tbody>
-        <tr class="header">
-          <th colspan="9"><%= d %></th>
-        </tr>
-        <%= render :partial => "time_entry", :collection => @entries  %>
-      </tbody>
-    </table>
+    <% @date_entries = @timesheet.time_entries.select{|e| e.spent_on == d} %>
+    <% @users = User.find(@date_entries.map(&:user_id), :order=> 'firstname ASC') %>
+
+    <% unless @date_entries.empty? %>
+      <h1><%= d.strftime('%A %B %d') %></h1>
+
+      <table class="list issues">
+        <tbody>
+          <tr class="header">
+            <th colspan="4"></th>
+            <th><%= l(:field_hours) %></th>
+            <th><%= l(:field_overtime) %></th>
+            <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
+            <th></th>
+          </tr>
+
+          <% @users.each do |u| %>
+            <% @user_entries = @date_entries.reject{|e| e.user_id != u.id } %>
+
+            <tr class="user">
+              <td colspan="4">
+                <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
+              </td>
+              <td align="center"><%= number_with_precision(@user_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+              <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
+              <td></td>
+            </tr>
+
+            <% @entries = @user_entries.select{|t| t.spent_on == d} %>
+            <%= render :partial => "time_entry", :collection => @entries  %>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
   <% end %>
 <% end %>
 

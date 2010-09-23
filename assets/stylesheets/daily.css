@@ -1,0 +1,7 @@
+table.list th { font-size: 12px; }
+
+tr.user td {
+  white-space: auto;
+  width: auto;
+  font-size: 12px; 
+}

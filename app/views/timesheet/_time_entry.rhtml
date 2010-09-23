@@ -1,6 +1,6 @@
-<tr id="time_entry_<%= time_entry.id %>" class="time_entry" style="display: none">
+<tr id="time_entry_<%= time_entry.id %>" class="time_entry <%= cycle('odd', 'even') %>" style="display: none">
   <td align="center"><%= format_date(time_entry.spent_on) %></td>
-  <td align="center"><%= link_to time_entry.project.name, :controller => 'projects', :action => 'show', :id => time_entry.project %></td>
+  <td><%= link_to time_entry.project.name, :controller => 'projects', :action => 'show', :id => time_entry.project %></td>
   <td align="center">
     <% if time_entry.issue %>
     <div class="tooltip">

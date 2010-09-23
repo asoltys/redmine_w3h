@@ -1,4 +1,6 @@
 Event.observe(window, 'load', function() { 
+  $$('tr.time_entry').each(function(tr) { tr.removeClassName('odd'); });
+
   $$('tr.user td, tr.deliverable td, tr.activity td').each(function(td) { 
     td.observe('click', toggleRow);
   });

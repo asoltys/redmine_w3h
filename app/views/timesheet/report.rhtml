@@ -52,9 +52,8 @@
         <% @deliverables.each do |d| %>
           <% @deliverable_entries = @user_entries.reject{|e| e.deliverable_id != d.id } %>
           <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>
-          <% @row_class = cycle("odd", "even") %>
 
-          <tr class="deliverable collapsed  <%= @row_class %>">
+          <tr class="deliverable collapsed">
             <td colspan="4" class="first">
               <img class="toggle" src="/images/arrow_collapsed.png" />
               <%= d.to_s %>
@@ -67,7 +66,7 @@
 
           <% @activities.each do |a| %>
             <% @activity_entries = @deliverable_entries.reject{|e| e.activity_id != a.id } %>
-            <tr class="activity collapsed <%= @row_class %>" style="display: none">
+            <tr class="activity collapsed" style="display: none">
               <td colspan="4" class="first">
                 <img class="toggle" src="/images/arrow_collapsed.png" />
                 <%= a.name %>

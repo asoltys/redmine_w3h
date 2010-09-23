@@ -37,7 +37,7 @@
       <p id="activity_selection">
         <label for="timesheet[activities][]" class="select_all"><%= l(:timesheet_activities_label)%>:</label><br />
         <%= select_tag 'timesheet[activities][]',
-          options_from_collection_for_select(@activities, :id, :name, @timesheet.selected_activities),
+          options_from_collection_for_select(@timesheet.available_activities, :id, :name, @timesheet.selected_activities),
           { :multiple => true, :size => @list_size}
         %>
       </p>

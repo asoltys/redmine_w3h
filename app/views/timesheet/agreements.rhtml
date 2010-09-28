@@ -1,0 +1,31 @@
+<% content_for(:header_tags) do %>
+  <%= javascript_include_tag 'reports', :plugin => "timesheet_plugin" %>
+  <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
+  <%= stylesheet_link_tag "daily.css", :plugin => "timesheet_plugin", :media => 'all' %>
+<% end %>
+
+<%= render :partial=> 'menu' %>
+<%= render :partial=> 'form' %>
+
+<table class="list issues">
+  <tbody>
+    <tr class="header">
+      <th colspan="4"></th>
+      <th><%= l(:field_hours) %></th>
+      <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
+      <th></th>
+    </tr>
+
+    <% @timesheet.deliverables.each do |d| %>
+      <% @deliverable_entries = @timesheet.time_entries.select{|e| e.deliverable_id == d.id} %>
+      <% @users = User.find(@deliverable_entries.map(&:user_id), :order=> 'firstname ASC') %>
+
+      <tr class="deliverable <%= cycle('odd', 'even') %>">
+        <td colspan="4"><%= d.to_s %></td>
+        <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+        <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

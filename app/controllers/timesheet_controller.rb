@@ -39,6 +39,12 @@ class TimesheetController < ApplicationController
     @timesheet = Timesheet.new(params[:timesheet])
   end
 
+  def daily
+    respond_to do |format|
+      format.html { render :action => 'daily' }
+    end
+  end
+
   def report
     if @timesheet.available_projects.empty?
       render :action => 'no_projects'
@@ -50,9 +56,9 @@ class TimesheetController < ApplicationController
     end
   end
 
-  def daily
+  def agreements
     respond_to do |format|
-      format.html { render :action => 'daily' }
+      format.html { render :action => 'agreements' }
     end
   end
 

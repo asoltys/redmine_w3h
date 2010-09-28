@@ -41,14 +41,7 @@
           <td></td>
         </tr>
 
-        <% @deliverable_ids = @user_entries.map(&:deliverable_id).reject{|d| d == 0 || d.nil?} %>
-        <% @deliverables = @deliverable_ids = [] if @deliverable_ids.empty? %>
-        <% @deliverables = Deliverable.find(@deliverable_ids) unless @deliverable_ids.empty? %>
-
-        <% # Define a temporary object to represent a fictitious Non-Billable Time deliverable that responds to #id and #name %>
-        <% fake_deliverable = "Non-Billable Time"; class <<fake_deliverable; def id; nil; end; def name; self; end; end %>
-        <% @deliverables.push(fake_deliverable).uniq! if @user_entries.map(&:deliverable_id).include? nil %>
-        
+        <% @deliverables = @timesheet.deliverables.reject{|d| !@user_entries.map(&:deliverable_id).include? d.id } %>
         <% @deliverables.each do |d| %>
           <% @deliverable_entries = @user_entries.reject{|e| e.deliverable_id != d.id } %>
           <% @activities = Enumeration.find(@deliverable_entries.map(&:activity_id)) %>

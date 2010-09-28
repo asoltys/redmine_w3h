@@ -35,11 +35,14 @@ class Timesheet
     self.users = User.find(self.selected_users)
 
     unless options[:deliverables].nil?
-      self.selected_deliverables = options[:deliverables].map(&:to_i)
+      self.selected_deliverables = options[:deliverables].map(&:to_i).map{|i| i == 0 ? nil : i}
     else
-      self.selected_deliverables = []
+      self.selected_deliverables = available_deliverables.map(&:id)
     end
-    self.deliverables = Deliverable.find(self.selected_deliverables)
+    self.deliverables = []
+    real_deliverables = self.selected_deliverables.reject{|id| id.nil?}
+    self.deliverables = Deliverable.find(real_deliverables) unless real_deliverables.empty?
+    self.deliverables.push(fake_deliverable) if selected_deliverables.include? nil
 
     self.date_from = options[:date_from] || Date.today.to_s
     self.date_to = options[:date_to] || Date.today.to_s
@@ -75,7 +78,17 @@ class Timesheet
   end
 
   def available_deliverables
-    Deliverable.current.sort { |a,b| a.to_s <=> b.to_s }
+    deliverables = Deliverable.current.sort { |a,b| a.to_s <=> b.to_s }
+    deliverables.push(fake_deliverable)
+  end
+  
+  def fake_deliverable
+    d = "Non-Billable Time"
+    class <<d
+      def id; nil; end; 
+      def to_s; self; end;
+    end
+    return d
   end
 
   def required
@@ -125,7 +138,12 @@ class Timesheet
     end
 
     unless self.deliverables.empty?
-      conditions[0] += " AND #{TimeEntry.table_name}.deliverable_id IN (:deliverables)"
+      conditions[0] += " AND (#{TimeEntry.table_name}.deliverable_id IN (:deliverables)"
+      if self.selected_deliverables.include? nil
+        conditions[0] += " OR #{TimeEntry.table_name}.deliverable_id IS NULL)" 
+      else
+        conditions[0] += ")"
+      end
       conditions[1][:deliverables] = self.selected_deliverables
     end
 

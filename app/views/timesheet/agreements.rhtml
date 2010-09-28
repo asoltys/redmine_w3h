@@ -18,14 +18,15 @@
 
     <% @timesheet.deliverables.each do |d| %>
       <% @deliverable_entries = @timesheet.time_entries.select{|e| e.deliverable_id == d.id} %>
-      <% @users = User.find(@deliverable_entries.map(&:user_id), :order=> 'firstname ASC') %>
 
-      <tr class="deliverable <%= cycle('odd', 'even') %>">
-        <td colspan="4"><%= d.to_s %></td>
-        <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
-        <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
-        <td></td>
-      </tr>
+      <% unless @deliverable_entries.empty? %>
+        <tr class="deliverable <%= cycle('odd', 'even') %>">
+          <td colspan="4"><%= d.to_s %></td>
+          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+          <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
+          <td></td>
+        </tr>
+      <% end %>
     <% end %>
   </tbody>
 </table>

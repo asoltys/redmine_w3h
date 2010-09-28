@@ -74,7 +74,7 @@ class Timesheet
   end
 
   def available_users
-    User.active.sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }
+    User.find(:all).sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }
   end
 
   def available_deliverables

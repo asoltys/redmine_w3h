@@ -4,7 +4,7 @@ class TimesheetController < ApplicationController
   layout 'base'
   before_filter :get_user, :only => :daily
   before_filter :get_list_size
-  before_filter :get_timesheet
+  before_filter :get_timesheet, :except => :agreements
 
   helper :sort
   include SortHelper
@@ -57,6 +57,18 @@ class TimesheetController < ApplicationController
   end
 
   def agreements
+    unless params[:timesheet]
+      params[:timesheet] = {} 
+      params[:timesheet][:period_type] = Timesheet::ValidPeriodType[:free_period]
+      params[:timesheet][:date_from] = 9.weekdays_ago.strftime('%Y-%m-%d')
+      params[:timesheet][:date_to] = Date.today
+      params[:timesheet][:users] = User.find(:all).map(&:id)
+
+      params[:timesheet][:users] = [params[:user_id]] unless params[:user_id].nil?
+      params[:timesheet][:deliverables] = [params[:deliverable_id]] unless params[:deliverable_id].nil?
+    end
+
+    @timesheet = Timesheet.new(params[:timesheet])
     respond_to do |format|
       format.html { render :action => 'agreements' }
     end

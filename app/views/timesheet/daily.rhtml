@@ -38,6 +38,7 @@
                 <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
               </td>
               <td align="center"><%= number_with_precision(@user_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+              <td align="center"><%= number_with_precision(@user_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
               <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
               <td></td>
             </tr>

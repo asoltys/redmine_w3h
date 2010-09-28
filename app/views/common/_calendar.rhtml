@@ -18,7 +18,7 @@
       <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %>">
         <p class="day-num"><%= day.day %></p>	
        
-        <% if day.weekday? %> 
+        <% if day.weekday? and User.current.quota > 0 %> 
           <div class="logged-time <%= User.current.logged_time_class(day) %>">
             <a style="font-size: 18px" href="<%= "/timesheet/report?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>"><%= User.current.logged_time(day) %></a>
             <br />

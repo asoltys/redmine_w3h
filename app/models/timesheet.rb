@@ -152,33 +152,29 @@ class Timesheet
 
   def period=(period)
     return if self.period_type == Timesheet::ValidPeriodType[:free_period]
+    fiscal_year = Date.today.month < 4 ? Date.today.year - 1 : Date.today.year
 
     case period.to_s
     when 'today'
       self.date_from = self.date_to = Date.today
-    when 'yesterday'
-      self.date_from = self.date_to = Date.today - 1
-    when 'current_week' # Mon -> Sun
-      self.date_from = Date.today - (Date.today.cwday - 1)%7
-      self.date_to = self.date_from + 6
-    when 'last_week'
-      self.date_from = Date.today - 7 - (Date.today.cwday - 1)%7
-      self.date_to = self.date_from + 6
-    when '7_days'
-      self.date_from = Date.today - 7
-      self.date_to = Date.today
-    when 'current_month'
-      self.date_from = Date.civil(Date.today.year, Date.today.month, 1)
-      self.date_to = (self.date_from >> 1) - 1
-    when 'last_month'
-      self.date_from = Date.civil(Date.today.year, Date.today.month, 1) << 1
-      self.date_to = (self.date_from >> 1) - 1
     when '30_days'
       self.date_from = Date.today - 30
       self.date_to = Date.today
-    when 'current_year'
-      self.date_from = Date.civil(Date.today.year, 1, 1)
-      self.date_to = Date.civil(Date.today.year, 12, 31)
+    when 'fiscal_year'
+      self.date_from = Date.civil(fiscal_year, 4, 1)
+      self.date_to = Date.civil(fiscal_year + 1, 3, 31)
+    when 'q1'
+      self.date_from = Date.civil(fiscal_year, 4, 1)
+      self.date_to = Date.civil(fiscal_year, 6, 30)
+    when 'q2'
+      self.date_from = Date.civil(fiscal_year, 7, 1)
+      self.date_to = Date.civil(fiscal_year, 9, 30)
+    when 'q3'
+      self.date_from = Date.civil(fiscal_year, 10, 1)
+      self.date_to = Date.civil(fiscal_year, 12, 31)
+    when 'q4'
+      self.date_from = Date.civil(fiscal_year + 1, 1, 1)
+      self.date_to = Date.civil(fiscal_year + 1, 3, 31)
     when 'all'
       self.date_from = self.date_to = nil
     end

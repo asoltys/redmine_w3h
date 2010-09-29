@@ -1,4 +1,9 @@
 en:
+  label_q1: First Quarter
+  label_q2: Second Quarter
+  label_q3: Third Quarter
+  label_q4: Fourth Quarter
+  label_fiscal_year: Fiscal Year
   timesheet_title: Reports
   timesheet_date_from_label: From
   timesheet_date_to_label: To

@@ -13,7 +13,7 @@
 <% else %>
   <% dates = @timesheet.time_entries.map(&:spent_on) %>
 
-  <% (dates.min..dates.max).each do |d| %>
+  <% (dates.min..dates.max).to_a.reverse.each do |d| %>
     <% @date_entries = @timesheet.time_entries.select{|e| e.spent_on == d} %>
     <% @users = User.find(@date_entries.map(&:user_id), :order=> 'firstname ASC') %>
 

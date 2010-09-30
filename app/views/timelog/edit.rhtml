@@ -7,7 +7,6 @@
 <div class="box">
 <% if User.current.admin? %>
   <p><%= f.select :user_id, User.active.collect{|u| [u.to_s,u.id]}, :required => true %></p>
-  <p><%= f.select :project_id, Project.find(:all, :order => 'name').collect{|u| [u.name,u.id]}, :required => true %></p>
 <% end %>
 <p><%= f.text_field :issue_id, :size => 6 %> <em><%= h("#{@time_entry.issue.tracker.name} ##{@time_entry.issue.id}: #{@time_entry.issue.subject}") if @time_entry.issue %></em></p>
 <p><%= f.select :deliverable_id, [['Select One', '']] + @project.ancestor_deliverables.collect{|d| [d.to_s,d.id]}, :required => false %></p>

@@ -40,3 +40,5 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:timesheet_plugin)
   end
 end
 
+require 'redmine_goc/hooks/controller_timelog_edit_before_save_hook'
+

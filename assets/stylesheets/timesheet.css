@@ -1,8 +1,8 @@
 div#timesheet-form p { padding:0px 10px; float:left; }
 .icon-timesheet { background-image: url(../../../images/csv.png); }
 
-div#toggle-form, div#controls { font-size: 18px; width: 100; text-align: center; }
-div#controls { padding: 10px; }
+div#toggle-form a { padding: 5px; color: white; background: #369; display: block; font-size: 18px; width: 100; text-align: center; }
+div#controls { font-size: 14px; padding: 10px; text-align: center; }
 a { cursor: pointer; }
 table.list th { background: #fff; font-size: 18px; }
 tr.time_entry.odd th { background: #ddd; }
@@ -23,7 +23,7 @@ tr.activity td.first {
 tr.user td {
   white-space: auto;
   width: auto;
-  font-size: 24px; 
+  font-size: 18px; 
 }
 
 td.good { color: green; }

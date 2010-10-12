@@ -78,7 +78,7 @@ class Timesheet
   end
 
   def available_deliverables
-    deliverables = Deliverable.current.sort { |a,b| a.to_s <=> b.to_s }
+    deliverables = Deliverable.all.sort { |a,b| a.to_s <=> b.to_s }
     deliverables.push(fake_deliverable)
   end
   

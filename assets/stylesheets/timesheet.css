@@ -48,13 +48,16 @@ div.totals {
 
 div.logged-time {
   background:#ffc; 
-  padding: 6px; 
-  margin-bottom:6px;
+  padding: 3px; 
   border: 1px solid #d7d7d7; 
+  margin-bottom: 5px;
   width: 80%; 
-  height: 30px; 
   float: left;
   text-align: center;
+}
+
+div.logged-time a {
+  font-size: 18px;
 }
 
 p.day-num { float: right; }

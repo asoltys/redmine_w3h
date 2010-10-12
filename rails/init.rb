@@ -37,7 +37,7 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:timesheet_plugin)
            User.current.admin?
          })
 
-    menu :project_menu, :time_entries, {:controller => 'timelog', :action => 'edit'}, :param => :project_id, :caption => :label_log_time 
+    menu :project_menu, :time_entries, {:controller => 'timelog', :action => 'new'}, :param => :project_id, :caption => :label_log_time 
   end
 end
 

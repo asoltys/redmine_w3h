@@ -1,10 +1,20 @@
 fr:
-  timesheet_title: Feuille de temps
-  timesheet_date_from_label: De
-  timesheet_date_to_label: A
-  timesheet_project_label: Projet
-  timesheet_activities_label: Activite
-  timesheet_users_label: Utilisateurs
+  label_q1: first quarter
+  label_q2: second quarter
+  label_q3: third quarter
+  label_q4: fourth quarter
+  label_fiscal_year: Fiscal Year
+  label_log_time: Time
+  timesheet_title: Reports
+  timesheet_date_from_label: From
+  timesheet_date_to_label: To
+  timesheet_project_label: Project
+  timesheet_activities_label: Activity
+  timesheet_users_label: Users
+  timesheet_agreements_label: Agreements
+  timesheet_deliverables_label: Agreements
   timesheet_showing_users: 'showing time for: '
   timesheet_permalink: '(Permalink to this timesheet)'
   timesheet_group_by: Group by
+  field_cost: Cost
+  field_vwd: Value

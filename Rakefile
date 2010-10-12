@@ -24,7 +24,7 @@ begin
                         "[A-Z]*",
                         "init.rb",
                         "rails/init.rb",
-                        "{bin,generators,lib,test,app,assets,config,lang}/**/*",
+                        "{bin,generators,lib,test,app,assets,config}/**/*",
                         'lib/jeweler/templates/.gitignore'
                        ]
   end

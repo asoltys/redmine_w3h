@@ -4,6 +4,7 @@ en:
   label_q3: third quarter
   label_q4: fourth quarter
   label_fiscal_year: Fiscal Year
+  label_log_time: Time
   timesheet_title: Reports
   timesheet_date_from_label: From
   timesheet_date_to_label: To

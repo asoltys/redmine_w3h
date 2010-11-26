@@ -1,6 +1,6 @@
 lt:
   timesheet_title: Sunaudoto laiko suvestinė lentelė
-  timesheet_date_from_label: Pradedant nuo
+  timesheet_date_to_label: Pradedant nuo
   timesheet_date_to_label: iki
   timesheet_project_label: Projektas
   timesheet_activities_label: Aktivumas

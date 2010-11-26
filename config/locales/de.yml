@@ -1,6 +1,6 @@
 de:
   timesheet_title: Stundenzettel
-  timesheet_date_from_label: Von
+  timesheet_date_to_label: Von
   timesheet_date_to_label: Bis
   timesheet_project_label: Projekt
   timesheet_activities_label: Aktivität

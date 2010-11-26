@@ -1,0 +1,21 @@
+<div id="budget-list">
+  <% unless deliverables.empty? %>
+    <table id="deliverable-list" class="list deliverables">
+        <thead>
+          <tr>
+            <%= content_tag('th', " ") %>
+            <%= content_tag('th',l(:label_agreement)) %>
+            <%= content_tag('th',l(:label_number)) %>
+            <%= content_tag('th',l(:label_forecast)) %>
+            <%= content_tag('th',l(:label_budget)) %>
+            <%= content_tag('th',l(:label_spent)) %>
+            <%= content_tag('th',l(:label_invoiced)) %>
+            <%= Redmine::Hook.call_hook(:plugin_budget_view_deliverable_list_header, { }) %>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render :partial => 'deliverable', :collection => deliverables %>
+        </tbody>
+    </table>
+  <% end %>
+</div>

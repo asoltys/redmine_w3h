@@ -1,5 +1,12 @@
-Redmine Timesheets is a Redmine plugin to create timesheets from all projects.
-Copyright (C) 2007  Eric Davis, Little Stream Software
+Redmine W3H Plugin - Terms and Conditions of Use
+Unless otherwise noted, computer program source code of the W3H Plugin is covered under Crown Copyright, Government of Canada, and is distributed under the GNU General Public License.
+
+The Canada wordmark and related graphics associated with this distribution are protected under trademark law and copyright law. No permission is granted to use them outside the parameters of the Government of Canada's corporate identity program. For more information, see http://www.tbs-sct.gc.ca/fip-pcim/index-eng.asp
+
+Copyright title to all 3rd party software distributed with the Redmine W3H Plugin is held by the respective copyright holders as noted in those files. Users are asked to read the 3rd Party Licenses referenced with those assets.
+
+
+Copyright (C) 2010 Government of Canada
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

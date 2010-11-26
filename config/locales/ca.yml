@@ -1,6 +1,6 @@
 ca:
   timesheet_title: Full de temps
-  timesheet_date_from_label: De
+  timesheet_date_to_label: De
   timesheet_date_to_label: A
   timesheet_project_label: Projecte
   timesheet_activities_label: Activitat

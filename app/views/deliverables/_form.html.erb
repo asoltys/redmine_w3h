@@ -1,0 +1,53 @@
+<style>
+ #attachments_fields input[type=text] { display: none; }  
+ #attachments_fields label { display: none; }  
+</style>
+
+<fieldset class="tabular">
+    <%= error_messages_for 'deliverable' %>
+    <div class="box">
+      <div class="splitcontentleft">
+        <h2>Details</h2>
+        <p><%= f.text_field :subject, :label => l(:label_subject), :required => true %></p>
+        <p><%= f.text_field :number, :label => l(:label_number), :required => true %></p>
+
+        <p>
+          <%= f.select :category, options_for_select(['Change', 'Sustain'], @deliverable.category) %>
+        </p>
+
+        <p>
+          <%= f.text_field :due, :required => true, :size => 10 %>
+          <%= calendar_for('deliverable_due') %>
+        </p>
+
+        <h2>Financials</h2>
+
+        <p><%= f.text_field :forecast, :label => l(:label_forecast) %></p>
+        <p><%= f.text_field :budget, :label => l(:label_budget) %></p>
+        <p><%= f.text_field :invoiced, :label => l(:label_invoiced) %></p>
+
+      </div>
+
+      <div class="splitcontentright">
+        <h2>Status</h2>
+        <p>
+          <%= f.check_box(:project_manager_signoff, :label => '') %>
+          <label for="project_manager_signoff">Project Manager Signed</label>
+        </p>
+        <p>
+          <%= f.check_box(:client_signoff, :label => '') %>
+          <label for="client_signoff">Client Signed</label>
+        </p>
+
+        <h2>Files</h2>
+        <%= link_to_attachments @deliverable %>
+        <p>
+          <%= render :partial => 'attachments/form' %>
+        </p>
+      </div>
+
+      <div style="clear:both;"> </div>
+
+    </div>
+    <%= mode == :create ? submit_tag(l(:button_create)) : submit_tag(l(:button_update)) %>
+</fieldset>

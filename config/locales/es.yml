@@ -1,6 +1,6 @@
 es:
   timesheet_title: Hoja de tiempos
-  timesheet_date_from_label: De
+  timesheet_date_to_label: De
   timesheet_date_to_label: A
   timesheet_project_label: Proyecto
   timesheet_activities_label: Actividad

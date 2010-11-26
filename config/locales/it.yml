@@ -1,6 +1,6 @@
 it:
   timesheet_title: Consuntivo tempi
-  timesheet_date_from_label: Da
+  timesheet_date_to_label: Da
   timesheet_date_to_label: A
   timesheet_project_label: Progetto
   timesheet_activities_label: Attività

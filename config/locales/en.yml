@@ -6,7 +6,7 @@ en:
   label_fiscal_year: Fiscal Year
   label_log_time: Time
   timesheet_title: Reports
-  timesheet_date_from_label: From
+  timesheet_date_to_label: From
   timesheet_date_to_label: To
   timesheet_project_label: Project
   timesheet_activities_label: Activity

@@ -23,7 +23,6 @@ begin
     s.files =  FileList[
                         "[A-Z]*",
                         "init.rb",
-                        "rails/init.rb",
                         "{bin,generators,lib,test,app,assets,config}/**/*",
                         'lib/jeweler/templates/.gitignore'
                        ]

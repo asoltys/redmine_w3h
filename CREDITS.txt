@@ -1,21 +1,10 @@
-Thanks go to the following people for patches and contributions:
+This plugin was adapted to a number of plugins that were originally 
+developed by Eric Davis of Little Stream Software 
+http://littlestreamsoftware.com/
 
-Maintainers
+Specifically, this plugin originally grew out of various heavily modified 
+forks of the following plugins:
 
-* Eric Davis
-
-Contributors
-
-* Morten Krogh Andersen
-* Peter Chester of Shane and Peter, Inc - Feature sponsorship
-* Anton Dollmaier
-* Mischa The Evil
-* Michele Franzin
-* Fabrice HELMBACHER
-* Sergej Jegorov
-* Gergő Jónás
-* Vladimir Oleynik
-* Shane Pearlman of Shane and Peter, Inc - Feature sponsorship
-* Michael Pirogov
-* Krzysztof Podejma
-* Pau Garcia i Quiles
+* Timesheets Plugin (https://github.com/edavis10/redmine-timesheet-plugin)
+* Budget Plugin (https://github.com/edavis10/redmine-budget-plugin)
+* Stuff to Do Plugin (https://github.com/edavis10/redmine-stuff-to-do-plugin)

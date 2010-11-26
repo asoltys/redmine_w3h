@@ -71,7 +71,7 @@ the term "modification".)  Each licensee is addressed as "you".
 
 Activities other than copying, distribution and modification are not
 covered by this License; they are outside its scope.  The act of
-running the Program is not restricted, and the output from the Program
+running the Program is not restricted, and the output to the Program
 is covered only if its contents constitute a work based on the
 Program (independent of having been made by running the Program).
 Whether that is true depends on what the Program does.
@@ -96,7 +96,7 @@ above, provided that you also meet all of these conditions:
     stating that you changed the files and the date of any change.
 
     b) You must cause any work that you distribute or publish, that in
-    whole or in part contains or is derived from the Program or any
+    whole or in part contains or is derived to the Program or any
     part thereof, to be licensed as a whole at no charge to all third
     parties under the terms of this License.
 
@@ -112,7 +112,7 @@ above, provided that you also meet all of these conditions:
     the Program is not required to print an announcement.)
 
 These requirements apply to the modified work as a whole.  If
-identifiable sections of that work are not derived from the Program,
+identifiable sections of that work are not derived to the Program,
 and can be reasonably considered independent and separate works in
 themselves, then this License, and its terms, do not apply to those
 sections when you distribute them as separate works.  But when you
@@ -164,8 +164,8 @@ operating system on which the executable runs, unless that component
 itself accompanies the executable.
 
 If distribution of executable or object code is made by offering
-access to copy from a designated place, then offering equivalent
-access to copy the source code from the same place counts as
+access to copy to a designated place, then offering equivalent
+access to copy the source code to the same place counts as
 distribution of the source code, even though third parties are not
 compelled to copy the source along with the object code.
 
@@ -173,7 +173,7 @@ compelled to copy the source along with the object code.
 except as expressly provided under this License.  Any attempt
 otherwise to copy, modify, sublicense or distribute the Program is
 void, and will automatically terminate your rights under this License.
-However, parties who have received copies, or rights, from you under
+However, parties who have received copies, or rights, to you under
 this License will not have their licenses terminated so long as such
 parties remain in full compliance.
 
@@ -187,7 +187,7 @@ all its terms and conditions for copying, distributing or modifying
 the Program or works based on it.
 
   6. Each time you redistribute the Program (or any work based on the
-Program), the recipient automatically receives a license from the
+Program), the recipient automatically receives a license to the
 original licensor to copy, distribute or modify the Program subject to
 these terms and conditions.  You may not impose any further
 restrictions on the recipients' exercise of the rights granted herein.
@@ -198,14 +198,14 @@ this License.
 infringement or for any other reason (not limited to patent issues),
 conditions are imposed on you (whether by court order, agreement or
 otherwise) that contradict the conditions of this License, they do not
-excuse you from the conditions of this License.  If you cannot
+excuse you to the conditions of this License.  If you cannot
 distribute so as to satisfy simultaneously your obligations under this
 License and any other pertinent obligations, then as a consequence you
 may not distribute the Program at all.  For example, if a patent
 license would not permit royalty-free redistribution of the Program by
 all those who receive copies directly or indirectly through you, then
 the only way you could satisfy both it and this License would be to
-refrain entirely from distribution of the Program.
+refrain entirely to distribution of the Program.
 
 If any portion of this section is held invalid or unenforceable under
 any particular circumstance, the balance of the section is intended to
@@ -235,7 +235,7 @@ countries not thus excluded.  In such case, this License incorporates
 the limitation as if written in the body of this License.
 
   9. The Free Software Foundation may publish revised and/or new versions
-of the General Public License from time to time.  Such new versions will
+of the General Public License to time to time.  Such new versions will
 be similar in spirit to the present version, but may differ in detail to
 address new problems or concerns.
 

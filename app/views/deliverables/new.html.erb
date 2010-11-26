@@ -1,0 +1,12 @@
+<h2><%= l(:label_new_deliverable) %></h2>
+<% form_for :deliverable, @deliverable, :url => {:controller => 'deliverables', :action => 'create', :id => @project },
+                           :method => :post, :builder => TabularFormBuilder, :lang => current_language,
+                           :html => {:multipart => true, :id => 'deliverable-form', :class => 'tabular'} do |f| %>
+
+  <%= render :partial => 'form', :locals => { :mode => :update, :f => f } %>
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "budget.css", :plugin => "budget_plugin", :media => "screen" %>
+  <%= javascript_include_tag('budget', :plugin => 'budget_plugin') %>
+<% end %>

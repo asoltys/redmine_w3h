@@ -29,7 +29,7 @@ class TimesheetController < ApplicationController
       params[:timesheet] = {} 
       params[:timesheet][:users] = User.current.groups.length > 0 ? User.current.groups.first.users.map(&:id) : [User.current.id]
       params[:timesheet][:period_type] = Timesheet::ValidPeriodType[:free_period]
-      params[:timesheet][:date_from] = 9.weekdays_ago.strftime('%Y-%m-%d')
+      params[:timesheet][:date_to] = 9.weekdays_ago.strftime('%Y-%m-%d')
       params[:timesheet][:date_to] = Date.today
 
       params[:timesheet][:users] = [params[:user_id]] unless params[:user_id].nil?
@@ -60,7 +60,7 @@ class TimesheetController < ApplicationController
     unless params[:timesheet]
       params[:timesheet] = {} 
       params[:timesheet][:period_type] = Timesheet::ValidPeriodType[:free_period]
-      params[:timesheet][:date_from] = 9.weekdays_ago.strftime('%Y-%m-%d')
+      params[:timesheet][:date_to] = 9.weekdays_ago.strftime('%Y-%m-%d')
       params[:timesheet][:date_to] = Date.today
       params[:timesheet][:users] = User.find(:all).map(&:id)
 

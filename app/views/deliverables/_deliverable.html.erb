@@ -1,0 +1,23 @@
+<% css = cycle('odd','even') %>
+<tr id="deliverable-<%= deliverable.id %>" class="deliverable <%= css %>">
+  <td class="actions">
+    <% unless deliverable.attachments.empty? %>
+    <%= link_to(image_tag('pdf-icon.gif', :plugin => 'budget_plugin'), {:controller => 'attachments', :action => 'download', :id => deliverable.attachments.last, :filename => deliverable.attachments.last.filename }) %>
+    <% end %>
+    <%= link_to image_tag('edit.png'), { :action => 'edit', :id => deliverable.project_id, :deliverable_id => deliverable.id }, 
+      :title => l(:button_edit) %>
+
+    <%= link_to image_tag('delete.png'), { :action => 'destroy', :id => deliverable.project_id, :deliverable_id => deliverable.id }, 
+      :confirm => l(:text_are_you_sure), 
+      :method => :post, 
+      :title => l(:button_delete) %>
+  </td>
+
+  <%= content_tag(:td, link_to(h(deliverable), "/deliverables/edit/#{deliverable.project.id}?deliverable_id=#{deliverable.id}"), {:class => 'subject', :align => 'center'}) %>
+  <%= content_tag(:td, h(deliverable.number), {:align => 'center'}) %>
+  <%= content_tag(:td, number_to_currency(deliverable.forecast), {:align => 'center'}) %>
+  <%= content_tag(:td, number_to_currency(deliverable.budget), {:align => 'center'}) %>
+  <%= content_tag(:td, link_to(number_to_currency(deliverable.spent), "/timesheet/report?timesheet[period_type]=0&timesheet[period]=all&timesheet[deliverables][]=#{deliverable.id}"), {:align => 'center'}) %>
+  <%= content_tag(:td, number_to_currency(deliverable.invoiced), {:align => 'center'}) %>
+  <%= Redmine::Hook.call_hook(:plugin_budget_view_deliverable_summary_row, { :deliverable => deliverable }) %>
+</tr>

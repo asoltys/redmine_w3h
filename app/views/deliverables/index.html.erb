@@ -1,0 +1,23 @@
+<div id="budget-summary">
+  <%= render :partial => 'budget', :object => @budget %>
+</div>
+
+<div id="budget-list">
+  <h2>Sustain Agreements</h2>
+  <%= render :partial => 'list', :locals => {:deliverables => @deliverables.select{|d| d.category == 'Sustain' }} %>
+</div>
+
+<div id="budget-list">
+  <h2>Change Agreements</h2>
+  <%= render :partial => 'list', :locals => {:deliverables => @deliverables.select{|d| d.category == 'Change' }} %>
+</div>
+
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'deliverables/sidebar' %>
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= stylesheet_link_tag "budget.css", :plugin => "budget_plugin", :media => "screen" %>
+  <%= javascript_include_tag('budget', :plugin => 'budget_plugin') %>
+<% end %>

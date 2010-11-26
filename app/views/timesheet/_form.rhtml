@@ -16,7 +16,7 @@
 
         <%= radio_button_tag 'timesheet[period_type]', '1', @timesheet.period_type  == Timesheet::ValidPeriodType[:free_period] %>
         <span onclick="$('timesheet_period_type_1').checked = true;">
-          <%= f.text_field "date_from", :size => 10 %><%= calendar_for('timesheet_date_from') %><br />
+          <%= f.text_field "date_to", :size => 10 %><%= calendar_for('timesheet_date_to') %><br />
         </span>
 
         <br />
@@ -29,7 +29,7 @@
       <p id="project_selection">
         <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
         <%= select_tag ('timesheet[projects][]',
-          options_from_collection_for_select(@timesheet.available_projects, :id, :name, @timesheet.selected_projects),
+          options_to_collection_for_select(@timesheet.available_projects, :id, :name, @timesheet.selected_projects),
           {:multiple => true, :size => @list_size}) 
         %>
       </p>
@@ -37,7 +37,7 @@
       <p id="activity_selection">
         <label for="timesheet[activities][]" class="select_all"><%= l(:timesheet_activities_label)%>:</label><br />
         <%= select_tag 'timesheet[activities][]',
-          options_from_collection_for_select(@timesheet.available_activities, :id, :name, @timesheet.selected_activities),
+          options_to_collection_for_select(@timesheet.available_activities, :id, :name, @timesheet.selected_activities),
           {:multiple => true, :size => @list_size}
         %>
       </p>
@@ -45,7 +45,7 @@
       <p id="user_selection">
         <label for="timesheet[users][]" class="select_all"><%= l(:timesheet_users_label)%>:</label><br />
         <%= select_tag 'timesheet[users][]',
-          options_from_collection_for_select(@timesheet.available_users, :id, :name, @timesheet.selected_users),
+          options_to_collection_for_select(@timesheet.available_users, :id, :name, @timesheet.selected_users),
           {:multiple => true, :size => @list_size}
          %>
       </p>
@@ -53,7 +53,7 @@
       <p id="deliverable_selection">
         <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_deliverables_label)%>:</label><br />
         <%= select_tag 'timesheet[deliverables][]',
-          options_from_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
+          options_to_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
           {:multiple => true, :size => @list_size}
          %>
       </p>

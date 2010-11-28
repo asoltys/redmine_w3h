@@ -29,32 +29,32 @@
       <p id="project_selection">
         <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
         <%= select_tag ('timesheet[projects][]',
-          options_to_collection_for_select(@timesheet.available_projects, :id, :name, @timesheet.selected_projects),
-          {:multiple => true, :size => @list_size}) 
+          options_from_collection_for_select(@timesheet.available_projects, :id, :name, @timesheet.selected_projects),
+          {:multiple => true, :size => 10})
         %>
       </p>
 
       <p id="activity_selection">
         <label for="timesheet[activities][]" class="select_all"><%= l(:timesheet_activities_label)%>:</label><br />
         <%= select_tag 'timesheet[activities][]',
-          options_to_collection_for_select(@timesheet.available_activities, :id, :name, @timesheet.selected_activities),
-          {:multiple => true, :size => @list_size}
+          options_from_collection_for_select(@timesheet.available_activities, :id, :name, @timesheet.selected_activities),
+          {:multiple => true, :size => 10}
         %>
       </p>
 
       <p id="user_selection">
         <label for="timesheet[users][]" class="select_all"><%= l(:timesheet_users_label)%>:</label><br />
         <%= select_tag 'timesheet[users][]',
-          options_to_collection_for_select(@timesheet.available_users, :id, :name, @timesheet.selected_users),
-          {:multiple => true, :size => @list_size}
+          options_from_collection_for_select(@timesheet.available_users, :id, :name, @timesheet.selected_users),
+          {:multiple => true, :size => 10}
          %>
       </p>
 
       <p id="deliverable_selection">
         <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_deliverables_label)%>:</label><br />
         <%= select_tag 'timesheet[deliverables][]',
-          options_to_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
-          {:multiple => true, :size => @list_size}
+          options_from_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
+          {:multiple => true, :size => 10}
          %>
       </p>
 

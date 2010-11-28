@@ -1,4 +1,4 @@
-module RedmineGOC
+module RedmineW3H
   module Patches
     module QueryPatch
       def self.included(base) # :nodoc:

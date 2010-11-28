@@ -18,3 +18,25 @@ en:
   timesheet_group_by: Group by
   field_cost: Cost
   field_vwd: Value
+  budget_title: Budget
+  label_member_rate: Rate ($)
+  message_updated_issues: Updated %d issues
+  message_budget_settings: Enter a dollar amount or percentage into each field to set your default amount.  Use <strong>%%</strong> in the field for percentages.
+  label_new_deliverable: New agreement 
+  label_agreement: Agreement
+  label_project: Project
+  label_progress: Progress
+  label_subject: Subject
+  label_number: Number
+  label_type: Type 
+  label_budget: Labour Budget
+  label_spent: Value of Work Done
+  label_invoiced: Actual Invoiced Amount
+  label_forecast: Forecast
+  label_remaining: Variance
+  label_update_deliverable: Update Agreement
+  field_deliverable: Agreement
+  field_due: Date
+  field_project_manager_signoff: Project manager signed
+  field_client_signoff: Client signed
+  field_overtime: Overtime

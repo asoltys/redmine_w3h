@@ -42,19 +42,24 @@ Dispatcher.to_prepare :redmine_w3h do
   require_dependency 'weekdays'
 
   require_dependency 'issue'
-  Issue.send(:include, W3H::Patches::IssuePatch)
+  require 'redmine_w3h/patches/issue_patch'
+  Issue.send(:include, RedmineW3H::Patches::IssuePatch)
 
   require_dependency 'project'
-  Project.send(:include, W3H::Patches::ProjectPatch)
+  require 'redmine_w3h/patches/project_patch'
+  Project.send(:include, RedmineW3H::Patches::ProjectPatch)
 
   require_dependency 'query'
-  Query.send(:include, W3H::Patches::QueryPatch)
+  require 'redmine_w3h/patches/query_patch'
+  Query.send(:include, RedmineW3H::Patches::QueryPatch)
 
   require_dependency 'time_entry'
-  TimeEntry.send(:include, W3H::Patches::TimeEntryPatch)
+  require 'redmine_w3h/patches/time_entry_patch'
+  TimeEntry.send(:include, RedmineW3H::Patches::TimeEntryPatch)
 
   require_dependency 'user'
-  User.send(:include, W3H::Patches::UserPatch)
+  require 'redmine_w3h/patches/user_patch'
+  User.send(:include, RedmineW3H::Patches::UserPatch)
 end
 
 require 'redmine_w3h/hooks/budget_issue_hook'

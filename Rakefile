@@ -4,7 +4,7 @@ require 'redmine_plugin_support'
 Dir[File.expand_path(File.dirname(__FILE__)) + "/lib/tasks/**/*.rake"].sort.each { |ext| load ext }
 
 RedminePluginSupport::Base.setup do |plugin|
-  plugin.project_name = 'timesheet_plugin'
+  plugin.project_name = 'redmine_w3h'
   plugin.default_task = [:spec]
   plugin.tasks = [:doc, :release, :clean, :spec, :stats]
   # TODO: gem not getting this automaticly
@@ -14,7 +14,7 @@ end
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
-    s.name = "timesheet_plugin"
+    s.name = "redmine_w3h"
     s.summary = "A Timesheet plugin for Redmine to show timelogs for all projects"
     s.email = "edavis@littlestreamsoftware.com"
     s.homepage = "https://projects.littlestreamsoftware.com/projects/redmine-timesheet"

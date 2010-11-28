@@ -1,7 +1,7 @@
 <% content_for(:header_tags) do %>
-  <%= javascript_include_tag 'reports', :plugin => "timesheet_plugin" %>
-  <%= stylesheet_link_tag "timesheet.css", :plugin => "timesheet_plugin", :media => 'all' %>
-  <%= stylesheet_link_tag "daily.css", :plugin => "timesheet_plugin", :media => 'all' %>
+  <%= javascript_include_tag 'reports', :plugin => "redmine_w3h" %>
+  <%= stylesheet_link_tag "timesheet.css", :plugin => "redmine_w3h", :media => 'all' %>
+  <%= stylesheet_link_tag "daily.css", :plugin => "redmine_w3h", :media => 'all' %>
 <% end %>
 
 <%= render :partial=> 'menu' %>

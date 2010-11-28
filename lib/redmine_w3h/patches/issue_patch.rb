@@ -1,4 +1,4 @@
-module RedmineGOC
+module RedmineW3H
   module Patches
     module IssuePatch
       def self.included(base) 

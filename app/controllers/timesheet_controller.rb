@@ -3,7 +3,6 @@ class TimesheetController < ApplicationController
 
   layout 'base'
   before_filter :get_user, :only => :daily
-  before_filter :get_list_size
   before_filter :get_timesheet, :except => :agreements
 
   helper :sort
@@ -96,10 +95,6 @@ class TimesheetController < ApplicationController
   end
 
   private
-  def get_list_size
-    @list_size = Setting.plugin_timesheet_plugin['list_size'].to_i
-  end
-
   def get_user
     params[:user_id] = User.current.id unless params[:user_id]
   end

@@ -20,7 +20,7 @@
        
         <% if day.weekday? and User.current.quota > 0 %> 
           <div class="logged-time <%= User.current.logged_time_class(day) %>">
-            <a href="<%= "/timesheet/daily?timesheet[date_to]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>"><%= User.current.logged_time(day) %></a>
+            <a href="<%= "/timesheet/daily?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>"><%= User.current.logged_time(day) %></a>
           </div>
         <% end %>
 

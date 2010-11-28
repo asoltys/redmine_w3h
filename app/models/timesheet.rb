@@ -1,5 +1,5 @@
 class Timesheet
-  attr_accessor :deliverables, :date_to, :date_to, :projects, :activities, :deliverables, :users
+  attr_accessor :deliverables, :date_from, :date_to, :projects, :activities, :deliverables, :users
   attr_accessor :available_projects, :available_users, :available_activities, :available_deliverables
   attr_accessor :selected_projects, :selected_users, :selected_activities, :selected_deliverables
   attr_accessor :period, :period_type
@@ -44,7 +44,7 @@ class Timesheet
     self.deliverables = Deliverable.find(real_deliverables) unless real_deliverables.empty?
     self.deliverables.push(fake_deliverable) if selected_deliverables.include? nil
 
-    self.date_to = options[:date_to] || Date.today.to_s
+    self.date_from = options[:date_from] || Date.today.to_s
     self.date_to = options[:date_to] || Date.today.to_s
 
     if options[:period_type]
@@ -111,12 +111,12 @@ class Timesheet
 
   def quota
     if self.date_to.is_a?(String)
-      self.date_to = Date.parse(self.date_to)
+      self.date_from = Date.parse(self.date_from)
       self.date_to = Date.parse(self.date_to)
     end
 
-    unless self.date_to.nil?
-      return (self.date_to.weekdays_until(self.date_to) + (self.date_to.weekday? ? 1 : 0)) * WORKING_HOURS
+    unless self.date_from.nil?
+      return (self.date_from.weekdays_until(self.date_to) + (self.date_to.weekday? ? 1 : 0)) * WORKING_HOURS
     end
   end
 
@@ -131,9 +131,9 @@ class Timesheet
         :users => self.selected_users
       }]
 
-    if self.date_to && self.date_to
-      conditions[0] += " AND #{TimeEntry.table_name}.spent_on BETWEEN :to AND :to"
-      conditions[1][:to] = self.date_to
+    if self.date_from && self.date_to
+      conditions[0] += " AND #{TimeEntry.table_name}.spent_on BETWEEN :from AND :to"
+      conditions[1][:from] = self.date_from
       conditions[1][:to] = self.date_to
     end
 
@@ -156,27 +156,27 @@ class Timesheet
 
     case period.to_s
     when 'today'
-      self.date_to = self.date_to = Date.today
+      self.date_from = self.date_to = Date.today
     when '30_days'
-      self.date_to = Date.today - 30
+      self.date_from = Date.today - 30
       self.date_to = Date.today
     when 'fiscal_year'
-      self.date_to = Date.civil(fiscal_year, 4, 1)
+      self.date_from = Date.civil(fiscal_year, 4, 1)
       self.date_to = Date.civil(fiscal_year + 1, 3, 31)
     when 'q1'
-      self.date_to = Date.civil(fiscal_year, 4, 1)
+      self.date_from = Date.civil(fiscal_year, 4, 1)
       self.date_to = Date.civil(fiscal_year, 6, 30)
     when 'q2'
-      self.date_to = Date.civil(fiscal_year, 7, 1)
+      self.date_from = Date.civil(fiscal_year, 7, 1)
       self.date_to = Date.civil(fiscal_year, 9, 30)
     when 'q3'
-      self.date_to = Date.civil(fiscal_year, 10, 1)
+      self.date_from = Date.civil(fiscal_year, 10, 1)
       self.date_to = Date.civil(fiscal_year, 12, 31)
     when 'q4'
-      self.date_to = Date.civil(fiscal_year + 1, 1, 1)
+      self.date_from = Date.civil(fiscal_year + 1, 1, 1)
       self.date_to = Date.civil(fiscal_year + 1, 3, 31)
     when 'all'
-      self.date_to = self.date_to = nil
+      self.date_from = self.date_to = nil
     end
 
     return self

@@ -16,7 +16,7 @@
 
         <%= radio_button_tag 'timesheet[period_type]', '1', @timesheet.period_type  == Timesheet::ValidPeriodType[:free_period] %>
         <span onclick="$('timesheet_period_type_1').checked = true;">
-          <%= f.text_field "date_to", :size => 10 %><%= calendar_for('timesheet_date_to') %><br />
+          <%= f.text_field "date_from", :size => 10 %><%= calendar_for('timesheet_date_to') %><br />
         </span>
 
         <br />

@@ -1,9 +1,11 @@
-This plugin was adapted to a number of plugins that were originally 
+This plugin is maintained by Adam Soltys <adam.soltys@pwgsc-tpsgc.gc.ca>
+
+I adapted this plugin from a number of plugins that were originally 
 developed by Eric Davis of Little Stream Software 
 http://littlestreamsoftware.com/
 
 Specifically, this plugin originally grew out of various heavily modified 
-forks of the following plugins:
+forks of the following:
 
 * Timesheets Plugin (https://github.com/edavis10/redmine-timesheet-plugin)
 * Budget Plugin (https://github.com/edavis10/redmine-budget-plugin)

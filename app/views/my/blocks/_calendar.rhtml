@@ -1,6 +1,11 @@
 <h3><%= l(:label_calendar) %></h3>
-
-<% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :three_week_window) %>
+<% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :month) %>
+<% def calendar.startdt=(value); @startdt = value; end; %>
+<% def calendar.enddt=(value); @enddt= value; end; %>
+<% startdt = (Date.today - 7) - (Date.today.cwday - calendar.first_wday)%7 %>
+<% enddt = (Date.today + 7) + (calendar.last_wday - Date.today.cwday)%7 %>
+<% calendar.startdt = startdt %>
+<% calendar.enddt = enddt %>
 <% 
 calendar.events =
   Issue.find(

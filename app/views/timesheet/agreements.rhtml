@@ -7,6 +7,8 @@
 <%= render :partial=> 'menu' %>
 <%= render :partial=> 'form' %>
 
+<% total = 0 %>
+
 <table class="list issues">
   <tbody>
     <tr class="header">
@@ -20,13 +22,19 @@
       <% @deliverable_entries = @timesheet.time_entries.select{|e| e.deliverable_id == d.id} %>
 
       <% unless @deliverable_entries.empty? %>
+        <% value = @deliverable_entries.map(&:value).sum %>
+        <% total += value %> 
         <tr class="deliverable <%= cycle('odd', 'even') %>">
           <td colspan="4"><%= d.to_s %></td>
           <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
-          <td align="center"><%= number_to_currency(@deliverable_entries.map(&:value).sum, :precision => 2) %></td>
-          <td></td>
+          <td align="center"><%= number_to_currency(value, :precision => 2) %></td>
+          <td><%= d.budget %></td>
         </tr>
       <% end %>
     <% end %>
+    <tr>
+      <td colspan="4">Total</td>
+      <td></td>
+    </tr>
   </tbody>
 </table>

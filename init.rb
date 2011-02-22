@@ -33,6 +33,8 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
       :param => :project_id, 
       :caption => :label_log_time
     )
+
+    menu :project_menu, :budget, {:controller => "deliverables", :action => 'index'}, :caption => :budget_title
   end
 end
 

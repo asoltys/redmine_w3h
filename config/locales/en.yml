@@ -31,7 +31,7 @@ en:
   label_type: Type 
   label_budget: Labour Budget
   label_spent: Value of Work Done
-  label_invoiced: Actual Invoiced Amount
+  label_invoiced: YTD Billed
   label_forecast: Forecast
   label_remaining: Variance
   label_update_deliverable: Update Agreement

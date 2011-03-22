@@ -87,6 +87,7 @@ class Timesheet
     class <<d
       def id; nil; end; 
       def to_s; self; end;
+      def budget; 0; end;
     end
     return d
   end

@@ -7,7 +7,6 @@
 <%= render :partial=> 'menu' %>
 <%= render :partial=> 'form' %>
 
-<% total = 0 %>
 
 <table class="list issues">
   <tbody>
@@ -15,26 +14,37 @@
       <th colspan="4"></th>
       <th><%= l(:field_hours) %></th>
       <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
-      <th></th>
+      <th>Budget</th>
     </tr>
 
+    
+    <% total_hours = 0 %>
+    <% total_value = 0 %>
+    <% total_budget = 0 %>
     <% @timesheet.deliverables.each do |d| %>
       <% @deliverable_entries = @timesheet.time_entries.select{|e| e.deliverable_id == d.id} %>
 
       <% unless @deliverable_entries.empty? %>
         <% value = @deliverable_entries.map(&:value).sum %>
-        <% total += value %> 
+        <% hours = @deliverable_entries.map(&:regular_hours).sum %>
+
         <tr class="deliverable <%= cycle('odd', 'even') %>">
           <td colspan="4"><%= d.to_s %></td>
-          <td align="center"><%= number_with_precision(@deliverable_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+          <td align="center"><%= number_with_precision(hours, :precision => 1) %></td>
           <td align="center"><%= number_to_currency(value, :precision => 2) %></td>
-          <td><%= d.budget %></td>
+          <td align="center"><%= number_to_currency(d.budget) %></td>
         </tr>
+
+        <% total_value += value %> 
+        <% total_hours += hours %> 
+        <% total_budget += d.budget %> 
       <% end %>
     <% end %>
-    <tr>
+    <tr class="deliverable">
       <td colspan="4">Total</td>
-      <td></td>
+      <td align="center"><%= number_with_precision(total_hours, :precision => 1) %></td>
+      <td align="center"><%= number_to_currency(total_value, :precision => 2) %></td>
+      <td align="center"><%= number_to_currency(total_budget, :precision => 2) %></td>
     </tr>
   </tbody>
 </table>

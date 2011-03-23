@@ -17,7 +17,7 @@ module RedmineW3H
           end
 
           def value
-            return (hours / 7.5) * (overtime ? 810 : 445)
+            return cost * (overtime ? 1.5 : 1)
           end
 
           def regular_hours

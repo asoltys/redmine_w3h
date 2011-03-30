@@ -4,7 +4,7 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
   Redmine::Plugin.register :redmine_w3h do
     name 'W3H (Who, What, When and How Much?)'
     author 'Adam Soltys, Public Works and Government Services Canada'
-    description 'This plugin adds budget and time management functionality to Redmine'
+    description 'This plugin adds additional budget and time management functionality to Redmine'
     url 'https://github.com/asoltys/redmine_w3h'
     author_url 'http://adamsoltys.com/'
 
@@ -34,7 +34,17 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
       :caption => :label_log_time
     )
 
-    menu :project_menu, :budget, {:controller => "deliverables", :action => 'index'}, :caption => :budget_title
+    menu(
+      :project_menu, 
+      :budget, 
+      {:controller => "deliverables", :action => 'index'},
+      :caption => :budget_title
+    )
+
+    project_module :budget_module do
+      permission :view_budget, { :deliverables => [:index, :issues]}
+      permission :manage_budget, { :deliverables => [:new, :edit, :create, :update, :destroy, :preview, :bulk_assign_issues]}
+    end
   end
 end
 

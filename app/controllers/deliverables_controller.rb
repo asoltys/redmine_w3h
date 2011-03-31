@@ -133,7 +133,7 @@ class DeliverablesController < ApplicationController
   end
   
   def get_settings
-    @settings = Setting.plugin_budget_plugin
+    @settings = Setting.plugin_redmine_w3h
   end
 
   # Sorting orders

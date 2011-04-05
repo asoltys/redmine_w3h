@@ -9,6 +9,7 @@ class Deliverable < ActiveRecord::Base
   has_many :time_entries, :dependent => :nullify
 
   acts_as_attachable :view_permission => :view_budget, :delete_permission => :manage_budget
+  acts_as_customizable
 
   named_scope :current, :conditions => ["due BETWEEN '2010-04-01' AND '2011-03-31'"]
 

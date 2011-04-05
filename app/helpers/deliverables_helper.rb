@@ -1,5 +1,7 @@
 module DeliverablesHelper
 
+  include CustomFieldsHelper
+
   # Helper to generate a form used to calculate the total budget while editing
   # a Deliverable
   # TODO Later: Refactor since observers are not used anymore

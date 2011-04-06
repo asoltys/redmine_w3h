@@ -99,4 +99,47 @@ module DeliverablesHelper
     return number_to_percentage(percent_field, :precision => 0) unless percent_field.blank?
     return "$0"
   end
+	
+	def budget_custom_table(deliverable, is_header)			
+		unless deliverable.custom_field_values.empty?
+			table_columns = 7
+			custom_spaces = 4
+			row_count = 0
+			row_max = (deliverable.custom_field_values.size / custom_spaces.to_f).ceil
+			if (deliverable.custom_field_values.size % custom_spaces) == 0
+				custom_mod = custom_spaces
+			else
+				custom_mod = (deliverable.custom_field_values.size % custom_spaces)
+			end
+			
+			while row_count < row_max do
+				custom_index = row_count * custom_spaces
+				concat("<tr>")
+				if (row_max - row_count) == 1
+					head_space = table_columns - custom_mod
+					custom_increment = custom_mod - 1
+				else
+					head_space = 3
+					custom_increment = 3
+				end
+				while head_space > 0 do
+					if is_header
+						concat(content_tag('th', " "))
+					else
+						concat(content_tag('td', " "))
+					end
+					head_space -= 1
+				end
+				for custom_index in custom_index..custom_index+custom_increment do
+					if is_header
+						concat(content_tag('th',@deliverable_custom_fields[custom_index].name))
+					else
+						concat(content_tag('td',number_to_currency(show_value(deliverable.custom_field_values[custom_index]).to_f, :precision => 2), {:align => 'center'}))
+					end
+				end
+				concat("</tr>")
+				row_count += 1
+			end
+		end
+	end
 end

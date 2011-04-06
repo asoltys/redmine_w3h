@@ -104,42 +104,36 @@ module DeliverablesHelper
 		unless deliverable.custom_field_values.empty?
 			table_columns = 7
 			custom_spaces = 4
-			row_count = 0
-			row_max = (deliverable.custom_field_values.size / custom_spaces.to_f).ceil
-			if (deliverable.custom_field_values.size % custom_spaces) == 0
-				custom_mod = custom_spaces
-			else
-				custom_mod = (deliverable.custom_field_values.size % custom_spaces)
-			end
-			
-			while row_count < row_max do
-				custom_index = row_count * custom_spaces
+      mod_factor = (deliverable.custom_field_values.size % custom_spaces)
+			num_rows = (deliverable.custom_field_values.size / custom_spaces.to_f).ceil
+      custom_mod = mod_factor ? mod_factor : custom_spaces
+
+			(0..num_rows - 1).each do |current_row|
+				i = current_row * custom_spaces
 				concat("<tr>")
-				if (row_max - row_count) == 1
-					head_space = table_columns - custom_mod
-					custom_increment = custom_mod - 1
-				else
-					head_space = 3
-					custom_increment = 3
+        head_space = (num_rows - current_row) == 1 ? table_columns - custom_mod : 3
+        custom_increment = (num_rows - current_row) == 1 ? custom_mod - 1 : 3
+        v = deliverable.custom_field_values[i]
+
+				head_space.times do 
+          is_header ? concat(content_tag('th', " ")) : concat(content_tag('td', " "))
+        end
+
+				(i..i + custom_increment).each do
+					is_header ? budget_header_row(i) : budget_values_row(v)
 				end
-				while head_space > 0 do
-					if is_header
-						concat(content_tag('th', " "))
-					else
-						concat(content_tag('td', " "))
-					end
-					head_space -= 1
-				end
-				for custom_index in custom_index..custom_index+custom_increment do
-					if is_header
-						concat(content_tag('th',@deliverable_custom_fields[custom_index].name))
-					else
-						concat(content_tag('td',number_to_currency(show_value(deliverable.custom_field_values[custom_index]).to_f, :precision => 2), {:align => 'center'}))
-					end
-				end
+
 				concat("</tr>")
-				row_count += 1
 			end
 		end
 	end
+
+  def budget_header_row(i)
+    concat(content_tag('th',@deliverable_custom_fields[i].name))
+  end
+
+  def budget_values_row(v)
+    concat(content_tag('td', number_to_currency(show_value(v).to_f, 
+     :precision => 2), {:align => 'center'}))
+  end
 end

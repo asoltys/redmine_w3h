@@ -22,6 +22,7 @@ class DeliverablesController < ApplicationController
   end
 
   def new
+		@deliverable_custom_fields = DeliverableCustomField.find(:all, :order => "#{CustomField.table_name}.position")
     @deliverable = Deliverable.new
     @deliverable.project = @project
   end
@@ -29,6 +30,7 @@ class DeliverablesController < ApplicationController
   # Saves a new Deliverable
   def create
     params[:deliverable][:invoiced] = 0 if params[:deliverable][:invoiced].nil?
+		@deliverable_custom_fields = DeliverableCustomField.find(:all, :order => "#{CustomField.table_name}.position")
     @deliverable = Deliverable.new(params[:deliverable])
     @deliverable.project = @project
 
@@ -133,6 +135,7 @@ class DeliverablesController < ApplicationController
   end
   
   def get_settings
+		@deliverable_custom_fields = DeliverableCustomField.find(:all, :order => "#{CustomField.table_name}.position")
     @settings = Setting.plugin_redmine_w3h
   end
 

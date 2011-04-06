@@ -1,5 +1,4 @@
-<% @deliverable_custom_fields = DeliverableCustomField.find(:all, :order => "#{CustomField.table_name}.position") %>
-<% unless @deliverable_custom_fields.empty? %>
+<% unless @deliverable.custom_field_values.empty? %>
 	<% @deliverable.custom_field_values.each do |value| %>
 		<p><%= custom_field_tag_with_label :deliverable, value %></p>
 	<% end %>

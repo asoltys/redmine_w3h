@@ -13,16 +13,18 @@
             <%= Redmine::Hook.call_hook(:plugin_budget_view_deliverable_list_header, { }) %>
           </tr>
 					<% unless @deliverable.custom_field_values.empty? %>
+						<% custom_spaces_int = 4 %>
+						<% custom_spaces_float = 4.0 %>
 						<% row_count = 0 %>
-						<% row_max = (@deliverable.custom_field_values.size / 4.0).ceil %>
-						<% if (@deliverable.custom_field_values.size % 4.0) == 0 %>
-							<% custom_mod = 4 %>
+						<% row_max = (@deliverable.custom_field_values.size / custom_spaces_float).ceil %>
+						<% if (@deliverable.custom_field_values.size % custom_spaces_float) == 0 %>
+							<% custom_mod = custom_spaces_int %>
 						<% else %>
-							<% custom_mod = (@deliverable.custom_field_values.size % 4.0) %>
+							<% custom_mod = (@deliverable.custom_field_values.size % custom_spaces_float) %>
 						<% end %>
 						
 						<% while row_count < row_max do %>
-							<% custom_index = row_count*4 %>
+							<% custom_index = row_count * custom_spaces_int %>
 							<tr>
 								<% if (row_max - row_count) == 1 %>
 									<% head_space = 7 - custom_mod %>
@@ -41,7 +43,6 @@
 							</tr>
 							<% row_count += 1 %>
 						<% end %>
-						
 					<% end %>
         </thead>
         <tbody>

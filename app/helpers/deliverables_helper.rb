@@ -110,10 +110,10 @@ module DeliverablesHelper
 
 			(0..num_rows-1).each do |current_row|
 				i = current_row * custom_spaces
-				concat("<tr>")
         head_space = (num_rows - current_row) == 1 ? table_columns - custom_mod : 3
         custom_increment = (num_rows - current_row) == 1 ? custom_mod - 1 : 3
-
+				
+				concat("<tr>")
 				head_space.times do 
           is_header ? concat(content_tag('th', " ")) : concat(content_tag('td', " "))
         end
@@ -122,10 +122,10 @@ module DeliverablesHelper
 					v = deliverable.custom_field_values[i]
 					is_header ? budget_header_row(i) : budget_values_row(v)
 				end
-
 				concat("</tr>")
 			end
 		end
+		return
 	end
 
   def budget_header_row(i)

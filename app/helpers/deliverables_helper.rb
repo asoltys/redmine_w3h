@@ -108,18 +108,18 @@ module DeliverablesHelper
 			num_rows = (deliverable.custom_field_values.size / custom_spaces.to_f).ceil
       custom_mod = mod_factor ? mod_factor : custom_spaces
 
-			(0..num_rows - 1).each do |current_row|
+			(0..num_rows-1).each do |current_row|
 				i = current_row * custom_spaces
 				concat("<tr>")
         head_space = (num_rows - current_row) == 1 ? table_columns - custom_mod : 3
         custom_increment = (num_rows - current_row) == 1 ? custom_mod - 1 : 3
-        v = deliverable.custom_field_values[i]
 
 				head_space.times do 
           is_header ? concat(content_tag('th', " ")) : concat(content_tag('td', " "))
         end
 
-				(i..i + custom_increment).each do
+				(i..i + custom_increment).each do |i|
+					v = deliverable.custom_field_values[i]
 					is_header ? budget_header_row(i) : budget_values_row(v)
 				end
 

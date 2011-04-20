@@ -1,7 +1,7 @@
 <h3><%= l(:budget_title) %></h3>
 <% form_tag do %>
-  <label for="year">Fiscal Year:</label>
-  <%= select_tag :year, options_for_select([['2010/2011', '2011-03-31'], ['2009/2010', '2010-03-31']]) %> 
+<label for="year"><%= l(:label_fiscal_year) %>:</label>
+  <%= select_tag :year, fiscal_year_options %> 
   <input type="submit" value="Go">
 <% end %>
 <br />

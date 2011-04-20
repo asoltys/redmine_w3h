@@ -1,7 +1,7 @@
 class DeliverablesController < ApplicationController
   unloadable
   layout 'base'
-  before_filter :find_project, :get_settings
+  before_filter :find_project
   before_filter :authorize, :except => :summary
   before_filter :set_year
 

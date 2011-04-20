@@ -12,7 +12,6 @@
             <%= content_tag('th',l(:label_invoiced)) %>
             <%= Redmine::Hook.call_hook(:plugin_budget_view_deliverable_list_header, { }) %>
           </tr>
-					<%= budget_custom_table(@deliverable, true) %>
         </thead>
         <tbody>
           <%= render :partial => 'deliverable', :collection => deliverables %>

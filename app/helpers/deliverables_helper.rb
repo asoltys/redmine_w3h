@@ -136,4 +136,11 @@ module DeliverablesHelper
     concat(content_tag('td', number_to_currency(show_value(v).to_f, 
      :precision => 2), {:align => 'center'}))
   end
+
+  def fiscal_year_options
+    min_date = Deliverable.minimum('due')
+    max_date = Date.today.year + 1
+    fiscal_years = (max_date..min_date).map{|d| "#{d.year}/#{(d.year + 1)}"}
+    options_for_select(fiscal_years)
+  end
 end

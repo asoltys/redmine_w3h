@@ -137,10 +137,9 @@ module DeliverablesHelper
      :precision => 2), {:align => 'center'}))
   end
 
-  def fiscal_year_options
-    min_date = Deliverable.minimum('due')
-    max_date = Date.today.year + 1
-    fiscal_years = (max_date..min_date).map{|d| "#{d.year}/#{(d.year + 1)}"}
-    options_for_select(fiscal_years)
+  def fiscal_years
+    min_year = (Deliverable.minimum('due') - 4.months).year
+    max_year = [(Deliverable.maximum('due') - 4.months).year, Date.today.year].max
+    return (min_year..max_year).map{|y| ["#{y}/#{(y + 1)}", y]}.reverse
   end
 end

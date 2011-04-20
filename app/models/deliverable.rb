@@ -11,7 +11,7 @@ class Deliverable < ActiveRecord::Base
   acts_as_attachable :view_permission => :view_budget, :delete_permission => :manage_budget
   acts_as_customizable
 
-  named_scope :current, :conditions => ["due BETWEEN '2010-04-01' AND '2011-03-31'"]
+  named_scope :current, :conditions => ["due BETWEEN '#{Date.today - 4.months}' AND '#{(Date.today - 4.months) + 1.year}-03-31'"]
 
   def timelogs
     TimeEntry.find(:all, :conditions => {:deliverable_id => self.id}) 
@@ -35,7 +35,13 @@ class Deliverable < ActiveRecord::Base
     (user == user && user.allowed_to?(:manage_budget, project))
   end
 
-  def to_s
-    self.due.year.to_s  + ": " + self.project.name + ' - ' + self.subject
+  def to_s(include_fiscal_year = true)
+    s = ""
+    s = "#{fiscal_year.to_s}/#{(fiscal_year+1).to_s}: " if include_fiscal_year
+    s += self.project.name + ' - ' + self.subject
+  end
+
+  def fiscal_year
+    (due - 4.months).year
   end
 end

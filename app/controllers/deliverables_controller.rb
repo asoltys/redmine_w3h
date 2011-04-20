@@ -12,8 +12,14 @@ class DeliverablesController < ApplicationController
 
   # Main deliverable list
   def index
-    @deliverable = Deliverable.new
-    @deliverables = deliverables
+    @deliverables = Deliverable.find(:all, 
+      { 
+       :include => :project,
+       :conditions => "#{@project.project_condition(Setting.display_subprojects_issues?)} 
+        AND due BETWEEN '#{params[:year]}-04-01' AND '#{params[:year].to_i + 1}-03-31'",
+       :order => 'deliverables.number ASC'
+      }
+    )
     @budget = Budget.new(@deliverables, params[:year])
 
     respond_to do |format|
@@ -112,22 +118,6 @@ class DeliverablesController < ApplicationController
 
   private
 
-  def deliverables
-    Deliverable.find(:all, 
-      { 
-       :include => :project,
-       :conditions => conditions,
-       :order => 'deliverables.number ASC'
-      }
-    )
-  end
-
-  def conditions
-    prev_year = (params[:year].to_datetime - 1.year) + 1.day
-    conditions = @project.project_condition(Setting.display_subprojects_issues?)
-    conditions += " AND due BETWEEN '#{prev_year}' AND '#{params[:year]}'"
-  end
-
   def find_project
     if params[:id]
       @project = Project.find(params[:id])
@@ -170,8 +160,6 @@ class DeliverablesController < ApplicationController
   end
 
   def set_year
-    if params[:year].nil?
-      params[:year] = '2011-03-31'
-    end
+    params[:year] ||= Date.today.month < 4 ? Date.today.year - 1 : Date.today.year
   end
 end

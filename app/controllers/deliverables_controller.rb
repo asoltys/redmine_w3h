@@ -4,6 +4,7 @@ class DeliverablesController < ApplicationController
   before_filter :find_project
   before_filter :authorize, :except => :summary
   before_filter :set_year
+  before_filter :find_deliverables, :only => [:index, :create]
 
   helper :sort
   include SortHelper
@@ -12,14 +13,6 @@ class DeliverablesController < ApplicationController
 
   # Main deliverable list
   def index
-    @deliverables = Deliverable.find(:all, 
-      { 
-       :include => :project,
-       :conditions => "#{@project.project_condition(Setting.display_subprojects_issues?)} 
-        AND due BETWEEN '#{params[:year]}-04-01' AND '#{params[:year].to_i + 1}-03-31'",
-       :order => 'deliverables.number ASC'
-      }
-    )
     @budget = Budget.new(@deliverables, params[:year])
 
     respond_to do |format|
@@ -40,7 +33,7 @@ class DeliverablesController < ApplicationController
     @deliverable = Deliverable.new(params[:deliverable])
     @deliverable.project = @project
 
-    @budget = Budget.new(deliverables, @deliverable.due)
+    @budget = Budget.new(@deliverables, @deliverable.due)
     
     respond_to do |format|
       if @deliverable.save
@@ -122,6 +115,17 @@ class DeliverablesController < ApplicationController
     if params[:id]
       @project = Project.find(params[:id])
     end
+  end
+
+  def find_deliverables
+    @deliverables = Deliverable.find(:all, 
+      { 
+       :include => :project,
+       :conditions => "#{@project.project_condition(Setting.display_subprojects_issues?)} 
+        AND due BETWEEN '#{params[:year]}-04-01' AND '#{params[:year].to_i + 1}-03-31'",
+       :order => 'deliverables.number ASC'
+      }
+    )
   end
   
   def get_settings

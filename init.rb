@@ -69,6 +69,10 @@ Dispatcher.to_prepare :redmine_w3h do
   require 'redmine_w3h/patches/time_entry_patch'
   TimeEntry.send(:include, RedmineW3H::Patches::TimeEntryPatch)
 
+  require_dependency 'timelog_controller'
+  require 'redmine_w3h/patches/timelog_controller_patch'
+  TimeEntry.send(:include, RedmineW3H::Patches::TimelogControllerPatch)
+
   require_dependency 'user'
   require 'redmine_w3h/patches/user_patch'
   User.send(:include, RedmineW3H::Patches::UserPatch)

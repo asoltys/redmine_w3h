@@ -71,7 +71,7 @@ Dispatcher.to_prepare :redmine_w3h do
 
   require_dependency 'timelog_controller'
   require 'redmine_w3h/patches/timelog_controller_patch'
-  TimeEntry.send(:include, RedmineW3H::Patches::TimelogControllerPatch)
+  TimelogController.send(:include, RedmineW3H::Patches::TimelogControllerPatch)
 
   require_dependency 'user'
   require 'redmine_w3h/patches/user_patch'

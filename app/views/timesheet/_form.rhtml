@@ -1,4 +1,4 @@
-<div id="toggle-form"><a>Parameters</a></div>
+<div id="toggle-form"><a>Report Parameters <small>(Click here to filter time entries by date and other criteria)</small></a></div>
 
 <div id="timesheet-form" style="display: none;">
   <fieldset>
@@ -16,13 +16,11 @@
 
         <%= radio_button_tag 'timesheet[period_type]', '1', @timesheet.period_type  == Timesheet::ValidPeriodType[:free_period] %>
         <span onclick="$('timesheet_period_type_1').checked = true;">
-          <%= f.text_field "date_from", :size => 10 %><%= calendar_for('timesheet_date_to') %><br />
+          <%= f.text_field "date_from", :size => 10 %><%= calendar_for('timesheet_date_from') %>
         </span>
-
         <br />
-
         <span onclick="$('timesheet_period_type_1').checked = true;">
-          <%= f.text_field "date_to", :size => 10 %><%= calendar_for('timesheet_date_to') %><br /><br />
+          <%= f.text_field "date_to", :size => 10 %><%= calendar_for('timesheet_date_to') %>
         </span>
       </p>
 
@@ -41,6 +39,8 @@
           {:multiple => true, :size => 10}
         %>
       </p>
+
+      <div class="clear"></div>
 
       <p id="user_selection">
         <label for="timesheet[users][]" class="select_all"><%= l(:timesheet_users_label)%>:</label><br />

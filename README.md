@@ -6,11 +6,11 @@ The code for this plugin was adapted from Eric Davis' [Timesheet](http://github.
 
 ## Terms and Conditions of Use
 
-Unless otherwise noted, computer program source code of the Land Info Data Manager is covered under Crown Copyright, Government of Canada, and is distributed under the MIT License.
+Unless otherwise noted, computer program source code of this software is covered under Crown Copyright, Government of Canada, and is distributed under the MIT License.
 
 The Canada wordmark and related graphics associated with this distribution are protected under trademark law and copyright law. No permission is granted to use them outside the parameters of the Government of Canada's corporate identity program. For more information, see http://www.tbs-sct.gc.ca/fip-pcim/index-eng.asp
 
-Copyright title to all 3rd party software distributed with the Land Info Data Manager is held by the respective copyright holders as noted in those files. Users are asked to read the 3rd Party Licenses referenced with those assets.
+Copyright title to all 3rd party software distributed with this software is held by the respective copyright holders as noted in those files. Users are asked to read the 3rd Party Licenses referenced with those assets.
 
 ## MIT License
 

@@ -18,6 +18,8 @@
   <% @users = User.find(@users, :order=> 'firstname ASC') %>
 
   <table class="list issues">
+    <colgroup span="4" class="data" />
+    <colgroup span="1" class="controls" />
     <tbody>
       <tr class="header">
         <th colspan="4"></th>
@@ -70,7 +72,7 @@
               <td></td>
             </tr>
             <%= render :partial => "time_entry", :collection => @activity_entries  %>
-            <tr class="activity_end">
+            <tr class="activity_end" style="display: none">
               <td colspan="7"></td>
             </tr>
           <% end %>

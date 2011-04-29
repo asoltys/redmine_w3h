@@ -72,7 +72,7 @@
 }
 
 @media print {
-  div#toggle-form { display: none; }	
-  h2#menu { display: none; }
-  td.controls a { display: none; }
+  div#toggle-form, div#timesheet-form, div#controls, h2#menu, div#cn-sig { display: none; }
+  img.gravatar, img.toggle, td.controls a { display: none; }
+  .deliverable_end, .activity_end, .user_end { display: none; }
 }

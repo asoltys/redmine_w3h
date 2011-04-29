@@ -50,6 +50,14 @@
          %>
       </p>
 
+      <p id="group_selection">
+        <label for="timesheet[groups][]" class="select_all"><%= l(:timesheet_groups_label)%>:</label><br />
+        <%= select_tag 'timesheet[groups][]',
+          options_from_collection_for_select(@timesheet.available_groups, :id, :name, @timesheet.selected_groups),
+          {:multiple => true, :size => 10}
+         %>
+      </p>
+
       <p id="deliverable_selection">
         <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_deliverables_label)%>:</label><br />
         <%= select_tag 'timesheet[deliverables][]',

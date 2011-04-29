@@ -1,7 +1,7 @@
 class Timesheet
-  attr_accessor :deliverables, :date_from, :date_to, :projects, :activities, :deliverables, :users
-  attr_accessor :available_projects, :available_users, :available_activities, :available_deliverables
-  attr_accessor :selected_projects, :selected_users, :selected_activities, :selected_deliverables
+  attr_accessor :deliverables, :date_from, :date_to, :projects, :activities, :deliverables, :users, :groups
+  attr_accessor :available_projects, :available_users, :available_groups, :available_activities, :available_deliverables
+  attr_accessor :selected_projects, :selected_users, :selected_groups, :selected_activities, :selected_deliverables
   attr_accessor :period, :period_type
   attr_accessor :time_entries
 
@@ -33,6 +33,13 @@ class Timesheet
       self.selected_users = User.current.groups.first.users.map(&:id)
     end
     self.users = User.find(self.selected_users)
+
+    unless options[:groups].nil?
+      self.selected_groups = options[:groups].map(&:to_i)
+    else
+      self.selected_groups = available_groups.map(&:id)
+    end
+    self.groups = Group.find(self.selected_groups)
 
     unless options[:deliverables].nil?
       self.selected_deliverables = options[:deliverables].map(&:to_i).map{|i| i == 0 ? nil : i}
@@ -76,6 +83,10 @@ class Timesheet
   def available_users
     User.find(:all).sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }
   end
+
+  def available_groups
+    Group.find(:all).sort { |a,b| a.to_s.downcase <=> b.to_s.downcase }
+  end    
 
   def available_deliverables
     deliverables = Deliverable.all.sort { |a,b| a.to_s <=> b.to_s }

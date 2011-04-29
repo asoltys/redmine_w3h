@@ -1,20 +1,23 @@
-h1. Who, What, When and How Much?
+# Who, What, When, and How Much?
 
-A time and budget tracking service for project teams
+This is a plugin for [Redmine](http://redmine.org/) tailored for [Intellectual Resources Canada](http://tbs-sct.ircan.gc.ca/) to provide additional functionality in the area of project budget management and time reporting.
 
-h1. Getting the plugin
+The code for this plugin was adapted from Eric Davis' [Timesheet](http://github.com/edavis10/redmine-timesheet-plugin/) and [Budget](http://github.com/edavis10/redmine-budget-plugin/) plugins
 
-The plugin can be downloaded from https://github.com/asoltys/redmine_w3h
+## Terms and Conditions of Use
 
-h1. Installation and Setup
+Unless otherwise noted, computer program source code of the Land Info Data Manager is covered under Crown Copyright, Government of Canada, and is distributed under the MIT License.
 
-1. Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins Make sure the plugin is installed to vendor/plugins/redmine_w3h
-2. Restart your ruby server
+The Canada wordmark and related graphics associated with this distribution are protected under trademark law and copyright law. No permission is granted to use them outside the parameters of the Government of Canada's corporate identity program. For more information, see http://www.tbs-sct.gc.ca/fip-pcim/index-eng.asp
 
-h1. License
+Copyright title to all 3rd party software distributed with the Land Info Data Manager is held by the respective copyright holders as noted in those files. Users are asked to read the 3rd Party Licenses referenced with those assets.
 
-This plugin is licensed under Canadian Crown Copyright and the GNU GPL v2.  See LICENSE.txt and GPL.txt for details.
+## MIT License
 
-h1. Project help
+Copyright (c) 2011 Government of Canada
 
-If you need help, you can contact the maintainer, Adam Soltys, at mailto:adam.soltys@pwgsc-tpsgc.gc.ca 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

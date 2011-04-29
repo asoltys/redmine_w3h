@@ -15,7 +15,7 @@
   <td align="center"><%= number_with_precision(time_entry.regular_hours, :precision => 1) %></td>
   <td align="center"><%= number_with_precision(time_entry.overtime_hours, :precision => 1) %></td>
   <td align="center"><%= number_to_currency(time_entry.value, :precision => 2) %></td>
-  <td align="center">
+  <td align="center" class="controls">
     <% if time_entry.editable_by?(User.current) -%>
       <%= link_to image_tag('edit.png'), {:controller => 'timelog', :action => 'edit', :id => time_entry},
                                        :title => l(:button_edit) %>

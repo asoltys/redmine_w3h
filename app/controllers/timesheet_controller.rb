@@ -89,11 +89,6 @@ class TimesheetController < ApplicationController
     end
   end
 
-  def context_menu
-    @time_entries = TimeEntry.find(:all, :conditions => ['id IN (?)', params[:ids]])
-    render :layout => false
-  end
-
   private
   def get_user
     params[:user_id] = User.current.id unless params[:user_id]

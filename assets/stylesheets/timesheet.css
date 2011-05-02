@@ -73,6 +73,6 @@
 
 @media print {
   div#toggle-form, div#timesheet-form, div#controls, h2#menu, div#cn-sig { display: none; }
-  img.gravatar, img.toggle, td.controls a { display: none; }
+  img.gravatar, img.toggle, .controls { display: none; }
   .deliverable_end, .activity_end, .user_end { display: none; }
 }

@@ -11,6 +11,7 @@ fr:
   timesheet_project_label: Project
   timesheet_activities_label: Activity
   timesheet_users_label: Users
+  timesheet_groups_label: Groups
   timesheet_agreements_label: Agreements
   timesheet_deliverables_label: Agreements
   timesheet_showing_users: 'showing time for: '

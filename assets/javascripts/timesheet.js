@@ -1,13 +1,4 @@
 Event.observe(window, 'load', function() { 
-  $('timesheet_groups_').observe('change', function() {
-    if ($('timesheet_groups_').getValue().size() == 0) {
-      $('timesheet_users_').enable();
-    } else {
-      $$('#timesheet_users_ option').each(function(e) {e.selected = false;});
-      $('timesheet_users_').disable();
-    }
-  });
-
   $$('tr.time_entry').each(function(tr) { tr.removeClassName('odd'); });
 
   $$('tr.user td, tr.deliverable td, tr.activity td').each(function(td) { 

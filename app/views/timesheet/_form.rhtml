@@ -27,7 +27,7 @@
       <p id="project_selection">
         <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
         <%= select_tag ('timesheet[projects][]',
-          options_from_collection_for_select(@timesheet.available_projects, :id, :name, @timesheet.selected_projects),
+          options_from_collection_for_select(@timesheet.avl_projects, :id, :name, @timesheet.sel_projects),
           {:multiple => true, :size => 10})
         %>
       </p>
@@ -35,7 +35,7 @@
       <p id="activity_selection">
         <label for="timesheet[activities][]" class="select_all"><%= l(:timesheet_activities_label)%>:</label><br />
         <%= select_tag 'timesheet[activities][]',
-          options_from_collection_for_select(@timesheet.available_activities, :id, :name, @timesheet.selected_activities),
+          options_from_collection_for_select(@timesheet.avl_activities, :id, :name, @timesheet.sel_activities),
           {:multiple => true, :size => 10}
         %>
       </p>
@@ -45,7 +45,7 @@
       <p id="user_selection">
         <label for="timesheet[users][]" class="select_all"><%= l(:timesheet_users_label)%>:</label><br />
         <%= select_tag 'timesheet[users][]',
-          options_from_collection_for_select(@timesheet.available_users, :id, :name, @timesheet.selected_users),
+          options_from_collection_for_select(@timesheet.avl_users, :id, :name, @timesheet.sel_users),
           {:multiple => true, :size => 10}
          %>
       </p>
@@ -53,7 +53,7 @@
       <p id="group_selection">
         <label for="timesheet[groups][]" class="select_all"><%= l(:timesheet_groups_label)%>:</label><br />
         <%= select_tag 'timesheet[groups][]',
-          options_from_collection_for_select(@timesheet.available_groups, :id, :name, @timesheet.selected_groups),
+          options_from_collection_for_select(@timesheet.avl_groups, :id, :name),
           {:multiple => true, :size => 10}
          %>
       </p>
@@ -61,7 +61,7 @@
       <p id="deliverable_selection">
         <label for="timesheet[deliverables][]" class="select_all"><%= l(:timesheet_deliverables_label)%>:</label><br />
         <%= select_tag 'timesheet[deliverables][]',
-          options_from_collection_for_select(@timesheet.available_deliverables, :id, :to_s, @timesheet.selected_deliverables),
+          options_from_collection_for_select(@timesheet.avl_deliverables, :id, :to_s, @timesheet.sel_deliverables),
           {:multiple => true, :size => 10}
          %>
       </p>

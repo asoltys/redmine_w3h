@@ -17,7 +17,7 @@ class TimesheetController < ApplicationController
       @timesheet.users = [] # Clear users so they aren't selected
     end
 
-    if @timesheet.available_projects.empty?
+    if @timesheet.avl_projects.empty?
       render :action => 'no_projects'
       return
     end
@@ -45,7 +45,7 @@ class TimesheetController < ApplicationController
   end
 
   def report
-    if @timesheet.available_projects.empty?
+    if @timesheet.avl_projects.empty?
       render :action => 'no_projects'
       return
     end

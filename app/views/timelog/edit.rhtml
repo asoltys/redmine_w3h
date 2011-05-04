@@ -14,26 +14,42 @@
 <%= back_url_hidden_field_tag %>
 
 <div class="box">
-<% if User.current.admin? %>
-  <p><%= f.select :user_id, User.active.collect{|u| [u.to_s,u.id]}, :required => true %></p>
-<% end %>
-<p><%= f.text_field :issue_id, :size => 6 %> <em><%= h("#{@time_entry.issue.tracker.name} ##{@time_entry.issue.id}: #{@time_entry.issue.subject}") if @time_entry.issue %></em></p>
-<p><%= f.select :deliverable_id, [['Select One', '']] + @project.ancestor_deliverables.collect{|d| [d.to_s,d.id]}, :required => false %></p>
-<p id="single_date"><%= f.text_field :spent_on, :size => 10, :required => true %><%= calendar_for('time_entry_spent_on') %><br /><small><a href="#" id="show_range">Specify Range</a></small></p>
-<% if @time_entry.new_record? %>
-<div id="date_range">
-<p><label for="date_from">From Date <span class="required"> *</span></label><input type="text" id="date_from" name="date_from" size="10" /><%= calendar_for('date_from') %></p>
-<p><label for="date_to">To Date <span class="required"> *</span></label><input type="text" id="date_to" name="date_to" size="10" /><%= calendar_for('date_to') %><br /><small><a href="#" id="show_single_date">Specify Single Date</a></small></p>
-</div>
-<% end %>
-<p><%= f.text_field :hours, :size => 6, :required => true %></p>
-<p><%= f.text_field :comments, :size => 100 %></p>
-<p><%= f.select :activity_id, activity_collection_for_select_options(@time_entry), :required => true %></p>
-<p><%= f.select :overtime, [['No', false], ['Yes', true]], :required => true %></p>
-<% @time_entry.custom_field_values.each do |value| %>
-	<p><%= custom_field_tag_with_label :time_entry, value %></p>
-<% end %>
-<%= call_hook(:view_timelog_edit_form_bottom, { :time_entry => @time_entry, :form => f }) %>
+  <% if User.current.admin? %>
+    <p><%= f.select :user_id, User.active.collect{|u| [u.to_s,u.id]}, :required => true %></p>
+  <% end %>
+  <p><%= f.text_field :issue_id, :size => 6 %> <em><%= h("#{@time_entry.issue.tracker.name} ##{@time_entry.issue.id}: #{@time_entry.issue.subject}") if @time_entry.issue %></em></p>
+  <p><%= f.select :deliverable_id, [['Select One', '']] + @project.ancestor_deliverables.collect{|d| [d.to_s,d.id]}, :required => false %></p>
+
+  <p id="single_date">
+    <%= f.text_field :spent_on, :size => 10, :required => true %><%= calendar_for('time_entry_spent_on') %>
+    <br />
+    <% if @time_entry.new_record? %>
+      <small><a href="#" id="show_range">Specify Range</a></small>
+    <% end %>
+  </p>
+
+  <% if @time_entry.new_record? %>
+    <div id="date_range">
+      <p>
+        <label for="date_from">From Date <span class="required"> *</span></label>
+        <input type="text" id="date_from" name="date_from" size="10" /><%= calendar_for('date_from') %>
+      </p>
+      <p>
+        <label for="date_to">To Date <span class="required"> *</span></label>
+        <input type="text" id="date_to" name="date_to" size="10" /><%= calendar_for('date_to') %><br />
+        <small><a href="#" id="show_single_date">Specify Single Date</a></small>
+      </p>
+    </div>
+  <% end %>
+
+  <p><%= f.text_field :hours, :size => 6, :required => true %></p>
+  <p><%= f.text_field :comments, :size => 100 %></p>
+  <p><%= f.select :activity_id, activity_collection_for_select_options(@time_entry), :required => true %></p>
+  <p><%= f.select :overtime, [['No', false], ['Yes', true]], :required => true %></p>
+  <% @time_entry.custom_field_values.each do |value| %>
+    <p><%= custom_field_tag_with_label :time_entry, value %></p>
+  <% end %>
+  <%= call_hook(:view_timelog_edit_form_bottom, { :time_entry => @time_entry, :form => f }) %>
 </div>
 
 <%= submit_tag l(:button_save) %>

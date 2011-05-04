@@ -16,7 +16,6 @@
       <th>Billed</th>
       <th>Unbilled</th>
       <th>Total</th>
-      <th>Required</th>
       <th>Missing</th>
       <th>Billable Ratio</th>
     </tr>
@@ -38,7 +37,6 @@
         <td align="center"><%= number_with_precision(@billable_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@non_billable_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@total_hours, 2) %></td>
-        <td align="center"><%= number_with_precision(@required_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@delinquent_hours,2) %></td>
         <td align="center"><%= number_with_precision(@billable_ratio,2)%>%</td>
       </tr>

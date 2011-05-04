@@ -13,55 +13,43 @@ class Timesheet
   }
   
   def initialize(options = { })
-    unless options[:projects].nil?
-      self.selected_projects = options[:projects].map(&:to_i)
-    else
-      self.selected_projects = available_projects.map(&:id)
-    end
-    self.projects = Project.find(self.selected_projects)
+    @selected_projects = options[:projects].nil? ? available_projects : options[:projects].map(&:to_i)
+    @projects = Project.find(@selected_projects)
 
-    unless options[:activities].nil?
-      self.selected_activities = options[:activities].map(&:to_i)
-    else
-      self.selected_activities = available_activities.map(&:id)
-    end
-    self.activities = Enumeration.find(self.selected_activities)
+    @selected_activities = options[:activities].nil? ? available_activities.map(&:id) : options[:activities].map(&:to_i) 
+    @activities = Enumeration.find(@selected_activities)
     
-    unless options[:users].nil?
-      self.selected_users = options[:users].map(&:to_i)
-    else
-      self.selected_users = User.current.groups.first.users.map(&:id)
-    end
-    self.users = User.find(self.selected_users)
+    @selected_groups = options[:groups].nil? ? [] : options[:groups].map(&:to_i)
+    @groups = Group.find(@selected_groups)
 
-    unless options[:groups].nil?
-      self.selected_groups = options[:groups].map(&:to_i)
+    if groups.empty?
+      @selected_users = options[:users].nil? ? User.current.groups.first.users.map(&:id) : options[:users].map(&:to_i)
     else
-      self.selected_groups = available_groups.map(&:id)
+      @selected_users = groups.map(&:users).flatten.map(&:id)
     end
-    self.groups = Group.find(self.selected_groups)
+    @users = User.find(@selected_users)
 
     unless options[:deliverables].nil?
-      self.selected_deliverables = options[:deliverables].map(&:to_i).map{|i| i == 0 ? nil : i}
+      @selected_deliverables = options[:deliverables].map(&:to_i).map{|i| i == 0 ? nil : i}
     else
-      self.selected_deliverables = available_deliverables.map(&:id)
+      @selected_deliverables = available_deliverables.map(&:id)
     end
-    self.deliverables = []
-    real_deliverables = self.selected_deliverables.reject{|id| id.nil?}
-    self.deliverables = Deliverable.find(real_deliverables) unless real_deliverables.empty?
-    self.deliverables.push(fake_deliverable) if selected_deliverables.include? nil
+    @deliverables = []
+    real_deliverables = @selected_deliverables.reject{|id| id.nil?}
+    @deliverables = Deliverable.find(real_deliverables) unless real_deliverables.empty?
+    @deliverables.push(fake_deliverable) if selected_deliverables.include? nil
 
-    self.date_from = options[:date_from] || Date.today.to_s
-    self.date_to = options[:date_to] || Date.today.to_s
+    @date_from = options[:date_from] || Date.today.to_s
+    @date_to = options[:date_to] || Date.today.to_s
 
     if options[:period_type]
-      self.period_type = options[:period_type].to_i
+      @period_type = options[:period_type].to_i
     else
-      self.period_type = Timesheet::ValidPeriodType[:free_period]
+      @period_type = Timesheet::ValidPeriodType[:free_period]
     end
-    self.period = options[:period] || nil
+    @period = options[:period] || nil
 
-    self.time_entries = TimeEntry.find(
+    @time_entries = TimeEntry.find(
       :all,
       :conditions => conditions,
       :include => [:activity, :user, :project, {:issue => [:tracker, :assigned_to, :priority]}],
@@ -138,25 +126,25 @@ class Timesheet
       " AND #{TimeEntry.table_name}.user_id IN (:users) " +
       " AND #{TimeEntry.table_name}.activity_id IN (:activities)",
       {
-        :projects => self.selected_projects,
-        :activities => self.selected_activities,
-        :users => self.selected_users
+        :projects => selected_projects,
+        :activities => selected_activities,
+        :users => selected_users
       }]
 
-    if self.date_from && self.date_to
+    if date_from && date_to
       conditions[0] += " AND #{TimeEntry.table_name}.spent_on BETWEEN :from AND :to"
-      conditions[1][:from] = self.date_from
-      conditions[1][:to] = self.date_to
+      conditions[1][:from] = date_from
+      conditions[1][:to] = date_to
     end
 
-    unless self.deliverables.empty?
+    unless deliverables.empty?
       conditions[0] += " AND (#{TimeEntry.table_name}.deliverable_id IN (:deliverables)"
-      if self.selected_deliverables.include? nil
+      if selected_deliverables.include? nil
         conditions[0] += " OR #{TimeEntry.table_name}.deliverable_id IS NULL)" 
       else
         conditions[0] += ")"
       end
-      conditions[1][:deliverables] = self.selected_deliverables
+      conditions[1][:deliverables] = selected_deliverables
     end
 
     return conditions

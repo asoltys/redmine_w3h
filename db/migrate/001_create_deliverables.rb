@@ -7,12 +7,12 @@ class CreateDeliverables < ActiveRecord::Migration
     ['budget_plugin', 'timesheet_plugin'].each do |legacy_plugin|
       SchemaMigration.find(:all, :conditions => "version LIKE '%#{legacy_plugin.gsub('_', '\\_')}%'").each do |migration|
         unless migration.version == '1-budget_plugin'
-          SchemaMigration.create(:version => migration.version.gsub(legacy_plugin, 'redmine_w3h')) 
+          SchemaMigration.create(:version => migration.version.gsub(legacy_plugin, 'redmine_w3h'))
         end
       end
     end
 
-    unless SchemaMigration.find(:all, :conditions => "version = '1-budget_plugin'")
+    if SchemaMigration.find(:all, :conditions => "version = '1-budget_plugin'").size == 0
       create_table :deliverables do |t|
         t.column :subject, :string
         t.column :due_date, :date
@@ -24,7 +24,7 @@ class CreateDeliverables < ActiveRecord::Migration
       end
     end
   end
-  
+
   def self.down
     drop_table :deliverables
   end

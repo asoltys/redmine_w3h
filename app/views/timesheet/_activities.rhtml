@@ -1,0 +1,31 @@
+<tr class="deliverable collapsed">
+  <td colspan="4" class="first">
+    <img class="toggle" src="/images/arrow_collapsed.png" />
+    <%= i.to_s %>
+  </td>
+  <td align="center"><%= number_with_precision(@entries.map(&:regular_hours).sum, :precision => 1) %></td>
+  <td align="center"><%= number_with_precision(@entries.map(&:overtime_hours).sum, :precision => 1) %></td>
+  <td align="center"><%= number_to_currency(@entries.map(&:value).sum, :precision => 2) %></td>
+  <td class="controls"></td>
+</tr>
+
+<% @activities.each do |a| %>
+  <% @activity_entries = @entries.select{|e| e.activity_id == a.id } %>
+  <tr class="activity collapsed" style="display: none">
+    <td colspan="4" class="first">
+      <img class="toggle" src="/images/arrow_collapsed.png" />
+      <%= a.name %>
+    </td>
+    <td align="center"><%= number_with_precision(@activity_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+    <td align="center"><%= number_with_precision(@activity_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
+    <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
+    <td class="controls"></td>
+  </tr>
+  <%= render :partial => "time_entry", :collection => @activity_entries  %>
+  <tr class="activity_end" style="display: none">
+    <td colspan="7"></td>
+  </tr>
+<% end %>
+<tr class="deliverable_end" style="display: none">
+  <td colspan="7"></td>
+</tr>

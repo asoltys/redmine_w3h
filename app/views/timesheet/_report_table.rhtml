@@ -1,0 +1,53 @@
+<% if billable %>
+  <% @time_entries = @timesheet.time_entries.reject{|t| t.deliverable_id.nil?} %>
+<% else %>
+  <% @time_entries = @timesheet.time_entries.select{|t| t.deliverable_id.nil?} %>
+<% end %>
+
+<% @users = User.find(@time_entries.map(&:user_id), :order=> 'firstname ASC') %>
+
+<table class="list issues">
+  <tbody>
+    <tr class="header">
+      <th colspan="4"></th>
+      <th><%= l(:field_hours) %></th>
+      <th><%= l(:field_overtime) %></th>
+      <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
+      <th class="controls"></th>
+    </tr>
+
+    <% @users.each do |u| %>
+      <% @user_entries = @time_entries.select{|e| e.user_id == u.id } %>
+      <tr class="user">
+        <td colspan="4">
+          <img class="toggle" src="/images/arrow_expanded.png" />
+          <%= avatar(u, :size => "30") %>
+          <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
+        </td>
+        <td align="center"><%= number_with_precision(@user_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+        <td align="center"><%= number_with_precision(@user_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
+        <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
+        <td class="controls"></td>
+      </tr>
+
+      <% if billable %>
+        <% @deliverables = @timesheet.deliverables.select{|d| @user_entries.map(&:deliverable_id).include? d.id } %>
+        <% @deliverables.each do |i| %>
+          <% @entries = @user_entries.select{|e| e.deliverable_id == i.id } %>
+          <% @activities = Enumeration.find(@entries.map(&:activity_id)) %>
+          <%= render :partial => 'activities', :locals => {:i => i} %>
+        <% end %>
+      <% else %>
+        <% @projects = @timesheet.projects.select{|p| @user_entries.map(&:project_id).include? p.id } %>
+        <% @projects.each do |i| %>
+          <% @entries = @user_entries.select{|e| e.project_id == i.id } %>
+          <% @activities = Enumeration.find(@entries.map(&:activity_id)) %>
+          <%= render :partial => 'activities', :locals => {:i => i} %>
+        <% end %>
+      <% end %>
+      <tr class="user_end">
+        <td colspan="7"></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

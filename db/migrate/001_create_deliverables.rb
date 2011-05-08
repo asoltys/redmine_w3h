@@ -12,7 +12,7 @@ class CreateDeliverables < ActiveRecord::Migration
       end
     end
 
-    if SchemaMigration.find(:all, :conditions => "version = '1-budget_plugin'").size == 0
+    if SchemaMigration.find(:all, :conditions => "version = '1-budget_plugin'").empty?
       create_table :deliverables do |t|
         t.column :subject, :string
         t.column :due_date, :date

@@ -48,3 +48,7 @@ en:
   activity_report: Activity Report
   agreements_report: Agreements
   delinquency_report: Delinquency
+  label_billable: Billable
+  label_non_billable: Non-Billable
+  label_missing: Missing
+  label_billable_ratio: Billable Ratio

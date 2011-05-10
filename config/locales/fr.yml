@@ -44,8 +44,9 @@ fr:
   field_overtime: Overtime
   day_by_day_report: Day By Day
   activity_report: Activity Report
+  projects_report: Projets
   agreements_report: Agreements
-  delinquency_report: Delinquency
+  delinquency_report: D&egrave;linquance
   label_billable: Facturable
   label_non_billable: Non-Facturable
   label_missing: Absent

@@ -1,0 +1,56 @@
+<% content_for(:header_tags) do %>
+  <%= javascript_include_tag 'reports', :plugin => "redmine_w3h" %>
+  <%= stylesheet_link_tag "timesheet.css", :plugin => "redmine_w3h", :media => 'all' %>
+  <%= stylesheet_link_tag "daily.css", :plugin => "redmine_w3h", :media => 'all' %>
+<% end %>
+
+<%= render :partial=> 'menu' %>
+<%= render :partial=> 'form' %>
+
+<table class="list issues">
+  <tbody>
+    <tr class="header">
+      <th colspan="4"></th>
+      <th><%= l(:field_hours) %></th>
+      <th><abbr title="Value of Work Done"><%= l(:field_vwd) %></abbr></th>
+    </tr>
+    
+    <% total_hours = 0 %>
+    <% total_value = 0 %>
+    <% @timesheet.projects.each do |p| %>
+      <% @entries = @timesheet.time_entries.select{|e| e.project_id == p.id} %>
+      <% @users = @timesheet.users.select{|u| @entries.map(&:user_id).include?(u.id)} %>
+      <% @users.sort!{|a,b| a.name <=> b.name} %>
+
+      <% unless @entries.empty? %>
+        <% value = @entries.map(&:value).sum %>
+        <% hours = @entries.map(&:regular_hours).sum %>
+
+        <tr class="deliverable <%= cycle('odd', 'even') %>">
+          <td colspan="4"><%= p.to_s %></td>
+          <td align="center"><%= number_with_precision(hours, :precision => 1) %></td>
+          <td align="center"><%= number_to_currency(value, :precision => 2) %></td>
+        </tr>
+
+        <% @users.each do |u| %>
+          <% @user_entries = @entries.select{|e| e.user_id == u.id } %>
+          <tr>
+            <td colspan="4">
+              <%= link_to u.name, :controller => 'users', :action => 'show', :id => u %>
+            </td>
+            <td align="center"><%= number_with_precision(@user_entries.map(&:regular_hours).sum, :precision => 1) %></td>
+        <td align="center"><%= number_to_currency(@user_entries.map(&:value).sum, :precision => 2) %></td>
+          </tr>
+        <% end %>
+
+        <% total_value += value %> 
+        <% total_hours += hours %> 
+      <% end %>
+    <% end %>
+    <tr class="deliverable">
+      <td colspan="4">Total</td>
+      <td align="center"><%= number_with_precision(total_hours, :precision => 1) %></td>
+      <td align="center"><%= number_to_currency(total_value, :precision => 2) %></td>
+    </tr>
+  </tbody>
+</table>

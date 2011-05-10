@@ -68,10 +68,8 @@ class TimesheetController < ApplicationController
     end
 
     @timesheet = Timesheet.new(params[:timesheet])
-    respond_to do |format|
-      format.html { render :action => 'agreements' }
-    end
   end
+  alias_method :projects, :agreements
 
   def delinquency
     respond_to do |format|

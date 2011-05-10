@@ -17,7 +17,7 @@
     
     <% total_hours = 0 %>
     <% total_value = 0 %>
-    <% @timesheet.projects.each do |p| %>
+    <% @timesheet.projects.sort{|a,b| a <=> b }.each do |p| %>
       <% @entries = @timesheet.time_entries.select{|e| e.project_id == p.id} %>
       <% @users = @timesheet.users.select{|u| @entries.map(&:user_id).include?(u.id)} %>
       <% @users.sort!{|a,b| a.name <=> b.name} %>

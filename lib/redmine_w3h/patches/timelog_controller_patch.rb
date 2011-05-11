@@ -13,19 +13,17 @@ module RedmineW3H
 
             success = true
             unless params[:date_from].empty?
-              begin
-                Date.parse(params[:date_from])
-                Date.parse(params[:date_to])
+              Date.parse(params[:date_from])
+              Date.parse(params[:date_to])
 
-                (params[:date_from]..params[:date_to]).each do |date|
-                  t = @time_entry.clone
-                  t.spent_on = date
-                  success &&= t.save
-                end
-              rescue
-                success = false
+              (params[:date_from]..params[:date_to]).each do |date|
+                t = @time_entry.clone
+                t.spent_on = date
+                set_hours(t)
+                success &&= t.save
               end
             else
+              set_hours(@time_entry)
               success = @time_entry.save
             end
 
@@ -43,6 +41,13 @@ module RedmineW3H
                 format.api  { render_validation_errors(@time_entry) }
               end
             end    
+          end
+
+          def set_hours(time_entry)
+            if params[:quota_specified] == "true"
+              existing = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', time_entry.spent_on]).map(&:hours).sum
+              time_entry.hours = [0, User.current.quota - existing].max
+            end
           end
         end
       end

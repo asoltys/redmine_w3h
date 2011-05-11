@@ -1,4 +1,4 @@
-module RedmineGoc
+module RedmineW3H
   module Hooks
     class ControllerTimelogEditBeforeSaveHook < Redmine::Hook::ViewListener
       def controller_timelog_edit_before_save(context = {})

@@ -17,6 +17,7 @@ fr:
   timesheet_showing_users: 'showing time for: '
   timesheet_permalink: '(Permalink to this timesheet)'
   timesheet_group_by: Group by
+  field_deliverable_subject: Agreement
   field_cost: Cost
   field_vwd: Value
   field_budget: Budget

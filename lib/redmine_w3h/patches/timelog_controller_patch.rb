@@ -20,7 +20,7 @@ module RedmineW3H
                 t = @time_entry.clone
                 t.spent_on = date
                 set_hours(t)
-                success &&= t.save
+                success &&= t.save unless t.hours == 0
               end
             else
               set_hours(@time_entry)

@@ -53,3 +53,7 @@ fr:
   label_non_billable: Non-Facturable
   label_missing: Absent
   label_billable_ratio: Ratio Facturable
+  label_my_activity: Mon activites
+  label_my_profile: Ma Profile
+  label_time_recording_settings: Paramètres d'enregistrement du temps
+  label_my_page: Mon tableau de bord

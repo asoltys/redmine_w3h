@@ -55,3 +55,7 @@ en:
   label_non_billable: Non-Billable
   label_missing: Missing
   label_billable_ratio: Billable Ratio
+  label_my_activity: My activity
+  label_my_profile: My Profile
+  label_time_recording_settings: Time Recording Settings
+  label_my_page: My dashboard

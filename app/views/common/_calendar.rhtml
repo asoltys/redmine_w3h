@@ -42,13 +42,6 @@
             </span>
           <% end %>
         <% end %>
-
-        <br />
-        <% if @project %>
-          <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project}, :class => 'icon icon-time-add' %>
-        <% else %>
-        <%= link_to l(:button_log_time), {:controller => "bulk_time_entries", :action => 'index', :date => day}, :class => 'icon icon-time-add' %>
-        <% end %>
       </td>
       <%= '</tr><tr>' if day.cwday==calendar.last_wday and day!=calendar.enddt %>
       <% day = day + 1 %>

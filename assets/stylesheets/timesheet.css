@@ -50,28 +50,23 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
   #date-options { margin-left: 10px; }
   #date-options input[type='radio'] { margin-left: -20px; }
 
-  div.logged-time {
-    background:#ffc; 
-    padding: 3px; 
-    border: 1px solid #d7d7d7; 
-    margin-bottom: 5px;
-    width: 80%; 
-    float: left;
-    text-align: center;
+  span.logged-time {
+    padding-left: 10px; 
+    background-image: url('/images/task_todo.png');
+    background-repeat: no-repeat;
+    background-position: 0px, 5px;
   }
 
-  div.logged-time a {
-    font-size: 18px;
-  }
 
   p.day-num { float: right; }
 
-  div.logged-time.delinquent{background: #fcc;}
-  div.logged-time.overtime{background: #cfc;}
+  span.logged-time.delinquent{ background-image: url('/images/task_late.png'); }
+  span.logged-time.overtime{ background-image: url('/images/task_done.png'); }
   div.issue img.gravatar { padding: 0; }
   table.cal td.today { background: none; }
   div.issue.closed { background: #cfc; }
   div.issue.overdue { background: #fcc; }
+  a.full-calendar{ padding-left: 18px; background-image: url('/images/calendar.png'); background-repeat: no-repeat; }
 }
 
 @media print {

@@ -20,3 +20,4 @@ calendar.events =
     :include => [:project, :tracker, :priority, :assigned_to]) unless @user.projects.empty? 
 %>
 <%= render :partial => 'common/calendar', :locals => {:calendar => calendar } %>
+<a class="full-calendar" href="/issues/calendar">View Full Calendar</a>

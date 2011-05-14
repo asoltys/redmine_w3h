@@ -16,13 +16,6 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
 
     menu(
       :top_menu,
-      :my_activity,
-      {:controller => 'my', :action => 'activity'},
-      :caption => :label_my_activity
-    )
-
-    menu(
-      :top_menu,
       :timesheet,
       {:controller => 'timesheet', :action => 'daily'},
       :caption => :timesheet_title,
@@ -31,14 +24,6 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
         User.current.allowed_to?(:view_time_entries, nil, :global => true) ||
         User.current.admin? 
       }
-    )
-
-    menu( 
-      :project_menu, 
-      :time_entries, 
-      {:controller => 'timelog', :action => 'new'}, 
-      :param => :project_id, 
-      :caption => :label_log_time
     )
 
     menu(

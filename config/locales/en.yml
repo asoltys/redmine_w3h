@@ -7,7 +7,7 @@ en:
   label_log_time: Time
   label_deliverable: Deliverable
   label_deliverable_plural: Deliverables
-  timesheet_title: Reports
+  timesheet_title: Time Reports
   timesheet_date_from_label: From
   timesheet_date_to_label: To
   timesheet_project_label: Project
@@ -55,7 +55,5 @@ en:
   label_non_billable: Non-Billable
   label_missing: Missing
   label_billable_ratio: Billable Ratio
-  label_my_activity: My activity
   label_my_profile: My Profile
   label_time_recording_settings: Time Recording Settings
-  label_my_page: My dashboard

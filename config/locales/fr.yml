@@ -5,7 +5,7 @@ fr:
   label_q4: fourth quarter
   label_fiscal_year: Fiscal Year
   label_log_time: Time
-  timesheet_title: Reports
+  timesheet_title: Reports du Temps
   timesheet_date_from_label: From
   timesheet_date_to_label: To
   timesheet_project_label: Project
@@ -53,7 +53,5 @@ fr:
   label_non_billable: Non-Facturable
   label_missing: Absent
   label_billable_ratio: Ratio Facturable
-  label_my_activity: Mon activites
   label_my_profile: Ma Profile
   label_time_recording_settings: Paramètres d'enregistrement du temps
-  label_my_page: Mon tableau de bord

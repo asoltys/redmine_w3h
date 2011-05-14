@@ -15,13 +15,15 @@
     <% day = calendar.startdt %>
     <% while day <= calendar.enddt %>
       <% issues = calendar.events_on(day).select{|i| i.is_a?(Issue)} %>
-      <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %>">
+      <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %> <%= day.strftime('%Y-%m-%d') %>">
         <p class="day-num"><%= day.day %></p>	
        
-        <% if day.weekday? and User.current.quota > 0 %> 
-          <div class="logged-time <%= User.current.logged_time_class(day) %>">
-            <a href="<%= "/timesheet/daily?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>"><%= User.current.logged_time(day) %></a>
-          </div>
+        <% if (day.weekday? && User.current.quota > 0) || User.current.logged_time(day) > 0 %> 
+          <span class="logged-time <%= User.current.logged_time_class(day) %>">
+            <a href="<%= "/timesheet/daily?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>">
+              <%= "#{User.current.logged_time(day)} #{l(:field_hours).downcase}" %>
+            </a>
+          </span>
         <% end %>
 
         <% issues.each do |i| %>
@@ -41,6 +43,12 @@
           <% end %>
         <% end %>
 
+        <br />
+        <% if @project %>
+          <%= link_to l(:button_log_time), {:controller => 'timelog', :action => 'new', :project_id => @project}, :class => 'icon icon-time-add' %>
+        <% else %>
+        <%= link_to l(:button_log_time), {:controller => "bulk_time_entries", :action => 'index', :date => day}, :class => 'icon icon-time-add' %>
+        <% end %>
       </td>
       <%= '</tr><tr>' if day.cwday==calendar.last_wday and day!=calendar.enddt %>
       <% day = day + 1 %>

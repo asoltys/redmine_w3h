@@ -42,7 +42,6 @@ end
 
 require 'dispatcher'
 Dispatcher.to_prepare :redmine_w3h do
-  gem 'weekdays', :version => '1.0'
   require_dependency 'weekdays'
 
   require_dependency 'issue'

@@ -6,18 +6,6 @@
 <% enddt = (Date.today + 7) + (calendar.last_wday - Date.today.cwday)%7 %>
 <% calendar.startdt = startdt %>
 <% calendar.enddt = enddt %>
-<% 
-calendar.events =
-  Issue.find(
-    :all,
-    :conditions => [
-      "((start_date>=? and start_date<=?) or (due_date>=? and due_date<=?)) and #{Issue.table_name}.assigned_to_id = ?", 
-      calendar.startdt, 
-      calendar.enddt, 
-      calendar.startdt, 
-      calendar.enddt,
-      @user.id],
-    :include => [:project, :tracker, :priority, :assigned_to]) unless @user.projects.empty? 
-%>
+<% calendar.events = [] %>
 <%= render :partial => 'common/calendar', :locals => {:calendar => calendar } %>
 <a class="full-calendar" href="/issues/calendar">View Full Calendar</a>

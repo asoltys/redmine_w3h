@@ -1,5 +1,6 @@
 class CreateDeliverables < ActiveRecord::Migration
   class SchemaMigration < ActiveRecord::Base
+    set_primary_key :version
   end
 
   def self.up
@@ -7,7 +8,9 @@ class CreateDeliverables < ActiveRecord::Migration
     ['budget_plugin', 'timesheet_plugin'].each do |legacy_plugin|
       SchemaMigration.find(:all, :conditions => "version LIKE '%#{legacy_plugin.gsub('_', '\\_')}%'").each do |migration|
         unless migration.version == '1-budget_plugin'
-          SchemaMigration.create(:version => migration.version.gsub(legacy_plugin, 'redmine_w3h'))
+          s = SchemaMigration.new
+          s.version = migration.version.gsub(legacy_plugin, 'redmine_w3h')
+          s.save
         end
       end
     end

@@ -44,6 +44,10 @@ require 'dispatcher'
 Dispatcher.to_prepare :redmine_w3h do
   require_dependency 'weekdays'
 
+  require_dependency 'context_menus_controller'
+  require 'redmine_w3h/patches/context_menus_controller_patch'
+  ContextMenusController.send(:include, RedmineW3H::Patches::ContextMenusControllerPatch)
+
   require_dependency 'issue'
   require 'redmine_w3h/patches/issue_patch'
   Issue.send(:include, RedmineW3H::Patches::IssuePatch)

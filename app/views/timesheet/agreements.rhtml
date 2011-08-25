@@ -35,7 +35,7 @@
 
         <% total_value += value %> 
         <% total_hours += hours %> 
-        <% total_budget += d.budget %> 
+        <% total_budget += d.budget unless d.budget.nil? %> 
       <% end %>
     <% end %>
     <tr class="deliverable">

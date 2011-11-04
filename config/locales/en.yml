@@ -57,3 +57,8 @@ en:
   label_billable_ratio: Billable Ratio
   label_my_profile: My Profile
   label_time_recording_settings: Time Recording Settings
+  bulk_time_entry_title: Time Entry
+  label_bulk_time_entries: Time Entry
+  label_bulk_time_add_another: Add Another
+  text_bulk_time_entry_permission: You do not have permission to log time on any projects
+  text_time_added_to_project: "{{count}} hours added to {{target}}"

@@ -1,0 +1,2 @@
+<%= label_for_field :deliverable_id, rnd, :required => true %>
+<%= select_tag "time_entries[#{rnd}][deliverable_id]", options_for_select([['Select One', '']] + project.ancestor_deliverables.collect{|d| [d.to_s,d.id]}.sort{|a,b| a <=> b}) %>

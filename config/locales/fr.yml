@@ -55,3 +55,8 @@ fr:
   label_billable_ratio: Ratio Facturable
   label_my_profile: Ma Profile
   label_time_recording_settings: Paramètres d'enregistrement du temps
+  bulk_time_entry_title: Saisie de temps
+  label_bulk_time_entries: Saisie de temps
+  label_bulk_time_add_another: Saisir un nouveau temps
+  text_bulk_time_entry_permission: Aucun projet ne vous permet de saisir des temps
+  text_time_added_to_project: "{{count}} heures ajoutees au {{target}}"

@@ -1,0 +1,72 @@
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'jquery-1.6.2.min.js', :plugin => 'redmine_w3h' %>
+  <%= javascript_include_tag 'time_form', :plugin => 'redmine_w3h' %>
+<% end %>
+
+<% fields_for('time_entries[]', time_entry) do |f| %>
+  <%# trick to have automatically populated html id/names of fields %>
+  <% time_entry.id = rnd = rand(9999)
+  @object = time_entry 
+  @object_name = 'time_entry' -%>
+  <div class="box" id="entry_<%= rnd %>">
+    <%= error_messages_for 'time_entry', :object => time_entry %>
+    <p>
+      <%= label_for_field :project_id, rnd, :required => true %>
+      <% projects = options_for_select(@projects.sort{|a,b| a <=> b}.map{|p| [p.to_s, p.id]}, :selected => @first_project.id) %>
+      <%= f.select :project_id, projects, {}, 
+        { :onchange => "new Ajax.Request('#{url_for :action => 'load_assigned_issues'}', { parameters: { project_id: $F(this), entry_id: $(this).up(1).id } } )" } %>&nbsp;
+    </p>
+    <p id="entry_<%= rnd %>_issues">
+    <% @issues = get_issues @first_project.id %>
+    <%= render :partial => 'issues_selector', :locals => { :issues => @issues, :f => f, :rnd => rnd } %>
+    </p>
+    <p id="entry_<%= rnd %>_deliverables">
+      <%= render :partial => 'deliverables_selector', :locals => {:rnd => rnd, :project => @first_project} %>
+    </p>
+
+    <p class="single_date">
+      <%= label_for_field :spent_on, rnd, :required => true %>
+      <%= f.text_field :spent_on, :size => 10, :name => "time_entries[#{rnd}][spent_on]", :id => "time_entries_#{rnd}_spent_on", :class => 'spent_on' %><%= calendar_for("time_entries_#{rnd}_spent_on") %>
+      <small><a href="#" class="show_range">Specify Range</a></small>
+    </p>
+
+    <div class="date_range">
+      <p>
+        <label for="date_from_<%= rnd %>">From Date <span class="required"> *</span></label>
+        <input type="text" class="date_from" name="date_from" size="10" id="date_from_<%= rnd %>" /><%= calendar_for("date_from_#{rnd}") %>
+      </p>
+      <p>
+        <label for="date_to_<%= rnd %>">To Date <span class="required"> *</span></label>
+        <input type="text" class="date_to" name="date_to" size="10" id="date_to_<%= rnd %>" /><%= calendar_for("date_to_#{rnd}") %><br />
+        <small><a href="#" class="show_single_date">Specify Single Date</a></small>
+      </p>
+    </div>
+
+    <p class="hours">
+      <%= label_for_field :hours, rnd, :required => true %>
+      <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
+      <small><a href="#" class="fill_quota">Fill Quota</a></small>
+    </p>
+
+    <p class="quota">
+      <label for="hours">Hours<span class="required"> *</span></label>
+      <span>Filling To <%= User.current.quota %> hours/day</span><br />
+      <input type="hidden" name="quota_specified" id="quota_specified" value="false" />
+      <small><a href="#" class="specify_hours">Specify Hours</a></small>
+    </p>
+
+    <p>
+      <%= label_for_field :comments, rnd %>
+      <%= f.text_field :comments, :size => 100, :maxlength => 255 %>
+    </p>
+    <p id="entry_<%= rnd %>_activities">
+      <%= render :partial => 'activities_selector', :locals => {:rnd => rnd, :activities => @first_project.activities } %>
+    </p>
+    <% time_entry.custom_field_values.each do |value| %>
+      <p><%= custom_field_tag_with_label "time_entries[#{rnd}]", value %></p>
+    <% end if time_entry.respond_to?(:custom_field_values) %>
+  </div>
+<% end %>
+
+<%= javascript_tag("Element.scrollTo('time_entries_#{time_entry.id}_project_id')") %>
+<%= javascript_tag("Form.Element.focus('time_entries_#{time_entry.id}_project_id')") %>

@@ -1,0 +1,38 @@
+<h2><%= l(:label_bulk_time_entries) %></h2>
+
+<% remote_form_for :bulk_time_entry_title, @bulk_time_entry, :url => {:action => 'save'}, :html => {:class => 'tabular'} do |f| %>
+  <div id="entries">
+    <%= render :partial => 'time_entry', :collection => @time_entries %>
+  </div>
+  <div id="add-entry">
+    <%= link_to_remote l(:label_bulk_time_add_another), :url => {:action => 'add_entry'}, :html => {:accesskey => 'a'}, :with => "'date='+ getLastTimeEntryDate()" %>
+  </div>
+  <br/>
+  <%= submit_tag l(:button_save) %>
+<% end %>
+
+<br />
+<br />
+
+<% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :month) %>
+<% calendar.events = [] %>
+<% def calendar.startdt=(value); @startdt = value; end; %>
+<% def calendar.enddt=(value); @enddt= value; end; %>
+<% startdt = (Date.today - 21) - (Date.today.cwday - calendar.first_wday)%7 %>
+<% enddt = (Date.today) + (calendar.last_wday - Date.today.cwday)%7 %>
+<% calendar.startdt = startdt %>
+<% calendar.enddt = enddt %>
+<%= render :partial => 'common/calendar', :locals => {:calendar => calendar } %>
+<a class="full-calendar" href="/issues/calendar">View Full Calendar</a>
+
+<% html_title l(:label_bulk_time_entries) %>
+
+<script type="text/javascript">
+function getLastTimeEntryDate() {
+  if ($$('.spent_on').size() > 0) {
+    return $$('.spent_on').last().value;
+  } else {
+    return null;
+  } 
+}
+</script>

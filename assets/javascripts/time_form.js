@@ -1,35 +1,38 @@
-Event.observe(window, 'load', function() {
-  $('date_range').hide();
-  $('quota').hide();
+jQuery.noConflict();
+(function($) { 
+  $(function() {
+    $('.date_range').hide();
+    $('.quota').hide();
 
-  $('show_range').observe('click', function() {
-    $('single_date').hide();
-    $('date_from').setValue($('time_entry_spent_on').getValue());
-    $('time_entry_spent_on').setValue('');
-    $('date_range').show();
-    $('date_from').focus();
-  });
+    $('.show_range').click(function() {
+      $('.single_date').hide();
+      $('.date_from').val($('.time_entry_spent_on').val());
+      $('.time_entry_spent_on').val('');
+      $('.date_range').show();
+      $('.date_from').focus();
+    });
 
-  $('show_single_date').observe('click', function() {
-    $('date_range').hide();
-    $('single_date').show();
-    $('time_entry_spent_on').focus();
-    $('time_entry_spent_on').setValue($('date_from').getValue());
-    $('date_from').setValue('');
-    $('date_to').setValue('');
-  });
+    $('.show_single_date').click(function() {
+      $('.date_range').hide();
+      $('.single_date').show();
+      $('.time_entry_spent_on').focus();
+      $('.time_entry_spent_on').val($('.date_from').val());
+      $('.date_from').val('');
+      $('.date_to').val('');
+    });
 
-  $('fill_quota').observe('click', function() {
-    $('hours').hide();
-    $('time_entry_hours').setValue('');
-    $('quota').show();
-    $('quota_specified').setValue('true');
-  });
+    $('.fill_quota').click(function() {
+      $('.hours').hide();
+      $('.time_entry_hours').val('');
+      $('.quota').show();
+      $('.quota_specified').val('true');
+    });
 
-  $('specify_hours').observe('click', function() {
-    $('quota').hide();
-    $('hours').show();
-    $('time_entry_hours').focus();
-    $('quota_specified').setValue('false');
+    $('.specify_hours').click(function() {
+      $('.quota').hide();
+      $('.hours').show();
+      $('.time_entry_hours').focus();
+      $('.quota_specified').val('false');
+    });
   });
-});
+})(jQuery);

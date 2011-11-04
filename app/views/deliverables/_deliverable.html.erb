@@ -15,7 +15,7 @@
 
   <%= content_tag(:td, link_to(h(deliverable.to_s(false)), "/deliverables/edit/#{deliverable.project.id}?deliverable_id=#{deliverable.id}"), {:class => 'subject', :align => 'center'}) %>
   <%= content_tag(:td, h(deliverable.number), {:align => 'center'}) %>
-  <%= content_tag(:td, number_to_currency(deliverable.forecast), {:align => 'center'}) %>
+  <%= content_tag(:td, number_to_currency(deliverable.forecast, :locale => 'en'), {:align => 'center'}) %>
   <%= content_tag(:td, number_to_currency(deliverable.budget), {:align => 'center'}) %>
   <%= content_tag(:td, link_to(number_to_currency(deliverable.spent), "/timesheet/report?timesheet[period_type]=0&timesheet[period]=all&timesheet[deliverables][]=#{deliverable.id}"), {:align => 'center'}) %>
   <%= content_tag(:td, number_to_currency(deliverable.invoiced), {:align => 'center'}) %>

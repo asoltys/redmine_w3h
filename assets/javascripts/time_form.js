@@ -1,35 +1,57 @@
 jQuery.noConflict();
 (function($) { 
-  $(function() {
+  function attachListeners() {
     $('.show_range').click(function() {
-      $('.single_date').hide();
-      $('.date_from').val($('.time_entry_spent_on').val());
-      $('.time_entry_spent_on').val('');
-      $('.date_range').show();
-      $('.date_from').focus();
+      var scope = $(this).closest('div.box');
+      scope.find('.single_date').hide();
+      scope.find('.date_from').val($('.time_entry_spent_on').val());
+      scope.find('.time_entry_spent_on').val('');
+      scope.find('.date_range').show();
+      scope.find('.date_from').focus();
     });
 
     $('.show_single_date').click(function() {
-      $('.date_range').hide();
-      $('.single_date').show();
-      $('.time_entry_spent_on').focus();
-      $('.time_entry_spent_on').val($('.date_from').val());
-      $('.date_from').val('');
-      $('.date_to').val('');
+      var scope = $(this).closest('div.box');
+      scope.find('.date_range').hide();
+      scope.find('.single_date').show();
+      scope.find('.time_entry_spent_on').focus();
+      scope.find('.time_entry_spent_on').val($('.date_from').val());
+      scope.find('.date_from').val('');
+      scope.find('.date_to').val('');
     });
 
     $('.fill_quota').click(function() {
-      $('.hours').hide();
-      $('.time_entry_hours').val('');
-      $('.quota').show();
-      $('.quota_specified').val('true');
+      var scope = $(this).closest('div.box');
+      scope.find('.hours').hide();
+      scope.find('.time_entry_hours').val('');
+      scope.find('.quota').show();
+      scope.find('.quota_specified').val('true');
     });
 
     $('.specify_hours').click(function() {
-      $('.quota').hide();
-      $('.hours').show();
-      $('.time_entry_hours').focus();
-      $('.quota_specified').val('false');
+      var scope = $(this).closest('div.box');
+      scope.find('.quota').hide();
+      scope.find('.hours').show();
+      scope.find('.time_entry_hours').focus();
+      scope.find('.quota_specified').val('false');
+    });
+
+    $('img.calendar-trigger').each(function() {
+      Calendar.setup({inputField : $(this).prev('input').attr('id'), ifFormat : '%Y-%m-%d', button : $(this).attr('id') });
+    });
+  }
+
+  $(function() {
+    attachListeners();
+
+    $('.add_entry').click(function() {
+      var entry = $('div#entries').children('div').last().clone(true, true);
+      var id = entry.attr('id').match(/_(.*)/)[1];
+      var new_id = id + 1;
+      $('div#entries').append('<div id="entry_' + new_id + '" class="box">' + entry.html().replace(id, new_id) + '</div>');
+      attachListeners();
     });
   });
 })(jQuery);
+
+

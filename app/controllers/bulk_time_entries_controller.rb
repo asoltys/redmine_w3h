@@ -28,7 +28,6 @@ class BulkTimeEntriesController < ApplicationController
   
   
   def save
-    debugger
     if request.post? 
       @unsaved_entries = {}
       @saved_entries = {}

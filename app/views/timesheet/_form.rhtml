@@ -7,9 +7,9 @@
         <label>Period:</label>
         <br />
         <%= radio_button_tag 'timesheet[period_type]', '0', @timesheet.period_type == Timesheet::ValidPeriodType[:default] %>
-        <%= select_tag('timesheet[period]', 
+        <%= select_tag 'timesheet[period]', 
           options_for_period_select((params[:timesheet].nil? ? nil : params[:timesheet][:period])),
-          :onfocus => '$("timesheet_period_type_0").checked = true;')
+          :onfocus => '$("timesheet_period_type_0").checked = true;'
         %>
 
         <br />
@@ -26,9 +26,9 @@
 
       <p id="project_selection">
         <label for="timesheet[projects][]" class="select_all"><%= l(:timesheet_project_label)%>:</label><br />
-        <%= select_tag ('timesheet[projects][]',
+        <%= select_tag 'timesheet[projects][]',
           options_from_collection_for_select(@timesheet.avl_projects, :id, :name, @timesheet.sel_projects),
-          {:multiple => true, :size => 10})
+          {:multiple => true, :size => 10}
         %>
       </p>
 

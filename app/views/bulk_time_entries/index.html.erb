@@ -1,3 +1,8 @@
+<% content_for :header_tags do %>
+  <%= javascript_include_tag 'jquery-1.6.2.min.js', :plugin => 'redmine_w3h' %>
+  <%= javascript_include_tag 'time_form', :plugin => 'redmine_w3h' %>
+<% end %>
+
 <h2><%= l(:label_bulk_time_entries) %></h2>
 
 <% remote_form_for :bulk_time_entry_title, @bulk_time_entry, :url => {:action => 'save'}, :html => {:class => 'tabular'} do |f| %>
@@ -26,13 +31,3 @@
 <a class="full-calendar" href="/issues/calendar">View Full Calendar</a>
 
 <% html_title l(:label_bulk_time_entries) %>
-
-<script type="text/javascript">
-function getLastTimeEntryDate() {
-  if ($$('.spent_on').size() > 0) {
-    return $$('.spent_on').last().value;
-  } else {
-    return null;
-  } 
-}
-</script>

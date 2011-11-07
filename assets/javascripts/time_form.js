@@ -1,9 +1,6 @@
 jQuery.noConflict();
 (function($) { 
   $(function() {
-    $('.date_range').hide();
-    $('.quota').hide();
-
     $('.show_range').click(function() {
       $('.single_date').hide();
       $('.date_from').val($('.time_entry_spent_on').val());

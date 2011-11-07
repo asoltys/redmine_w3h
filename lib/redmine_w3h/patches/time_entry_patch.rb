@@ -28,7 +28,7 @@ module RedmineW3H
             hours - regular_hours
           end
 
-          def create_bulk_time_entry(entry)
+          def self.create_bulk_time_entry(entry)
             time_entry = TimeEntry.new(entry)
             time_entry.hours = nil if time_entry.hours.blank? or time_entry.hours <= 0
             if BulkTimeEntriesController.allowed_project?(entry[:project_id])

@@ -28,10 +28,10 @@ class BulkTimeEntriesController < ApplicationController
   
   
   def save
+    debugger
     if request.post? 
       @unsaved_entries = {}
       @saved_entries = {}
-
       params[:time_entries].each_pair do |html_id, entry|
         time_entry = TimeEntry.create_bulk_time_entry(entry)
         if params[:date_from].present?

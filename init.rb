@@ -26,6 +26,17 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
       }
     )
 
+
+    menu(
+      :top_menu, 
+      :bulk_time_entry, 
+      { :controller => "bulk_time_entries", :action => 'index' }, 
+      :caption => :bulk_time_entry_title, 
+      :if => Proc.new {
+        User.current.allowed_to?(:log_time, nil, :global => true)
+      } 
+    )
+
     menu( 
       :project_menu, 
       :time_entries, 

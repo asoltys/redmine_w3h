@@ -1,7 +1,7 @@
 jQuery.noConflict();
 (function($) { 
-  function attachListeners() {
-    $('.show_range').click(function() {
+  function setup() {
+    $('a.show_range').click(function() {
       var scope = $(this).closest('div.box');
       scope.find('.single_date').hide();
       scope.find('.date_from').val($('.time_entry_spent_on').val());
@@ -10,7 +10,7 @@ jQuery.noConflict();
       scope.find('.date_from').focus();
     });
 
-    $('.show_single_date').click(function() {
+    $('a.show_single_date').click(function() {
       var scope = $(this).closest('div.box');
       scope.find('.date_range').hide();
       scope.find('.single_date').show();
@@ -20,7 +20,7 @@ jQuery.noConflict();
       scope.find('.date_to').val('');
     });
 
-    $('.fill_quota').click(function() {
+    $('a.fill_quota').click(function() {
       var scope = $(this).closest('div.box');
       scope.find('.hours').hide();
       scope.find('.time_entry_hours').val('');
@@ -28,7 +28,7 @@ jQuery.noConflict();
       scope.find('.quota_specified').val('true');
     });
 
-    $('.specify_hours').click(function() {
+    $('a.specify_hours').click(function() {
       var scope = $(this).closest('div.box');
       scope.find('.quota').hide();
       scope.find('.hours').show();
@@ -46,16 +46,19 @@ jQuery.noConflict();
   }
 
   $(function() {
-    attachListeners();
+    setup();
 
     $('.add_entry').click(function() {
       var entry = $('div#entries').children('div').last().clone(true, true);
       var id = entry.attr('id').match(/_(.*)/)[1];
       var new_id = parseInt(id) + 1;
-      id = '/' + id + '/g';
-      id = eval(id);
-      $('div#entries').append('<div id="entry_' + new_id + '" class="box">' + entry.html().replace(id, new_id) + '</div>');
-      attachListeners();
+      var id_regex = eval('/' + id + '/g');
+
+      $('div#entries').
+        append('<div id="entry_' + new_id + '" class="box">' + entry.html().replace(id_regex, new_id) + '</div>').
+        remove('div.errorExplanation');
+
+      setup();
     });
   });
 })(jQuery);

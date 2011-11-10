@@ -33,10 +33,8 @@ class BulkTimeEntriesController < ApplicationController
       @saved_entries = {}
       params[:time_entries].each_pair do |html_id, entry|
         time_entry = TimeEntry.create_bulk_time_entry(entry)
+        success = true
         if params[:date_from].present?
-          Date.parse(params[:date_from])
-          Date.parse(params[:date_to])
-
           (params[:date_from]..params[:date_to]).each do |date|
             t = time_entry.clone
             t.spent_on = date

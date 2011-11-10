@@ -37,7 +37,11 @@ jQuery.noConflict();
     });
 
     $('img.calendar-trigger').each(function() {
-      Calendar.setup({inputField : $(this).prev('input').attr('id'), ifFormat : '%Y-%m-%d', button : $(this).attr('id') });
+      Calendar.setup({
+        inputField: $(this).prev('input').attr('id'), 
+        ifFormat: '%Y-%m-%d', 
+        button: $(this).attr('id') 
+      });
     });
   }
 
@@ -47,11 +51,11 @@ jQuery.noConflict();
     $('.add_entry').click(function() {
       var entry = $('div#entries').children('div').last().clone(true, true);
       var id = entry.attr('id').match(/_(.*)/)[1];
-      var new_id = id + 1;
+      var new_id = parseInt(id) + 1;
+      id = '/' + id + '/g';
+      id = eval(id);
       $('div#entries').append('<div id="entry_' + new_id + '" class="box">' + entry.html().replace(id, new_id) + '</div>');
       attachListeners();
     });
   });
 })(jQuery);
-
-

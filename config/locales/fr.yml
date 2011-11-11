@@ -3,7 +3,6 @@ fr:
   label_q2: second quarter
   label_q3: third quarter
   label_q4: fourth quarter
-  label_fiscal_year: Fiscal Year
   label_log_time: Time
   timesheet_title: Reports du Temps
   timesheet_date_from_label: From
@@ -30,13 +29,10 @@ fr:
   label_agreement: Agreement
   label_project: Project
   label_progress: Progress
-  label_subject: Subject
-  label_number: Number
+  label_subject: Sujet
   label_type: Type 
-  label_budget: Labour Budget
+  label_budget: Budget
   label_spent: Value of Work Done
-  label_invoiced: YTD Billed
-  label_forecast: Forecast
   label_remaining: Variance
   label_update_deliverable: Update Agreement
   field_deliverable: Agreement

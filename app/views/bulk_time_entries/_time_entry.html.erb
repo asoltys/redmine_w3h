@@ -1,44 +1,40 @@
 <% fields_for('time_entries[]', time_entry) do |f| %>
-  <%# trick to have automatically populated html id/names of fields %>
-  <% time_entry.id = rnd = rand(9999)
-  @object = time_entry 
-  @object_name = 'time_entry' -%>
-  <div class="box" id="entry_<%= rnd %>">
+  <div class="box" id="entry_0">
     <%= error_messages_for 'time_entry', :object => time_entry %>
     <p>
-      <%= label_for_field :project_id, rnd, :required => true %>
+      <%= label_for_field :project_id, 0, :required => true %>
       <% projects = options_for_select(@projects.sort{|a,b| a <=> b}.map{|p| [p.to_s, p.id]}, :selected => @first_project.id) %>
       <%= f.select :project_id, projects, {}, 
         { :onchange => "new Ajax.Request('#{url_for :action => 'load_assigned_issues'}', { parameters: { project_id: $F(this), entry_id: $(this).up(1).id } } )" } %>&nbsp;
     </p>
-    <p id="entry_<%= rnd %>_issues">
+    <p id="entry_0_issues">
     <% @issues = get_issues @first_project.id %>
-    <%= render :partial => 'issues_selector', :locals => { :issues => @issues, :f => f, :rnd => rnd } %>
+    <%= render :partial => 'issues_selector', :locals => { :issues => @issues, :f => f } %>
     </p>
-    <p id="entry_<%= rnd %>_deliverables">
-      <%= render :partial => 'deliverables_selector', :locals => {:rnd => rnd, :project => @first_project} %>
+    <p id="entry_0_deliverables">
+      <%= render :partial => 'deliverables_selector', :locals => {:project => @first_project} %>
     </p>
 
     <p class="single_date">
-      <%= label_for_field :spent_on, rnd, :required => true %>
-      <%= f.text_field :spent_on, :size => 10, :name => "time_entries[#{rnd}][spent_on]", :id => "time_entries_#{rnd}_spent_on", :class => 'spent_on' %><%= calendar_for("time_entries_#{rnd}_spent_on") %>
+      <%= label_for_field :spent_on, 0, :required => true %>
+      <%= f.text_field :spent_on, :size => 10, :name => "time_entries[0][spent_on]", :id => "time_entries_0_spent_on", :class => 'spent_on' %><%= calendar_for("time_entries_0_spent_on") %>
       <small><a href="#" class="show_range">Specify Range</a></small>
     </p>
 
     <div class="date_range" style="display: none">
       <p>
-        <label for="date_from_<%= rnd %>">From Date <span class="required"> *</span></label>
-        <input type="text" class="date_from" size="10" id="date_from_<%= rnd %>" name="time_entries[<%= rnd %>][date_from]" /><%= calendar_for("date_from_#{rnd}") %>
+        <label for="date_from_0">From Date <span class="required"> *</span></label>
+        <input type="text" class="date_from" size="10" id="date_from_0" name="time_entries[0][date_from]" /><%= calendar_for("date_from_0") %>
       </p>
       <p>
-        <label for="date_to_<%= rnd %>">To Date <span class="required"> *</span></label>
-        <input type="text" class="date_to" size="10" id="date_to_<%= rnd %>" name="time_entries[<%= rnd %>][date_to]" /><%= calendar_for("date_to_#{rnd}") %><br />
+        <label for="date_to_0">To Date <span class="required"> *</span></label>
+        <input type="text" class="date_to" size="10" id="date_to_0" name="time_entries[0][date_to]" /><%= calendar_for("date_to_0") %><br />
         <small><a href="#" class="show_single_date">Specify Single Date</a></small>
       </p>
     </div>
 
     <p class="hours">
-      <%= label_for_field :hours, rnd, :required => true %>
+      <%= label_for_field :hours, 0, :required => true %>
       <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
       <small><a href="#" class="fill_quota">Fill Quota</a></small>
     </p>
@@ -46,19 +42,19 @@
     <p class="quota" style="display: none">
       <label for="quota_specified">Hours<span class="required"> *</span></label>
       <span>Filling To <%= User.current.quota %> hours/day</span><br />
-      <input type="hidden" class="quota_specified" value="false" name="time_entries[<%= rnd %>][quota_specified]" />
+      <input type="hidden" class="quota_specified" value="false" name="time_entries[0][quota_specified]" />
       <small><a href="#" class="specify_hours">Specify Hours</a></small>
     </p>
 
     <p>
-      <%= label_for_field :comments, rnd %>
+      <%= label_for_field :comments, 0 %>
       <%= f.text_field :comments, :size => 100, :maxlength => 255 %>
     </p>
-    <p id="entry_<%= rnd %>_activities">
-      <%= render :partial => 'activities_selector', :locals => {:rnd => rnd, :activities => @first_project.activities } %>
+    <p id="entry_0_activities">
+      <%= render :partial => 'activities_selector', :locals => {:activities => @first_project.activities } %>
     </p>
     <% time_entry.custom_field_values.each do |value| %>
-      <p><%= custom_field_tag_with_label "time_entries[#{rnd}]", value %></p>
+      <p><%= custom_field_tag_with_label "time_entries[0]", value %></p>
     <% end if time_entry.respond_to?(:custom_field_values) %>
   </div>
 <% end %>

@@ -35,7 +35,7 @@ en:
   label_subject: Subject
   label_number: Number
   label_type: Type 
-  label_budget: Labour Budget
+  label_budget: Budget
   label_spent: Value of Work Done
   label_invoiced: YTD Billed
   label_forecast: Forecast

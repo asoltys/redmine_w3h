@@ -31,22 +31,25 @@ class BulkTimeEntriesController < ApplicationController
     if request.post? 
       @unsaved_entries = {}
       @saved_entries = {}
-      params[:time_entries].each_pair do |html_id, entry|
-        time_entry = TimeEntry.create_bulk_time_entry(entry)
+
+      params[:time_entries].each_pair do |html_id, fields|
+        non_attributes = ["date_from", "date_to", "quota_specified"]
+        attributes = fields.reject{|k,v| non_attributes.include? k}
+        time_entry = TimeEntry.create_bulk_time_entry(attributes)
         success = true
         collective_hours = 0
 
-        if params[:date_from].present?
-          (params[:date_from]..params[:date_to]).each do |date|
+        if fields[:date_from].present?
+          (fields[:date_from]..fields[:date_to]).each do |date|
             t = time_entry.clone
             t.spent_on = date
-            set_hours(t)
+            set_hours(t) if fields[:quota_specified] == "true"
             collective_hours += t.hours
             success &&= t.save unless t.hours == 0
           end
           time_entry.hours = collective_hours
         else
-          set_hours(time_entry)
+          set_hours(time_entry) if fields[:quota_specified] == "true"
           success = time_entry.save
         end
 
@@ -60,10 +63,8 @@ class BulkTimeEntriesController < ApplicationController
   end
 
   def set_hours(time_entry)
-    if params[:quota_specified] == "true"
-      existing = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', time_entry.spent_on]).map(&:hours).sum
-      time_entry.hours = [0, User.current.quota - existing].max
-    end
+    existing = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', time_entry.spent_on]).map(&:hours).sum
+    time_entry.hours = [0, User.current.quota - existing].max
   end
     
   def add_entry

@@ -1,6 +1,10 @@
 jQuery.noConflict()
 (($) ->
+  root = exports ? this
+
   setup = ->
+    root.entry = $('div#entries').children('div').last().clone(true, true)
+
     $('a.show_range').click(->
       scope = $(this).closest('div.box')
       scope.find('.single_date').hide()
@@ -23,7 +27,7 @@ jQuery.noConflict()
     $('a.fill_quota').click(->
       scope = $(this).closest('div.box')
       scope.find('.hours').hide()
-      scope.find('.time_entry_hours').val('')
+      scope.find('.hours input').val('1')
       scope.find('.quota').show()
       scope.find('.quota_specified').val('true')
     )
@@ -32,6 +36,7 @@ jQuery.noConflict()
       scope = $(this).closest('div.box')
       scope.find('.quota').hide()
       scope.find('.hours').show()
+      scope.find('.hours input').val('')
       scope.find('.time_entry_hours').focus()
       scope.find('.quota_specified').val('false')
     )
@@ -43,19 +48,17 @@ jQuery.noConflict()
         button: $(this).attr('id')
       })
     )
-  
 
   $(->
     setup()
 
     $('.add_entry').click(->
-      entry = $('div#entries').children('div').last().clone(true, true)
-      id = entry.attr('id').match(/_(.*)/)[1]
+      id = root.entry.attr('id').match(/_(.*)/)[1]
       new_id = parseInt(id) + 1
       id_regex = eval('/' + id + '/g')
 
       $('div#entries').
-        append('<div id="entry_' + new_id + '" class="box">' + entry.html().replace(id_regex, new_id) + '</div>').
+        append('<div id="entry_' + new_id + '" class="box">' + root.entry.html().replace(id_regex, new_id) + '</div>').
         remove('div.errorExplanation')
 
       setup()

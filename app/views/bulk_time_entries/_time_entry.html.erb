@@ -28,11 +28,11 @@
     <div class="date_range" style="display: none">
       <p>
         <label for="date_from_<%= rnd %>">From Date <span class="required"> *</span></label>
-        <input type="text" class="date_from" name="date_from" size="10" id="date_from_<%= rnd %>" /><%= calendar_for("date_from_#{rnd}") %>
+        <input type="text" class="date_from" size="10" id="date_from_<%= rnd %>" name="time_entries[<%= rnd %>][date_from]" /><%= calendar_for("date_from_#{rnd}") %>
       </p>
       <p>
         <label for="date_to_<%= rnd %>">To Date <span class="required"> *</span></label>
-        <input type="text" class="date_to" name="date_to" size="10" id="date_to_<%= rnd %>" /><%= calendar_for("date_to_#{rnd}") %><br />
+        <input type="text" class="date_to" size="10" id="date_to_<%= rnd %>" name="time_entries[<%= rnd %>][date_to]" /><%= calendar_for("date_to_#{rnd}") %><br />
         <small><a href="#" class="show_single_date">Specify Single Date</a></small>
       </p>
     </div>
@@ -46,7 +46,7 @@
     <p class="quota" style="display: none">
       <label for="quota_specified">Hours<span class="required"> *</span></label>
       <span>Filling To <%= User.current.quota %> hours/day</span><br />
-      <input type="hidden" name="quota_specified" id="quota_specified" value="false" />
+      <input type="hidden" class="quota_specified" value="false" name="time_entries[<%= rnd %>][quota_specified]" />
       <small><a href="#" class="specify_hours">Specify Hours</a></small>
     </p>
 

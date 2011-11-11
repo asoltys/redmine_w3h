@@ -2,8 +2,10 @@
   jQuery.noConflict();
 
   (function($) {
-    var setup;
+    var root, setup;
+    root = typeof exports !== "undefined" && exports !== null ? exports : this;
     setup = function() {
+      root.entry = $('div#entries').children('div').last().clone(true, true);
       $('a.show_range').click(function() {
         var scope;
         scope = $(this).closest('div.box');
@@ -27,7 +29,7 @@
         var scope;
         scope = $(this).closest('div.box');
         scope.find('.hours').hide();
-        scope.find('.time_entry_hours').val('');
+        scope.find('.hours input').val('1');
         scope.find('.quota').show();
         return scope.find('.quota_specified').val('true');
       });
@@ -36,6 +38,7 @@
         scope = $(this).closest('div.box');
         scope.find('.quota').hide();
         scope.find('.hours').show();
+        scope.find('.hours input').val('');
         scope.find('.time_entry_hours').focus();
         return scope.find('.quota_specified').val('false');
       });
@@ -50,12 +53,11 @@
     return $(function() {
       setup();
       return $('.add_entry').click(function() {
-        var entry, id, id_regex, new_id;
-        entry = $('div#entries').children('div').last().clone(true, true);
-        id = entry.attr('id').match(/_(.*)/)[1];
+        var id, id_regex, new_id;
+        id = root.entry.attr('id').match(/_(.*)/)[1];
         new_id = parseInt(id) + 1;
         id_regex = eval('/' + id + '/g');
-        $('div#entries').append('<div id="entry_' + new_id + '" class="box">' + entry.html().replace(id_regex, new_id) + '</div>').remove('div.errorExplanation');
+        $('div#entries').append('<div id="entry_' + new_id + '" class="box">' + root.entry.html().replace(id_regex, new_id) + '</div>').remove('div.errorExplanation');
         return setup();
       });
     });

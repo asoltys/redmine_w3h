@@ -13,9 +13,6 @@ module RedmineW3H
 
             success = true
             unless params[:date_from].empty?
-              Date.parse(params[:date_from])
-              Date.parse(params[:date_to])
-
               (params[:date_from]..params[:date_to]).each do |date|
                 t = @time_entry.clone
                 t.spent_on = date

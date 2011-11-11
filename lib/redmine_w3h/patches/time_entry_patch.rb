@@ -35,7 +35,6 @@ module RedmineW3H
               time_entry.project_id = entry[:project_id] # project_id is protected from mass assignment
             end
             time_entry.user = User.current
-            time_entry.save
             time_entry
           end
         end

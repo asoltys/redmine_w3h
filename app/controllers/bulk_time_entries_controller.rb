@@ -34,21 +34,23 @@ class BulkTimeEntriesController < ApplicationController
       params[:time_entries].each_pair do |html_id, entry|
         time_entry = TimeEntry.create_bulk_time_entry(entry)
         success = true
+        collective_hours = 0
+
         if params[:date_from].present?
           (params[:date_from]..params[:date_to]).each do |date|
             t = time_entry.clone
             t.spent_on = date
             set_hours(t)
+            collective_hours += t.hours
             success &&= t.save unless t.hours == 0
           end
+          time_entry.hours = collective_hours
         else
           set_hours(time_entry)
-          if time_entry.save
-            @saved_entries[html_id] = time_entry
-          else
-            @unsaved_entries[html_id] = time_entry
-          end
+          success = time_entry.save
         end
+
+        success ? @saved_entries[html_id] = time_entry : @unsaved_entries[html_id] = time_entry
       end
       
       respond_to do |format|

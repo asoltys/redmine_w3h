@@ -9,6 +9,7 @@
       setup();
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
+          $('div.box input, div.box select').removeAttr('disabled');
           if (!$.isEmptyObject(json.messages)) {
             $.each(json.entries, function(index, entries) {
               $("#entry_" + index).replaceWith("<div class='flash notice'>" + json.messages[index] + "</div>");
@@ -31,6 +32,7 @@
             });
           });
         });
+        $('div.box input, div.box select').attr('disabled', 'disabled');
         return false;
       });
       return $('.add_entry').click(function() {

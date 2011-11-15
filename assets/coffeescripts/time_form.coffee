@@ -16,6 +16,7 @@ jQuery.noConflict()
     # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
       $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
+        $('div.box input, div.box select').removeAttr('disabled')
         unless $.isEmptyObject(json.messages)
           $.each(json.entries, (index, entries) ->
             # use the first entry to find the form
@@ -38,6 +39,8 @@ jQuery.noConflict()
           )
         )
       )
+
+      $('div.box input, div.box select').attr('disabled', 'disabled')
 
       # prevent the form from submitting normally
       return false

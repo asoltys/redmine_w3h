@@ -45,7 +45,7 @@
 
     <p class="quota" style="display: none">
       <label for="quota_specified"><%= l(:field_hours) %><span class="required"> *</span></label>
-      <span>Filling To <%= User.current.quota %> hours/day</span><br />
+      <span><%= User.current.quota %></span><br />
       <input type="hidden" class="quota_specified" value="false" name="time_entries[0][quota_specified]" />
       <small><a class="specify_hours"><%= l(:label_specify_hours) %></a></small>
     </p>

@@ -1,3 +1,4 @@
+<% time_entry.id = 0 %>
 <% fields_for('time_entries[]', time_entry) do |f| %>
   <div class="box" id="entry_0">
     <%= error_messages_for 'time_entry', :object => time_entry %>

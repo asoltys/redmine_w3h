@@ -51,17 +51,20 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
   #date-options input[type='radio'] { margin-left: -20px; }
 
   span.logged-time {
-    padding-left: 10px; 
-    background-image: url('/images/task_todo.png');
+    display: block;
+    color: 333;
+    font-size: 30px;
+    padding-top: 25px; 
     background-repeat: no-repeat;
     background-position: 0px, 5px;
+    text-align: center;
+    width: 100%;
   }
 
 
-  p.day-num { float: right; }
+  table.cal td p.day-num { float: right; font-size: 14px; font-weight: bold; font-family: 'Trebuchet MS'; }
 
-  span.logged-time.delinquent{ background-image: url('/images/task_late.png'); }
-  span.logged-time.overtime{ background-image: url('/images/task_done.png'); }
+  span.logged-time.overtime a { color: #aa7; }
   div.issue img.gravatar { padding: 0; }
   table.cal td.today { background: none; }
   div.issue.closed { background: #cfc; }

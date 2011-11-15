@@ -4,7 +4,29 @@
   (function($) {
     var root, setup;
     root = typeof exports !== "undefined" && exports !== null ? exports : this;
-    setup = function() {
+    $(function() {
+      setup();
+      $('form.tabular').submit(function() {
+        $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
+          return $.each(json.entries, function(index, value) {
+            var entry;
+            entry = value.time_entry;
+            return $("#entry_" + index).replaceWith("<div class='flash notice'>" + json.messages[index] + "</div>");
+          });
+        });
+        return false;
+      });
+      return $('.add_entry').click(function() {
+        var entry, id, id_regex, new_id;
+        id = root.entry.attr('id').match(/_(.*)/)[1];
+        new_id = parseInt(id) + 1;
+        id_regex = eval('/' + id + '/g');
+        entry = "<div id='entry_" + new_id + "' class='box'>" + (root.entry.html().replace(id_regex, new_id)) + "</div>";
+        $('div#entries').append(entry);
+        return setup();
+      });
+    });
+    return setup = function() {
       root.entry = $('div#entries').children('div').last().clone(true, true);
       $('a.show_range').click(function() {
         var scope;
@@ -50,15 +72,4 @@
         });
       });
     };
-    return $(function() {
-      setup();
-      return $('.add_entry').click(function() {
-        var id, id_regex, new_id;
-        id = root.entry.attr('id').match(/_(.*)/)[1];
-        new_id = parseInt(id) + 1;
-        id_regex = eval('/' + id + '/g');
-        $('div#entries').append('<div id="entry_' + new_id + '" class="box">' + root.entry.html().replace(id_regex, new_id) + '</div>').remove('div.errorExplanation');
-        return setup();
-      });
-    });
   })(jQuery);

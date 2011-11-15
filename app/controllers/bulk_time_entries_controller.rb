@@ -29,8 +29,8 @@ class BulkTimeEntriesController < ApplicationController
   
   def save
     if request.post? 
-      @unsaved_entries = {}
-      @saved_entries = {}
+      entries = {}
+      messages = {}
 
       params[:time_entries].each_pair do |html_id, fields|
         non_attributes = ["date_from", "date_to", "quota_specified"]
@@ -53,11 +53,17 @@ class BulkTimeEntriesController < ApplicationController
           success = time_entry.save
         end
 
-        success ? @saved_entries[html_id] = time_entry : @unsaved_entries[html_id] = time_entry
+        if success
+          entries[html_id] = time_entry
+          messages[html_id] = l(:text_time_added_to_project, 
+            :count => time_entry.hours, 
+            :target => time_entry.project.name)
+        end
       end
       
+      request.format = :json
       respond_to do |format|
-        format.js {}
+        format.json { render :json => {:entries => entries, :messages => messages }}
       end
     end
   end

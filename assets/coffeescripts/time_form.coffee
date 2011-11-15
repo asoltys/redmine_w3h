@@ -2,6 +2,29 @@ jQuery.noConflict()
 (($) ->
   root = exports ? this
 
+  $(->
+    setup()
+
+    $('form.tabular').submit(->
+      $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
+        $.each(json.entries, (index, value) ->
+          entry = value.time_entry
+          $("#entry_#{index}").replaceWith("<div class='flash notice'>#{json.messages[index]}</div>")
+        )
+      )
+      return false
+    )
+
+    $('.add_entry').click(->
+      id = root.entry.attr('id').match(/_(.*)/)[1]
+      new_id = parseInt(id) + 1
+      id_regex = eval('/' + id + '/g')
+      entry = "<div id='entry_#{new_id}' class='box'>#{root.entry.html().replace(id_regex, new_id)}</div>"
+      $('div#entries').append(entry) 
+      setup()
+    )
+  )
+
   setup = ->
     root.entry = $('div#entries').children('div').last().clone(true, true)
 
@@ -48,20 +71,4 @@ jQuery.noConflict()
         button: $(this).attr('id')
       })
     )
-
-  $(->
-    setup()
-
-    $('.add_entry').click(->
-      id = root.entry.attr('id').match(/_(.*)/)[1]
-      new_id = parseInt(id) + 1
-      id_regex = eval('/' + id + '/g')
-
-      $('div#entries').
-        append('<div id="entry_' + new_id + '" class="box">' + root.entry.html().replace(id_regex, new_id) + '</div>').
-        remove('div.errorExplanation')
-
-      setup()
-    )
-  )
 )(jQuery)

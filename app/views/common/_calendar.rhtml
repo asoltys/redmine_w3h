@@ -20,7 +20,7 @@
         <% if (day.weekday? && User.current.quota && User.current.quota > 0) || User.current.logged_time(day) > 0 %> 
           <span class="logged-time <%= User.current.logged_time_class(day) %>">
             <a href="<%= "/timesheet/daily?timesheet[date_from]=#{day}&timesheet[date_to]=#{day}&timesheet[users][]=#{User.current.id}&timesheet[period_type]=0" %>">
-              <%= "#{User.current.logged_time(day)} #{l(:field_hours).downcase}" %>
+              <%= "#{User.current.logged_time(day)}" %>
             </a>
           </span>
         <% end %>

@@ -1,17 +1,38 @@
 jQuery.noConflict()
+
+# set $ to jquery instead of prototype, just in this file
 (($) ->
+  # root is where we store 'global' variables in coffeescript
   root = exports ? this
 
+  # everything in here gets run on page load
   $(->
+    # make a copy of the original time entry form
+    root.entry = $('div#entries').children('div').first().clone(true, true)
+
+    # bind all the click handlers
     setup()
 
+    # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
       $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
-        $.each(json.entries, (index, value) ->
-          entry = value.time_entry
+        $.each(json.entries, (index, entries) ->
+          
+          # use the first entry to find the form
           $("#entry_#{index}").replaceWith("<div class='flash notice'>#{json.messages[index]}</div>")
+
+          # update the calendar for each day that was logged
+          $.each(entries, (i, e) ->
+            e = e.time_entry
+            hours = $('.' + e.spent_on + ' a').html()
+            hours = parseFloat($.trim(hours)) + e.hours
+            $('.' + e.spent_on + ' a').html(hours)
+            $('.' + e.spent_on + ' a').effect('highlight', {color: '#9FCF9F'}, 1500)
+          )
         )
       )
+
+      # prevent the form from submitting normally
       return false
     )
 
@@ -20,48 +41,48 @@ jQuery.noConflict()
       new_id = parseInt(id) + 1
       id_regex = eval('/' + id + '/g')
       entry = "<div id='entry_#{new_id}' class='box'>#{root.entry.html().replace(id_regex, new_id)}</div>"
-      $('div#entries').append(entry) 
+      $('div#entries').append(entry)
+
+      # re-bind all the behaviours so that the new entry form gets them
       setup()
     )
   )
 
   setup = ->
-    root.entry = $('div#entries').children('div').last().clone(true, true)
-
     $('a.show_range').click(->
-      scope = $(this).closest('div.box')
-      scope.find('.single_date').hide()
-      scope.find('.date_from').val($('.time_entry_spent_on').val())
-      scope.find('.time_entry_spent_on').val('')
-      scope.find('.date_range').show()
-      scope.find('.date_from').focus()
+      e = $(this).closest('div.box')
+      e.find('.single_date').hide()
+      e.find('.date_from').val($('.time_entry_spent_on').val())
+      e.find('.time_entry_spent_on').val('')
+      e.find('.date_range').show()
+      e.find('.date_from').focus()
     )
 
     $('a.show_single_date').click(->
-      scope = $(this).closest('div.box')
-      scope.find('.date_range').hide()
-      scope.find('.single_date').show()
-      scope.find('.time_entry_spent_on').focus()
-      scope.find('.time_entry_spent_on').val($('.date_from').val())
-      scope.find('.date_from').val('')
-      scope.find('.date_to').val('')
+      e = $(this).closest('div.box')
+      e.find('.date_range').hide()
+      e.find('.single_date').show()
+      e.find('.time_entry_spent_on').focus()
+      e.find('.time_entry_spent_on').val($('.date_from').val())
+      e.find('.date_from').val('')
+      e.find('.date_to').val('')
     )
 
     $('a.fill_quota').click(->
-      scope = $(this).closest('div.box')
-      scope.find('.hours').hide()
-      scope.find('.hours input').val('1')
-      scope.find('.quota').show()
-      scope.find('.quota_specified').val('true')
+      e = $(this).closest('div.box')
+      e.find('.hours').hide()
+      e.find('.hours input').val('1')
+      e.find('.quota').show()
+      e.find('.quota_specified').val('true')
     )
 
     $('a.specify_hours').click(->
-      scope = $(this).closest('div.box')
-      scope.find('.quota').hide()
-      scope.find('.hours').show()
-      scope.find('.hours input').val('')
-      scope.find('.time_entry_hours').focus()
-      scope.find('.quota_specified').val('false')
+      e = $(this).closest('div.box')
+      e.find('.quota').hide()
+      e.find('.hours').show()
+      e.find('.hours input').val('')
+      e.find('.time_entry_hours').focus()
+      e.find('.quota_specified').val('false')
     )
 
     $('img.calendar-trigger').each(->

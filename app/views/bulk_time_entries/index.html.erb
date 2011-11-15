@@ -10,7 +10,7 @@
   <div id="entries">
     <%= render :partial => 'time_entry', :collection => @time_entries %>
   </div>
-  <a class="add_entry">Add Another</a>
+  <a class="add_entry"><%= l(:label_add_another) %></a>
   <%= submit_tag l(:button_save) %>
 <% end %>
 

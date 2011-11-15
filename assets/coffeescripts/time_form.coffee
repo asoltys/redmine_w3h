@@ -52,7 +52,7 @@ jQuery.noConflict()
       id_regex = eval('/entr(y|ies)(_|\\[)' + id + '/g')
       entry = "<div id='entry_#{new_id}' class='box'>#{root.entry.html().replace(id_regex, "entr$1$2#{new_id}")}</div>"
       $('div#entries').append(entry)
-      root.entry = entry.clone(true, true)
+      root.entry = $("#entry_#{new_id}").clone(true, true)
 
       # re-bind all the behaviours so that the new entry form gets them
       setup()
@@ -60,6 +60,8 @@ jQuery.noConflict()
   )
 
   setup = ->
+    $('div.box input, div.box select').removeAttr('disabled')
+
     $('a.show_range').click(->
       e = $(this).closest('div.box')
       e.find('.single_date').hide()

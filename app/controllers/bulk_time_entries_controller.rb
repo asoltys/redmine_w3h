@@ -47,7 +47,10 @@ class BulkTimeEntriesController < ApplicationController
             set_hours(t) if fields[:quota_specified] == "true"
             collective_hours += t.hours
             success &&= t.save unless t.hours == 0
-            entries[html_id] ||= [] && entries[html_id] += [t] if success
+            if success
+              entries[html_id] ||= [t] 
+              entries[html_id] += [t]
+            end
           end
           time_entry.hours = collective_hours
         else

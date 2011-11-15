@@ -50,7 +50,7 @@ fr:
   label_bulk_time_entries: Saisie de temps
   label_bulk_time_add_another: Saisir un nouveau temps
   text_bulk_time_entry_permission: Aucun projet ne vous permet de saisir des temps
-  text_time_added_to_project: "{{count}} heures ajoutees au {{target}}"
+  text_time_added_to_project: "%{count} heures ajoutees au %{target}"
   label_specify_range: Specifi&eacute;z une plage
   label_specify_single_date: Specifi&eacute;z une date unique
   label_fill_quota: Remplissez quotas

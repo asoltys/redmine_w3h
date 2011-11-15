@@ -16,18 +16,25 @@ jQuery.noConflict()
     # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
       $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
-        $.each(json.entries, (index, entries) ->
-          
-          # use the first entry to find the form
-          $("#entry_#{index}").replaceWith("<div class='flash notice'>#{json.messages[index]}</div>")
+        unless $.isEmptyObject(json.messages)
+          $.each(json.entries, (index, entries) ->
+            # use the first entry to find the form
+            $("#entry_#{index}").replaceWith("<div class='flash notice'>#{json.messages[index]}</div>")
 
-          # update the calendar for each day that was logged
-          $.each(entries, (i, e) ->
-            e = e.time_entry
-            hours = $('.' + e.spent_on + ' a').html()
-            hours = parseFloat($.trim(hours)) + e.hours
-            $('.' + e.spent_on + ' a').html(hours)
-            $('.' + e.spent_on + ' a').effect('highlight', {color: '#9FCF9F'}, 1500)
+            # update the calendar for each day that was logged
+            $.each(entries, (i, e) ->
+              e = e.time_entry
+              hours = $('.' + e.spent_on + ' a').html()
+              hours = parseFloat($.trim(hours)) + e.hours
+              $('.' + e.spent_on + ' a').html(hours)
+              $('.' + e.spent_on + ' a').effect('highlight', {color: '#9FCF9F'}, 1500)
+            )
+          )
+
+        $('label').css('color', 'black')
+        $.each(json.errors, (i, errors) ->
+          $.each(errors, (j, error) ->
+            $("#time_entries_#{i}_#{error[0]}").prev('label').css('color', 'red')
           )
         )
       )
@@ -42,6 +49,7 @@ jQuery.noConflict()
       id_regex = eval('/entr(y|ies)(_|\\[)' + id + '/g')
       entry = "<div id='entry_#{new_id}' class='box'>#{root.entry.html().replace(id_regex, "entr$1$2#{new_id}")}</div>"
       $('div#entries').append(entry)
+      root.entry = entry.clone(true, true)
 
       # re-bind all the behaviours so that the new entry form gets them
       setup()

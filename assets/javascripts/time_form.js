@@ -9,17 +9,25 @@
       setup();
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
-          return $.each(json.entries, function(index, entries) {
-            $("#entry_" + index).replaceWith("<div class='flash notice'>" + json.messages[index] + "</div>");
-            return $.each(entries, function(i, e) {
-              var hours;
-              e = e.time_entry;
-              hours = $('.' + e.spent_on + ' a').html();
-              hours = parseFloat($.trim(hours)) + e.hours;
-              $('.' + e.spent_on + ' a').html(hours);
-              return $('.' + e.spent_on + ' a').effect('highlight', {
-                color: '#9FCF9F'
-              }, 1500);
+          if (!$.isEmptyObject(json.messages)) {
+            $.each(json.entries, function(index, entries) {
+              $("#entry_" + index).replaceWith("<div class='flash notice'>" + json.messages[index] + "</div>");
+              return $.each(entries, function(i, e) {
+                var hours;
+                e = e.time_entry;
+                hours = $('.' + e.spent_on + ' a').html();
+                hours = parseFloat($.trim(hours)) + e.hours;
+                $('.' + e.spent_on + ' a').html(hours);
+                return $('.' + e.spent_on + ' a').effect('highlight', {
+                  color: '#9FCF9F'
+                }, 1500);
+              });
+            });
+          }
+          $('label').css('color', 'black');
+          return $.each(json.errors, function(i, errors) {
+            return $.each(errors, function(j, error) {
+              return $("#time_entries_" + i + "_" + error[0]).prev('label').css('color', 'red');
             });
           });
         });
@@ -32,6 +40,7 @@
         id_regex = eval('/entr(y|ies)(_|\\[)' + id + '/g');
         entry = "<div id='entry_" + new_id + "' class='box'>" + (root.entry.html().replace(id_regex, "entr$1$2" + new_id)) + "</div>";
         $('div#entries').append(entry);
+        root.entry = entry.clone(true, true);
         return setup();
       });
     });

@@ -31,9 +31,9 @@ class BulkTimeEntriesController < ApplicationController
     if request.post? 
       entries = {}
       messages = {}
+      errors = {}
 
       params[:time_entries].each_pair do |html_id, fields|
-        entries[html_id] = []
         non_attributes = ["date_from", "date_to", "quota_specified"]
         attributes = fields.reject{|k,v| non_attributes.include? k}
         time_entry = TimeEntry.create_bulk_time_entry(attributes)
@@ -47,25 +47,27 @@ class BulkTimeEntriesController < ApplicationController
             set_hours(t) if fields[:quota_specified] == "true"
             collective_hours += t.hours
             success &&= t.save unless t.hours == 0
-            entries[html_id] += [t] if success
+            entries[html_id] ||= [] && entries[html_id] += [t] if success
           end
           time_entry.hours = collective_hours
         else
           set_hours(time_entry) if fields[:quota_specified] == "true"
           success = time_entry.save
-          entries[html_id] += [time_entry] if success
+          entries[html_id] = [time_entry] if success
         end
 
         if success
           messages[html_id] = l(:text_time_added_to_project, 
             :count => time_entry.hours, 
             :target => time_entry.project.name)
+        else
+          errors[html_id] = time_entry.errors 
         end
       end
-      
+
       request.format = :json
       respond_to do |format|
-        format.json { render :json => {:entries => entries, :messages => messages }}
+        format.json { render :json => {:entries => entries, :messages => messages, :errors => errors }}
       end
     end
   end

@@ -35,7 +35,6 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
 
   tr.deliverable_end, tr.user_end { height: 15px; }
 
-
   img.gravatar { padding: 0; margin-bottom: -5px; }
 
   div.totals {
@@ -61,8 +60,7 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
     width: 100%;
   }
 
-
-  table.cal td p.day-num { float: right; font-size: 14px; font-weight: bold; font-family: 'Trebuchet MS'; }
+  table.cal td p.day-num { float: right; font-size: 14px; font-weight: bold; }
 
   span.logged-time.overtime a { color: #aa7; }
   div.issue img.gravatar { padding: 0; }

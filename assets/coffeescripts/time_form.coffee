@@ -39,8 +39,8 @@ jQuery.noConflict()
     $('.add_entry').click(->
       id = root.entry.attr('id').match(/_(.*)/)[1]
       new_id = parseInt(id) + 1
-      id_regex = eval('/' + id + '/g')
-      entry = "<div id='entry_#{new_id}' class='box'>#{root.entry.html().replace(id_regex, new_id)}</div>"
+      id_regex = eval('/entr(y|ies)(_|\\[)' + id + '/g')
+      entry = "<div id='entry_#{new_id}' class='box'>#{root.entry.html().replace(id_regex, "entr$1$2#{new_id}")}</div>"
       $('div#entries').append(entry)
 
       # re-bind all the behaviours so that the new entry form gets them

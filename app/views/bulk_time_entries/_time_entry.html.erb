@@ -22,7 +22,7 @@
     <p class="single_date">
       <%= label_for_field :spent_on, 0, :required => true %>
       <%= f.text_field :spent_on, :size => 10, :name => "time_entries[0][spent_on]", :id => "time_entries_0_spent_on", :class => 'spent_on' %><%= calendar_for("time_entries_0_spent_on") %>
-      <small><a href="#" class="show_range">Specify Range</a></small>
+      <small><a href="#" class="show_range"><%= l(:label_specify_range) %></a></small>
     </p>
 
     <div class="date_range" style="display: none">
@@ -33,21 +33,21 @@
       <p>
         <label for="date_to_0">To Date <span class="required"> *</span></label>
         <input type="text" class="date_to" size="10" id="date_to_0" name="time_entries[0][date_to]" /><%= calendar_for("date_to_0") %><br />
-        <small><a href="#" class="show_single_date">Specify Single Date</a></small>
+        <small><a href="#" class="show_single_date"><%= l(:label_specify_single_date) %></a></small>
       </p>
     </div>
 
     <p class="hours">
       <%= label_for_field :hours, 0, :required => true %>
       <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
-      <small><a href="#" class="fill_quota">Fill Quota</a></small>
+      <small><a href="#" class="fill_quota"><%= l(:label_fill_quota) %></a></small>
     </p>
 
     <p class="quota" style="display: none">
-      <label for="quota_specified">Hours<span class="required"> *</span></label>
+      <label for="quota_specified"><%= l(:field_hours) %><span class="required"> *</span></label>
       <span>Filling To <%= User.current.quota %> hours/day</span><br />
       <input type="hidden" class="quota_specified" value="false" name="time_entries[0][quota_specified]" />
-      <small><a href="#" class="specify_hours">Specify Hours</a></small>
+      <small><a href="#" class="specify_hours"><%= l(:label_specify_hours) %></a></small>
     </p>
 
     <p>

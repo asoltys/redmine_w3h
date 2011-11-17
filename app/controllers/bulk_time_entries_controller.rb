@@ -26,7 +26,6 @@ class BulkTimeEntriesController < ApplicationController
     end
   end
   
-  
   def save
     if request.post? 
       entries = {}

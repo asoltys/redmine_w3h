@@ -26,7 +26,6 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
       }
     )
 
-
     menu(
       :top_menu, 
       :bulk_time_entry, 
@@ -36,15 +35,6 @@ unless Redmine::Plugin.registered_plugins.keys.include?(:redmine_w3h)
         User.current.allowed_to?(:log_time, nil, :global => true)
       } 
     )
-
-    menu( 
-      :project_menu, 
-      :time_entries, 
-      {:controller => 'timelog', :action => 'new'}, 
-      :param => :project_id, 
-      :caption => :label_log_time
-    )
-
 
     menu(
       :project_menu, 

@@ -19,10 +19,8 @@ class BulkTimeEntriesController < ApplicationController
   end
 
   def load_assigned_issues
-    @issues = get_issues(params[:project_id])
-    @selected_project = BulkTimeEntriesController.allowed_project?(params[:project_id])
     respond_to do |format|
-      format.js {}
+      format.json {render :json => get_issues(params[:project_id]).map{|i| {:id => i.id, :subject => i.subject}}}
     end
   end
   

@@ -35,7 +35,7 @@
         $('div.box input, div.box select').attr('disabled', 'disabled');
         return false;
       });
-      return $('.add_entry').click(function() {
+      $('.add_entry').click(function() {
         var entry, id, id_regex, new_id;
         id = root.entry.attr('id').match(/_(.*)/)[1];
         new_id = parseInt(id) + 1;
@@ -44,6 +44,21 @@
         $('div#entries').append(entry);
         root.entry = $("#entry_" + new_id).clone(true, true);
         return setup();
+      });
+      return $('select[id*=project]').change(function() {
+        var target;
+        target = $(this).closest('div').find('select[id*=issue_id]');
+        return $.getJSON('/bulk_time_entries/load_assigned_issues', {
+          project_id: $(this).val(),
+          entry_id: $(this).closest('div').attr('id')
+        }, function(data) {
+          var options;
+          options = '';
+          $.each(data, function(i, v) {
+            return options += "<option value='" + v.id + "'>" + v.id + " - " + v.subject + "</option>";
+          });
+          return target.html(options);
+        });
       });
     });
     return setup = function() {

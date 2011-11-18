@@ -57,6 +57,20 @@ jQuery.noConflict()
       # re-bind all the behaviours so that the new entry form gets them
       setup()
     )
+
+    $('select[id*=project]').change(->
+      target = $(this).closest('div').find('select[id*=issue_id]')
+      $.getJSON('/bulk_time_entries/load_assigned_issues', {
+        project_id: $(this).val(),
+        entry_id: $(this).closest('div').attr('id')
+      }, (data) ->
+        options = ''
+        $.each(data, (i, v) ->
+          options += "<option value='#{v.id}'>#{v.id} - #{v.subject}</option>"
+        )
+        target.html(options)
+      )
+    )
   )
 
   setup = ->

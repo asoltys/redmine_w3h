@@ -8,8 +8,7 @@
     <p>
       <%= label_for_field :project_id, 0, :required => true %>
       <% projects = options_for_select(@projects.sort{|a,b| a <=> b}.map{|p| [p.to_s, p.id]}, :selected => @first_project.id) %>
-      <%= f.select :project_id, projects, {}, 
-        { :onchange => "new Ajax.Request('#{url_for :action => 'load_assigned_issues'}', { parameters: { project_id: $F(this), entry_id: $(this).up(1).id } } )" } %>&nbsp;
+      <%= f.select :project_id, projects %>
     </p>
     <p id="entry_0_issues">
     <% @issues = get_issues @first_project.id %>

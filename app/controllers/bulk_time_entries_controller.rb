@@ -105,7 +105,9 @@ class BulkTimeEntriesController < ApplicationController
   end
 
   def load_first_project
-    @first_project = @projects.sort_by(&:lft).first unless @projects.empty?
+    @first_project = params[:project_id].nil? ?
+      @projects.sort_by(&:lft).first :
+      Project.find(params[:project_id])
   end
 
   def check_for_no_projects

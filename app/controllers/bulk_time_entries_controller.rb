@@ -20,7 +20,12 @@ class BulkTimeEntriesController < ApplicationController
 
   def load_assigned_issues
     respond_to do |format|
-      format.json {render :json => get_issues(params[:project_id]).map{|i| {:id => i.id, :subject => i.subject}}}
+      format.json {render :json => get_issues(
+        params[:project_id]).map{|i| {
+          :id => i.id, 
+          :subject => i.subject,
+          :closed => i.status.is_closed
+        }}.sort{|a,b| a[:closed] ? 1 : -1 }}
     end
   end
   

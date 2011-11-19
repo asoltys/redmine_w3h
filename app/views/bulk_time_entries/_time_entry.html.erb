@@ -11,8 +11,13 @@
       <%= f.select :project_id, projects %>
     </p>
     <p id="entry_0_issues">
-    <% @issues = get_issues @first_project.id %>
-    <%= render :partial => 'issues_selector', :locals => { :issues => @issues, :f => f } %>
+      <% @issues = get_issues @first_project.id %>
+      <%= label_for_field :issue_id, 0 %>
+      <select id="time_entries_<%= time_entry.id %>_issue_id">
+        <optgroup label="<%= l(:label_open_issues) %>"></optgroup>
+        <optgroup label="<%= l(:label_closed_issues) %>"></optgroup>
+      </select>
+      <small><a class="show_closed_issues"><%= l(:label_specify_single_date) %></a></small>
     </p>
     <p id="entry_0_deliverables">
       <%= render :partial => 'deliverables_selector', :locals => {:project => @first_project} %>

@@ -52,12 +52,17 @@
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
-          var options;
-          options = '';
+          var closed_issues, open_issues;
+          open_issues = closed_issues = '';
           $.each(data, function(i, v) {
-            return options += "<option value='" + v.id + "'>" + v.id + " - " + v.subject + "</option>";
+            var option, _ref;
+            option = "<option value='" + v.id + "'>" + v.id + ": " + v.subject + "</option>";
+            return (_ref = v.closed) != null ? _ref : closed_issues += {
+              option: open_issues += option
+            };
           });
-          return target.html(options);
+          target.find('optgroup:first').html(open_issues);
+          return target.find('optgroup:last').html(closed_issues);
         });
       });
     });

@@ -6,7 +6,6 @@
     root = typeof exports !== "undefined" && exports !== null ? exports : this;
     $(function() {
       root.entry = $('div#entries').children('div').first().clone(true, true);
-      setup();
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
           $('div.box input, div.box select').removeAttr('disabled');
@@ -45,7 +44,7 @@
         root.entry = $("#entry_" + new_id).clone(true, true);
         return setup();
       });
-      return $('select[id*=project]').change(function() {
+      $('select[id*=project]').change(function() {
         var target;
         target = $(this).closest('div').find('select[id*=issue_id]');
         return $.getJSON('/bulk_time_entries/load_assigned_issues', {
@@ -55,19 +54,23 @@
           var closed_issues, open_issues;
           open_issues = closed_issues = '';
           $.each(data, function(i, v) {
-            var option, _ref;
+            var option;
             option = "<option value='" + v.id + "'>" + v.id + ": " + v.subject + "</option>";
-            return (_ref = v.closed) != null ? _ref : closed_issues += {
-              option: open_issues += option
-            };
+            if (v.closed) {
+              return closed_issues += option;
+            } else {
+              return open_issues += option;
+            }
           });
           target.find('optgroup:first').html(open_issues);
           return target.find('optgroup:last').html(closed_issues);
         });
       });
+      return setup();
     });
     return setup = function() {
       $('div.box input, div.box select').removeAttr('disabled');
+      $('select[id*=project]').change();
       $('a.show_range').click(function() {
         var e;
         e = $(this).closest('div.box');

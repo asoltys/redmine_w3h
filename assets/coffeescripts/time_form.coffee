@@ -10,9 +10,6 @@ jQuery.noConflict()
     # make a copy of the original time entry form
     root.entry = $('div#entries').children('div').first().clone(true, true)
 
-    # bind all the click handlers
-    setup()
-
     # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
       $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
@@ -46,6 +43,7 @@ jQuery.noConflict()
       return false
     )
 
+    # display a new copy of the time entry form
     $('.add_entry').click(->
       id = root.entry.attr('id').match(/_(.*)/)[1]
       new_id = parseInt(id) + 1
@@ -68,16 +66,20 @@ jQuery.noConflict()
         open_issues = closed_issues = ''
         $.each(data, (i, v) ->
           option = "<option value='#{v.id}'>#{v.id}: #{v.subject}</option>"
-          v.closed ? closed_issues += option : open_issues += option
+          if v.closed then closed_issues += option else open_issues += option
         )
         target.find('optgroup:first').html(open_issues)
         target.find('optgroup:last').html(closed_issues)
       )
     )
+
+    # bind all the click handlers
+    setup()
   )
 
   setup = ->
     $('div.box input, div.box select').removeAttr('disabled')
+    $('select[id*=project]').change()
 
     $('a.show_range').click(->
       e = $(this).closest('div.box')

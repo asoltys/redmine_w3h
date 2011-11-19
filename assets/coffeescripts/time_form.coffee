@@ -47,10 +47,12 @@ jQuery.noConflict()
     # load issues on project change
     $('select[id*=project]').change(->
       target = $(this).closest('div').find('select[id*=issue_id]')
+      target.attr('disabled', 'disabled')
       $.getJSON('/bulk_time_entries/load_assigned_issues', {
         project_id: $(this).val(),
         entry_id: $(this).closest('div').attr('id')
       }, (data) ->
+        target.removeAttr('disabled')
         open_issues = closed_issues = ''
         $.each(data, (i, v) ->
           option = "<option value='#{v.id}'>#{v.id}: #{v.subject}</option>"

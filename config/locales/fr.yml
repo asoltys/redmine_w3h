@@ -4,9 +4,9 @@ fr:
   label_q3: third quarter
   label_q4: fourth quarter
   label_log_time: Temps
+  label_from: De
+  label_to: A
   timesheet_title: Reports du temps
-  timesheet_date_from_label: De
-  timesheet_date_to_label: A
   timesheet_project_label: Projet
   timesheet_activities_label: Activit&eacute;
   timesheet_users_label: Utilisateurs

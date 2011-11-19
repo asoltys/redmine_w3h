@@ -38,11 +38,13 @@
       $('select[id*=project]').change(function() {
         var target;
         target = $(this).closest('div').find('select[id*=issue_id]');
+        target.attr('disabled', 'disabled');
         return $.getJSON('/bulk_time_entries/load_assigned_issues', {
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
           var closed_issues, open_issues;
+          target.removeAttr('disabled');
           open_issues = closed_issues = '';
           $.each(data, function(i, v) {
             var option;

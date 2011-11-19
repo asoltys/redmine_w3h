@@ -6,9 +6,9 @@ en:
   label_log_time: Temps
   label_deliverable: Deliverable
   label_deliverable_plural: Deliverables
+  label_from: From
+  label_to: To
   timesheet_title: Time Reports
-  timesheet_date_from_label: From
-  timesheet_date_to_label: To
   timesheet_project_label: Project
   timesheet_activities_label: Activities
   timesheet_users_label: Users

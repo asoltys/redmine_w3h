@@ -17,7 +17,6 @@
         <optgroup label="<%= l(:label_open_issues) %>"></optgroup>
         <optgroup label="<%= l(:label_closed_issues) %>"></optgroup>
       </select>
-      <small><a class="show_closed_issues"><%= l(:label_specify_single_date) %></a></small>
     </p>
     <p id="entry_0_deliverables">
       <%= render :partial => 'deliverables_selector', :locals => {:project => @first_project} %>

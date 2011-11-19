@@ -6,12 +6,71 @@
 
 <h2><%= l(:label_bulk_time_entries) %></h2>
 
-<% form_for :bulk_time_entry_title, @bulk_time_entry, :url => {:action => 'save'}, :html => {:class => 'tabular'} do |f| %>
-  <div id="entries">
-    <%= render :partial => 'time_entry', :collection => @time_entries %>
+<% form_for @time_entry, :url => {:action => 'save'}, :html => {:class => 'tabular'} do |f| %>
+  <div class="box" id="entry">
+    <%= error_messages_for 'time_entry', :object => @time_entry %>
+
+    <p class="single_date">
+      <label for="time_entry_spent_on"><%= l(:field_spent_on) %> <span class="required">*</span></label>
+      <%= f.text_field :spent_on, :size => 10 %>
+      <%= calendar_for("time_entries_spent_on") %>
+      <small><a class="show_range"><%= l(:label_specify_range) %></a></small>
+    </p>
+
+    <div class="date_range" style="display: none">
+      <p>
+        <label for="date_from">From Date <span class="required"> *</span></label>
+        <input type="text" class="date_from" size="10" id="date_from" name="date_from" /><%= calendar_for("date_from") %>
+      </p>
+      <p>
+        <label for="date_to">To Date <span class="required"> *</span></label>
+        <input type="text" class="date_to" size="10" id="date_to" name="date_to" /><%= calendar_for("date_to") %><br />
+        <small><a class="show_single_date"><%= l(:label_specify_single_date) %></a></small>
+      </p>
+    </div>
+
+    <p class="hours">
+      <label for="time_entry_hours"><%= l(:field_hours) %> <span class="required">*</span></label>
+      <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
+      <small><a class="fill_quota"><%= l(:label_fill_quota) %></a></small>
+    </p>
+
+    <p class="quota" style="display: none">
+      <label for="quota_specified"><%= l(:field_hours) %><span class="required"> *</span></label>
+      <span><%= User.current.quota %></span><br />
+      <input type="hidden" class="quota_specified" value="false" name="quota_specified" />
+      <small><a class="specify_hours"><%= l(:label_specify_hours) %></a></small>
+    </p>
+
+    <p>
+      <label for="time_entry_project_id"><%= l(:field_project) %> <span class="required">*</span></label>
+      <% projects = options_for_select(@projects.sort{|a,b| a <=> b}.map{|p| [p.to_s, p.id]}, :selected => @first_project.id) %>
+      <%= f.select :project_id, projects %>
+    </p>
+    <p id="entry_issues">
+      <% @issues = get_issues @first_project.id %>
+      <label for="time_entry_issue_id"><%= l(:field_issue) %></label>
+      <select id="time_entry_issue_id" name="time_entry[issue_id]">
+        <optgroup label="<%= l(:label_open_issues) %>"></optgroup>
+        <optgroup label="<%= l(:label_closed_issues) %>"></optgroup>
+      </select>
+    </p>
+    <p id="entry_deliverables">
+      <%= label_for_field :deliverable_id, 0, :required => false %>
+      <%= select_tag "time_entries[0][deliverable_id]", options_for_select([['Select One', '']] + @deliverables) %>
+    </p>
+    <p>
+      <%= label_for_field :comments, :required => false %>
+      <%= f.text_field :comments, :size => 100, :maxlength => 255 %>
+    </p>
+    <p id="entry_activities">
+      <%= label_for_field :activity_id, '', :required => true %>
+      <%= select_tag "activity_id", options_from_collection_for_select(@first_project.activities, :id, :name) %>
+    </p>
+    <% @time_entry.custom_field_values.each do |value| %>
+      <p><%= custom_field_tag_with_label "", value %></p>
+    <% end if @time_entry.respond_to?(:custom_field_values) %>
   </div>
-  <a class="add_entry"><%= l(:label_add_another) %></a>
-  <%= submit_tag l(:button_save) %>
 <% end %>
 
 <br />

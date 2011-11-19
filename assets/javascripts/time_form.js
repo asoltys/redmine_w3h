@@ -6,12 +6,13 @@
     root = typeof exports !== "undefined" && exports !== null ? exports : this;
     $(function() {
       root.entry = $('div#entries').children('div').first().clone(true, true);
+      $('.hours').focus();
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
           $('div.box input, div.box select').removeAttr('disabled');
           if (!$.isEmptyObject(json.messages)) {
             $.each(json.entries, function(index, entries) {
-              $("#entry_" + index).replaceWith("<div class='flash notice'>" + json.messages[index] + "</div>");
+              $("#entry").prepend("<div class='flash notice'>" + json.messages[index] + "</div>");
               return $.each(entries, function(i, e) {
                 var hours;
                 e = e.time_entry;
@@ -33,16 +34,6 @@
         });
         $('div.box input, div.box select').attr('disabled', 'disabled');
         return false;
-      });
-      $('.add_entry').click(function() {
-        var entry, id, id_regex, new_id;
-        id = root.entry.attr('id').match(/_(.*)/)[1];
-        new_id = parseInt(id) + 1;
-        id_regex = eval('/entr(y|ies)(_|\\[)' + id + '/g');
-        entry = "<div id='entry_" + new_id + "' class='box'>" + (root.entry.html().replace(id_regex, "entr$1$2" + new_id)) + "</div>";
-        $('div#entries').append(entry);
-        root.entry = $("#entry_" + new_id).clone(true, true);
-        return setup();
       });
       $('select[id*=project]').change(function() {
         var target;

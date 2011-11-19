@@ -9,6 +9,7 @@ jQuery.noConflict()
   $(->
     # make a copy of the original time entry form
     root.entry = $('div#entries').children('div').first().clone(true, true)
+    $('.hours').focus()
 
     # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
@@ -17,7 +18,7 @@ jQuery.noConflict()
         unless $.isEmptyObject(json.messages)
           $.each(json.entries, (index, entries) ->
             # use the first entry to find the form
-            $("#entry_#{index}").replaceWith("<div class='flash notice'>#{json.messages[index]}</div>")
+            $("#entry").prepend("<div class='flash notice'>#{json.messages[index]}</div>")
 
             # update the calendar for each day that was logged
             $.each(entries, (i, e) ->
@@ -41,19 +42,6 @@ jQuery.noConflict()
 
       # prevent the form from submitting normally
       return false
-    )
-
-    # display a new copy of the time entry form
-    $('.add_entry').click(->
-      id = root.entry.attr('id').match(/_(.*)/)[1]
-      new_id = parseInt(id) + 1
-      id_regex = eval('/entr(y|ies)(_|\\[)' + id + '/g')
-      entry = "<div id='entry_#{new_id}' class='box'>#{root.entry.html().replace(id_regex, "entr$1$2#{new_id}")}</div>"
-      $('div#entries').append(entry)
-      root.entry = $("#entry_#{new_id}").clone(true, true)
-
-      # re-bind all the behaviours so that the new entry form gets them
-      setup()
     )
 
     # load issues on project change

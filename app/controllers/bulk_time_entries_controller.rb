@@ -3,10 +3,11 @@ class BulkTimeEntriesController < ApplicationController
   unloadable
   layout 'base'
   before_filter :require_login
-  before_filter :load_activities
   before_filter :load_allowed_projects
   before_filter :load_first_project
   before_filter :check_for_no_projects
+  before_filter :load_activities
+  before_filter :load_deliverables
 
   helper :custom_fields
   include BulkTimeEntriesHelper
@@ -15,7 +16,7 @@ class BulkTimeEntriesController < ApplicationController
   
   def index
     params[:date] ||= today_with_time_zone
-    @time_entries = [TimeEntry.new(:spent_on => params[:date].to_s)]
+    @time_entry = TimeEntry.new(:spent_on => params[:date].to_s)
   end
 
   def load_assigned_issues
@@ -100,6 +101,10 @@ class BulkTimeEntriesController < ApplicationController
 
   def load_activities
     @activities = TimeEntryActivity.all
+  end
+
+  def load_deliverables
+    @deliverables = @first_project.ancestor_deliverables.collect{|d| [d.to_s,d.id]}.sort{|a,b| a <=> b}
   end
   
   def load_allowed_projects

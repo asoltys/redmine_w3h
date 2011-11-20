@@ -6,7 +6,7 @@
     root = typeof exports !== "undefined" && exports !== null ? exports : this;
     $(function() {
       root.entry = $('div#entries').children('div').first().clone(true, true);
-      $('.hours').focus();
+      $('#time_entry_hours').focus();
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
           $('div.box input, div.box select').removeAttr('disabled');

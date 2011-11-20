@@ -9,7 +9,7 @@ jQuery.noConflict()
   $(->
     # make a copy of the original time entry form
     root.entry = $('div#entries').children('div').first().clone(true, true)
-    $('.hours').focus()
+    $('#time_entry_hours').focus()
 
     # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->

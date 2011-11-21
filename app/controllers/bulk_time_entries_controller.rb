@@ -32,55 +32,50 @@ class BulkTimeEntriesController < ApplicationController
   
   def save
     if request.post? 
-      entries = {}
-      messages = {}
-      errors = {}
+      entries = []
+      time_entry = TimeEntry.create_bulk_time_entry(params[:time_entry])
 
-      params[:time_entries].each_pair do |html_id, fields|
-        non_attributes = ["date_from", "date_to", "quota_specified"]
-        attributes = fields.reject{|k,v| non_attributes.include? k}
-        time_entry = TimeEntry.create_bulk_time_entry(attributes)
-        success = true
-        collective_hours = 0
-
-        if fields[:date_from].present?
-          (fields[:date_from]..fields[:date_to]).each do |date|
-            t = time_entry.clone
-            t.spent_on = date
-            set_hours(t) if fields[:quota_specified] == "true"
-            collective_hours += t.hours
-            success &&= t.save unless t.hours == 0
-            if success
-              entries[html_id] ||= [t] 
-              entries[html_id] += [t]
-            end
-          end
-          time_entry.hours = collective_hours
-        else
-          set_hours(time_entry) if fields[:quota_specified] == "true"
-          success = time_entry.save
-          entries[html_id] = [time_entry] if success
+      if params[:date_from].present?
+        entries = []
+        (params[:date_from]..params[:date_to]).each do |date|
+          t = time_entry.clone
+          t.spent_on = date
+          entries += [t]
         end
-
-        if success
-          messages[html_id] = l(:text_time_added_to_project, 
-            :count => time_entry.hours, 
-            :target => time_entry.project.name)
-        else
-          errors[html_id] = time_entry.errors 
-        end
+      else
+        entries = [time_entry]
       end
 
-      request.format = :json
+      success = true
+      entries.each do |t| 
+        if params[:quota_specified] == "true"
+          logged = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', t.spent_on]).map(&:hours).sum
+          t.hours = [0, User.current.quota - logged].max
+        end
+        success &&= t.save unless t.hours == 0
+      end
+
+      errors = {}
+      if success
+        message = l(:text_time_added_to_project, 
+          :count => entries.map(&:hours).sum, 
+          :target => entries.first.project.name)
+      else
+        errors = entries.first.errors 
+        entries = []
+      end
+
       respond_to do |format|
-        format.json { render :json => {:entries => entries, :messages => messages, :errors => errors }}
+        format.json { render :json => {:entries => entries, :message => message, :errors => errors }}
       end
     end
   end
 
   def set_hours(time_entry)
-    existing = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', time_entry.spent_on]).map(&:hours).sum
-    time_entry.hours = [0, User.current.quota - existing].max
+    if params[:quota_specified] == "true"
+      existing = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', time_entry.spent_on]).map(&:hours).sum
+      time_entry.hours = [0, User.current.quota - existing].max
+    end
   end
     
   def add_entry

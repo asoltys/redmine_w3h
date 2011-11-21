@@ -10,31 +10,34 @@ jQuery.noConflict()
     # make a copy of the original time entry form
     root.entry = $('div#entries').children('div').first().clone(true, true)
     $('#time_entry_hours').focus()
+    $('form.tabular input').keypress((e) ->
+      $('form.tabular').submit() if e.which == 13
+    )
 
     # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
       $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
         $('div.box input, div.box select').removeAttr('disabled')
-        unless $.isEmptyObject(json.messages)
-          $.each(json.entries, (index, entries) ->
-            # use the first entry to find the form
-            $("#entry").prepend("<div class='flash notice'>#{json.messages[index]}</div>")
 
-            # update the calendar for each day that was logged
-            $.each(entries, (i, e) ->
-              e = e.time_entry
-              hours = $('.' + e.spent_on + ' a').html()
-              hours = parseFloat($.trim(hours)) + e.hours
-              $('.' + e.spent_on + ' a').html(hours)
-              $('.' + e.spent_on + ' a').effect('highlight', {color: '#9FCF9F'}, 1500)
-            )
+        if json.message
+          $("#entry").before("<div class='flash notice'>#{json.message}</div>")
+
+          # update the calendar for each day that was logged
+          $.each(json.entries, (i, e) ->
+            e = e.time_entry
+            link = $('.' + e.spent_on + ' a')
+            hours = parseFloat($.trim(link.html()))
+            hours = 0 if isNaN(hours)
+            hours += e.hours
+            link.closest('span').show()
+            link.html(hours).effect('highlight', {color: '#9FCF9F'}, 1500)
+            if hours >= parseFloat($.trim($('#quota_value').html()))
+              link.closest('span').removeClass('delinquent').show()
           )
 
         $('label').css('color', 'black')
-        $.each(json.errors, (i, errors) ->
-          $.each(errors, (j, error) ->
-            $("#time_entries_#{i}_#{error[0]}").prev('label').css('color', 'red')
-          )
+        $.each(json.errors, (i, error) ->
+          $("#time_entry_#{error}").prev('label').css('color', 'red')
         )
       )
 

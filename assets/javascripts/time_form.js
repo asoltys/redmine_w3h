@@ -7,29 +7,33 @@
     $(function() {
       root.entry = $('div#entries').children('div').first().clone(true, true);
       $('#time_entry_hours').focus();
+      $('form.tabular input').keypress(function(e) {
+        if (e.which === 13) return $('form.tabular').submit();
+      });
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
           $('div.box input, div.box select').removeAttr('disabled');
-          if (!$.isEmptyObject(json.messages)) {
-            $.each(json.entries, function(index, entries) {
-              $("#entry").prepend("<div class='flash notice'>" + json.messages[index] + "</div>");
-              return $.each(entries, function(i, e) {
-                var hours;
-                e = e.time_entry;
-                hours = $('.' + e.spent_on + ' a').html();
-                hours = parseFloat($.trim(hours)) + e.hours;
-                $('.' + e.spent_on + ' a').html(hours);
-                return $('.' + e.spent_on + ' a').effect('highlight', {
-                  color: '#9FCF9F'
-                }, 1500);
-              });
+          if (json.message) {
+            $("#entry").before("<div class='flash notice'>" + json.message + "</div>");
+            $.each(json.entries, function(i, e) {
+              var hours, link;
+              e = e.time_entry;
+              link = $('.' + e.spent_on + ' a');
+              hours = parseFloat($.trim(link.html()));
+              if (isNaN(hours)) hours = 0;
+              hours += e.hours;
+              link.closest('span').show();
+              link.html(hours).effect('highlight', {
+                color: '#9FCF9F'
+              }, 1500);
+              if (hours >= parseFloat($.trim($('#quota_value').html()))) {
+                return link.closest('span').removeClass('delinquent').show();
+              }
             });
           }
           $('label').css('color', 'black');
-          return $.each(json.errors, function(i, errors) {
-            return $.each(errors, function(j, error) {
-              return $("#time_entries_" + i + "_" + error[0]).prev('label').css('color', 'red');
-            });
+          return $.each(json.errors, function(i, error) {
+            return $("#time_entry_" + error).prev('label').css('color', 'red');
           });
         });
         $('div.box input, div.box select').attr('disabled', 'disabled');

@@ -94,6 +94,8 @@
       <p><%= custom_field_tag_with_label "", value %></p>
     <% end if @time_entry.respond_to?(:custom_field_values) %>
   </div>
+
+  <%= submit_tag l(:button_save) %>
 <% end %>
 
 <br />

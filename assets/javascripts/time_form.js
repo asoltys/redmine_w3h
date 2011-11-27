@@ -7,6 +7,7 @@
     $(function() {
       root.entry = $('div#entries').children('div').first().clone(true, true);
       $('#time_entry_hours').focus();
+      $('.quota_specified').val(false);
       $('form.tabular input').keypress(function(e) {
         if (e.which === 13) return $('form.tabular').submit();
       });

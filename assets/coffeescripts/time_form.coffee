@@ -10,6 +10,7 @@ jQuery.noConflict()
     # make a copy of the original time entry form
     root.entry = $('div#entries').children('div').first().clone(true, true)
     $('#time_entry_hours').focus()
+    $('.quota_specified').val(false)
     $('form.tabular input').keypress((e) ->
       $('form.tabular').submit() if e.which == 13
     )

@@ -92,7 +92,6 @@
         var e;
         e = $(this).closest('div.box');
         e.find('.hours').hide();
-        e.find('.hours input').val('1');
         e.find('.quota').show();
         return e.find('.quota_specified').val('true');
       });

@@ -48,22 +48,34 @@ jQuery.noConflict()
       return false
     )
 
-    # load issues on project change
+    # load issues and deliverables on project change
     $('select[id*=project]').change(->
-      target = $(this).closest('div').find('select[id*=issue_id]')
-      target.attr('disabled', 'disabled')
-      $.getJSON('/bulk_time_entries/load_assigned_issues', {
+      issues = $(this).closest('div').find('select[id*=issue_id]')
+      deliverables = $(this).closest('div').find('select[id*=deliverable_id]')
+      issues.attr('disabled', 'disabled')
+      deliverables.attr('disabled', 'disabled')
+
+      $.getJSON('/bulk_time_entries/load_project_data', {
         project_id: $(this).val(),
         entry_id: $(this).closest('div').attr('id')
       }, (data) ->
-        target.removeAttr('disabled')
+        issues.removeAttr('disabled')
+        deliverables.removeAttr('disabled')
+
         open_issues = closed_issues = ''
-        $.each(data, (i, v) ->
+        $.each(data.issues, (i, v) ->
           option = "<option value='#{v.id}'>#{v.id}: #{v.subject}</option>"
           if v.closed then closed_issues += option else open_issues += option
         )
-        target.find('optgroup:first').html(open_issues)
-        target.find('optgroup:last').html(closed_issues)
+
+        issues.find('optgroup:first').html(open_issues)
+        issues.find('optgroup:last').html(closed_issues)
+
+        options = ''
+        $.each(data.deliverables, (i, v) ->
+          options += "<option value='#{v.id}'>#{v.subject}</option>"
+        )
+        deliverables.html(options)
       )
     )
 

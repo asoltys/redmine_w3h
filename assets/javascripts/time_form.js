@@ -41,17 +41,20 @@
         return false;
       });
       $('select[id*=project]').change(function() {
-        var target;
-        target = $(this).closest('div').find('select[id*=issue_id]');
-        target.attr('disabled', 'disabled');
-        return $.getJSON('/bulk_time_entries/load_assigned_issues', {
+        var deliverables, issues;
+        issues = $(this).closest('div').find('select[id*=issue_id]');
+        deliverables = $(this).closest('div').find('select[id*=deliverable_id]');
+        issues.attr('disabled', 'disabled');
+        deliverables.attr('disabled', 'disabled');
+        return $.getJSON('/bulk_time_entries/load_project_data', {
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
-          var closed_issues, open_issues;
-          target.removeAttr('disabled');
+          var closed_issues, open_issues, options;
+          issues.removeAttr('disabled');
+          deliverables.removeAttr('disabled');
           open_issues = closed_issues = '';
-          $.each(data, function(i, v) {
+          $.each(data.issues, function(i, v) {
             var option;
             option = "<option value='" + v.id + "'>" + v.id + ": " + v.subject + "</option>";
             if (v.closed) {
@@ -60,8 +63,13 @@
               return open_issues += option;
             }
           });
-          target.find('optgroup:first').html(open_issues);
-          return target.find('optgroup:last').html(closed_issues);
+          issues.find('optgroup:first').html(open_issues);
+          issues.find('optgroup:last').html(closed_issues);
+          options = '';
+          $.each(data.deliverables, function(i, v) {
+            return options += "<option value='" + v.id + "'>" + v.subject + "</option>";
+          });
+          return deliverables.html(options);
         });
       });
       return setup();

@@ -81,8 +81,9 @@
     </p>
 
     <p id="entry_deliverables">
-      <%= label_for_field :deliverable_id, 0, :required => false %>
-      <%= select_tag "time_entries[0][deliverable_id]", options_for_select([['Select One', '']] + @deliverables) %>
+      <label for="time_entry_deliverable_id"><%= l(:field_deliverable) %></label>
+      <select id="time_entry_deliverable_id" name="time_entry[deliverable_id]">
+      </select>
     </p>
 
     <p>

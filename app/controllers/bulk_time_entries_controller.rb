@@ -38,6 +38,7 @@ class BulkTimeEntriesController < ApplicationController
       if params[:date_from].present?
         entries = []
         (params[:date_from]..params[:date_to]).each do |date|
+          next unless params[:eligible_days].include?(Date.parse(date).wday.to_s)
           t = time_entry.clone
           t.spent_on = date
           entries += [t]

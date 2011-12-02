@@ -1,17 +1,10 @@
-<div id="budget-summary">
-  <%= render :partial => 'budget', :object => @budget %>
-</div>
+<style>
+  table.deliverables th { text-align: left; }
+</style>
 
 <div id="budget-list">
-  <h2>Sustain Agreements</h2>
-  <%= render :partial => 'list', :locals => {:deliverables => @deliverables.select{|d| d.category == 'Sustain' }} %>
+  <%= render :partial => 'list', :locals => {:deliverables => @deliverables} %>
 </div>
-
-<div id="budget-list">
-  <h2>Change Agreements</h2>
-  <%= render :partial => 'list', :locals => {:deliverables => @deliverables.select{|d| d.category == 'Change' }} %>
-</div>
-
 
 <% content_for :sidebar do %>
   <%= render :partial => 'deliverables/sidebar' %>

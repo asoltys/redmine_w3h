@@ -2,10 +2,8 @@
   jQuery.noConflict();
 
   (function($) {
-    var root, setup;
-    root = typeof exports !== "undefined" && exports !== null ? exports : this;
+    var setup;
     $(function() {
-      root.entry = $('div#entries').children('div').first().clone(true, true);
       $('#time_entry_hours').focus();
       $('.quota_specified').val(false);
       $('form.tabular input').keypress(function(e) {
@@ -69,7 +67,8 @@
           $.each(data.deliverables, function(i, v) {
             return options += "<option value='" + v.id + "'>" + v.subject + "</option>";
           });
-          return deliverables.html(options);
+          deliverables.find('option:gt(1)').remove();
+          return deliverables.find('option').after(options);
         });
       });
       return setup();

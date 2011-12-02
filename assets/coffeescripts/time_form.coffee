@@ -2,20 +2,14 @@ jQuery.noConflict()
 
 # set $ to jquery instead of prototype, just in this file
 (($) ->
-  # root is where we store 'global' variables in coffeescript
-  root = exports ? this
-
-  # everything in here gets run on page load
   $(->
-    # make a copy of the original time entry form
-    root.entry = $('div#entries').children('div').first().clone(true, true)
     $('#time_entry_hours').focus()
     $('.quota_specified').val(false)
+
     $('form.tabular input').keypress((e) ->
       $('form.tabular').submit() if e.which == 13
     )
 
-    # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
       $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
         $('div.box input, div.box select').removeAttr('disabled')
@@ -75,7 +69,8 @@ jQuery.noConflict()
         $.each(data.deliverables, (i, v) ->
           options += "<option value='#{v.id}'>#{v.subject}</option>"
         )
-        deliverables.html(options)
+        deliverables.find('option:gt(1)').remove()
+        deliverables.find('option').after(options)
       )
     )
 

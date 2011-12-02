@@ -75,6 +75,7 @@
       <% @issues = get_issues @first_project.id %>
       <label for="time_entry_issue_id"><%= l(:field_issue) %></label>
       <select id="time_entry_issue_id" name="time_entry[issue_id]">
+        <option value=""></option>
         <optgroup label="<%= l(:label_open_issues) %>"></optgroup>
         <optgroup label="<%= l(:label_closed_issues) %>"></optgroup>
       </select>
@@ -83,6 +84,7 @@
     <p id="entry_deliverables">
       <label for="time_entry_deliverable_id"><%= l(:field_deliverable) %></label>
       <select id="time_entry_deliverable_id" name="time_entry[deliverable_id]">
+        <option value=""></option>
       </select>
     </p>
 

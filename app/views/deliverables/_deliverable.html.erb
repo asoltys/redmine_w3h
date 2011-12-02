@@ -2,7 +2,7 @@
 <tr id="deliverable-<%= deliverable.id %>" class="deliverable <%= css %>">
   <td class="actions">
     <% unless deliverable.attachments.empty? %>
-    <%= link_to(image_tag('pdf-icon.gif', :plugin => 'redmine_w3h'), {:controller => 'attachments', :action => 'download', :id => deliverable.attachments.last, :filename => deliverable.attachments.last.filename }) %>
+    <%= link_to(image_tag('attachment.png'), {:controller => 'attachments', :action => 'download', :id => deliverable.attachments.last, :filename => deliverable.attachments.last.filename }) %>
     <% end %>
     <%= link_to image_tag('edit.png'), { :action => 'edit', :id => deliverable.project_id, :deliverable_id => deliverable.id }, 
       :title => l(:button_edit) %>

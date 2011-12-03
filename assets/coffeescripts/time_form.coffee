@@ -6,6 +6,8 @@ jQuery.noConflict()
 
   $(->
     global.ctrl_down = false
+    global.xhr
+
     $('#time_entry_hours').focus()
     $('.quota_specified').val(false)
 
@@ -47,12 +49,15 @@ jQuery.noConflict()
 
     # load issues and deliverables on project change
     $('select[id*=project]').change(->
+      if global.xhr && global.xhr.readyState != 4
+        global.xhr.abort()
+
       issues = $(this).closest('div').find('select[id*=issue_id]')
       deliverables = $(this).closest('div').find('select[id*=deliverable_id]')
       issues.attr('disabled', 'disabled')
       deliverables.attr('disabled', 'disabled')
 
-      $.getJSON('/bulk_time_entries/load_project_data', {
+      global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
         project_id: $(this).val(),
         entry_id: $(this).closest('div').attr('id')
       }, (data) ->
@@ -64,6 +69,11 @@ jQuery.noConflict()
           option = "<option value='#{v.id}'>#{v.id}: #{v.subject}</option>"
           if v.closed then closed_issues += option else open_issues += option
         )
+        
+        if open_issues.length + closed_issues.length == 0
+          $('#entry_issues').hide() 
+        else
+          $('#entry_issues').show()
 
         issues.find('optgroup:first').html(open_issues)
         issues.find('optgroup:last').html(closed_issues)
@@ -87,8 +97,12 @@ jQuery.noConflict()
     ).keyup((e) ->
       global.ctrl_down = false if e.keyCode == 17
     )
-        
 
+    $('select').focus(->
+      $(this).attr('size', 10)
+    ).blur(->
+      $(this).attr('size', 1)
+    )
 
     # bind all the click handlers
     setup()

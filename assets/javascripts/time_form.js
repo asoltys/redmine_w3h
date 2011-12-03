@@ -42,11 +42,12 @@
       });
       $('select[id*=project]').change(function() {
         var deliverables, issues;
+        if (global.xhr && global.xhr.readyState !== 4) global.xhr.abort();
         issues = $(this).closest('div').find('select[id*=issue_id]');
         deliverables = $(this).closest('div').find('select[id*=deliverable_id]');
         issues.attr('disabled', 'disabled');
         deliverables.attr('disabled', 'disabled');
-        return $.getJSON('/bulk_time_entries/load_project_data', {
+        return global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
@@ -63,6 +64,11 @@
               return open_issues += option;
             }
           });
+          if (open_issues.length + closed_issues.length === 0) {
+            $('#entry_issues').hide();
+          } else {
+            $('#entry_issues').show();
+          }
           issues.find('optgroup:first').html(open_issues);
           issues.find('optgroup:last').html(closed_issues);
           options = '';
@@ -86,6 +92,11 @@
         }
       }).keyup(function(e) {
         if (e.keyCode === 17) return global.ctrl_down = false;
+      });
+      $('select').focus(function() {
+        return $(this).attr('size', 10);
+      }).blur(function() {
+        return $(this).attr('size', 1);
       });
       return setup();
     });

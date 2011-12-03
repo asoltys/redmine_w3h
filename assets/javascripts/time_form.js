@@ -2,8 +2,10 @@
   jQuery.noConflict();
 
   (function($) {
-    var setup;
+    var global, setup;
+    global = this;
     $(function() {
+      global.ctrl_down = false;
       $('#time_entry_hours').focus();
       $('.quota_specified').val(false);
       $('form.tabular input').keypress(function(e) {
@@ -70,6 +72,20 @@
           deliverables.find('option:gt(1)').remove();
           return deliverables.find('option').after(options);
         });
+      });
+      $('.calendar-trigger').prev('input').keydown(function(e) {
+        var interval;
+        interval = global.ctrl_down ? 'months' : 'days';
+        switch (e.keyCode) {
+          case 17:
+            return global.ctrl_down = true;
+          case 38:
+            return $(this).val(moment($(this).val(), 'YYYY-MM-DD').add(interval, 1).format('YYYY-MM-DD'));
+          case 40:
+            return $(this).val(moment($(this).val(), 'YYYY-MM-DD').subtract(interval, 1).format('YYYY-MM-DD'));
+        }
+      }).keyup(function(e) {
+        if (e.keyCode === 17) return global.ctrl_down = false;
       });
       return setup();
     });

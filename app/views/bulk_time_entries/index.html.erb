@@ -1,6 +1,7 @@
 <% content_for :header_tags do %>
   <%= javascript_include_tag 'jquery-1.6.2.min.js', :plugin => 'redmine_w3h' %>
   <%= javascript_include_tag 'jquery-ui-1.8.16.custom.min.js', :plugin => 'redmine_w3h' %>
+  <%= javascript_include_tag 'moment.min.js', :plugin => 'redmine_w3h' %>
   <%= javascript_include_tag 'time_form', :plugin => 'redmine_w3h' %>
 <% end %>
 
@@ -14,6 +15,7 @@
       <label for="time_entry_spent_on"><%= l(:field_spent_on) %> <span class="required">*</span></label>
       <%= f.text_field :spent_on, :size => 10 %>
       <%= calendar_for("time_entries_spent_on") %>
+      <img src="/images/help.png" style="vertical-align: middle" />
       <br />
       <small><a class="show_range"><%= l(:label_specify_range) %></a></small>
     </p>

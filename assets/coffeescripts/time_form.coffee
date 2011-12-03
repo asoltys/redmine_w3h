@@ -2,7 +2,10 @@ jQuery.noConflict()
 
 # set $ to jquery instead of prototype, just in this file
 (($) ->
+  global = this
+
   $(->
+    global.ctrl_down = false
     $('#time_entry_hours').focus()
     $('.quota_specified').val(false)
 
@@ -73,6 +76,19 @@ jQuery.noConflict()
         deliverables.find('option').after(options)
       )
     )
+
+    $('.calendar-trigger').prev('input').keydown((e) ->
+      interval = if global.ctrl_down then 'months' else 'days'
+
+      switch e.keyCode
+        when 17 then global.ctrl_down = true
+        when 38 then $(this).val(moment($(this).val(), 'YYYY-MM-DD').add(interval, 1).format('YYYY-MM-DD'))
+        when 40 then $(this).val(moment($(this).val(), 'YYYY-MM-DD').subtract(interval, 1).format('YYYY-MM-DD'))
+    ).keyup((e) ->
+      global.ctrl_down = false if e.keyCode == 17
+    )
+        
+
 
     # bind all the click handlers
     setup()

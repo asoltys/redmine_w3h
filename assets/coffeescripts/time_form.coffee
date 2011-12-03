@@ -53,37 +53,47 @@ jQuery.noConflict()
         global.xhr.abort()
 
       issues = $(this).closest('div').find('select[id*=issue_id]')
-      deliverables = $(this).closest('div').find('select[id*=deliverable_id]')
       issues.attr('disabled', 'disabled')
+
+      deliverables = $(this).closest('div').find('select[id*=deliverable_id]')
       deliverables.attr('disabled', 'disabled')
+      deliverables.find('option:gt(1)').remove()
 
       global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
         project_id: $(this).val(),
         entry_id: $(this).closest('div').attr('id')
       }, (data) ->
-        issues.removeAttr('disabled')
-        deliverables.removeAttr('disabled')
-
-        open_issues = closed_issues = ''
+        open_issues_options = closed_issues_options = ''
         $.each(data.issues, (i, v) ->
           option = "<option value='#{v.id}'>#{v.id}: #{v.subject}</option>"
-          if v.closed then closed_issues += option else open_issues += option
+          if v.closed 
+            closed_issues_options += option 
+          else 
+            open_issues_options += option
         )
         
-        if open_issues.length + closed_issues.length == 0
+        if open_issues_options.length + closed_issues_options.length == 0
           $('#entry_issues').hide() 
+          deliverables.focus()
         else
           $('#entry_issues').show()
+          issues.removeAttr('disabled')
+          issues.focus() if $('#time_entry_project_id').is(':focus')
+          issues.find('optgroup:first').html(open_issues_options)
+          issues.find('optgroup:last').html(closed_issues_options)
 
-        issues.find('optgroup:first').html(open_issues)
-        issues.find('optgroup:last').html(closed_issues)
-
-        options = ''
+        deliverables_options = ''
         $.each(data.deliverables, (i, v) ->
-          options += "<option value='#{v.id}'>#{v.subject}</option>"
+          deliverables_options += "<option value='#{v.id}'>#{v.subject}</option>"
         )
-        deliverables.find('option:gt(1)').remove()
-        deliverables.find('option').after(options)
+
+        if deliverables_options == ''
+          $('#entry_deliverables').hide()
+        else
+          $('#entry_deliverables').show()
+          deliverables.removeAttr('disabled')
+          deliverables.focus() if $('#time_entry_project_id').is(':focus')
+          deliverables.find('option').after(deliverables_options)
       )
     )
 
@@ -96,12 +106,6 @@ jQuery.noConflict()
         when 40 then $(this).val(moment($(this).val(), 'YYYY-MM-DD').subtract(interval, 1).format('YYYY-MM-DD'))
     ).keyup((e) ->
       global.ctrl_down = false if e.keyCode == 17
-    )
-
-    $('select').focus(->
-      $(this).attr('size', 10)
-    ).blur(->
-      $(this).attr('size', 1)
     )
 
     # bind all the click handlers

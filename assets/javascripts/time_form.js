@@ -6,6 +6,7 @@
     global = this;
     $(function() {
       global.ctrl_down = false;
+      global.xhr;
       $('#time_entry_hours').focus();
       $('.quota_specified').val(false);
       $('form.tabular input').keypress(function(e) {
@@ -44,39 +45,47 @@
         var deliverables, issues;
         if (global.xhr && global.xhr.readyState !== 4) global.xhr.abort();
         issues = $(this).closest('div').find('select[id*=issue_id]');
-        deliverables = $(this).closest('div').find('select[id*=deliverable_id]');
         issues.attr('disabled', 'disabled');
+        deliverables = $(this).closest('div').find('select[id*=deliverable_id]');
         deliverables.attr('disabled', 'disabled');
+        deliverables.find('option:gt(1)').remove();
         return global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
-          var closed_issues, open_issues, options;
-          issues.removeAttr('disabled');
-          deliverables.removeAttr('disabled');
-          open_issues = closed_issues = '';
+          var closed_issues_options, deliverables_options, open_issues_options;
+          open_issues_options = closed_issues_options = '';
           $.each(data.issues, function(i, v) {
             var option;
             option = "<option value='" + v.id + "'>" + v.id + ": " + v.subject + "</option>";
             if (v.closed) {
-              return closed_issues += option;
+              return closed_issues_options += option;
             } else {
-              return open_issues += option;
+              return open_issues_options += option;
             }
           });
-          if (open_issues.length + closed_issues.length === 0) {
+          if (open_issues_options.length + closed_issues_options.length === 0) {
             $('#entry_issues').hide();
+            deliverables.focus();
           } else {
             $('#entry_issues').show();
+            issues.removeAttr('disabled');
+            if ($('#time_entry_project_id').is(':focus')) issues.focus();
+            issues.find('optgroup:first').html(open_issues_options);
+            issues.find('optgroup:last').html(closed_issues_options);
           }
-          issues.find('optgroup:first').html(open_issues);
-          issues.find('optgroup:last').html(closed_issues);
-          options = '';
+          deliverables_options = '';
           $.each(data.deliverables, function(i, v) {
-            return options += "<option value='" + v.id + "'>" + v.subject + "</option>";
+            return deliverables_options += "<option value='" + v.id + "'>" + v.subject + "</option>";
           });
-          deliverables.find('option:gt(1)').remove();
-          return deliverables.find('option').after(options);
+          if (deliverables_options === '') {
+            return $('#entry_deliverables').hide();
+          } else {
+            $('#entry_deliverables').show();
+            deliverables.removeAttr('disabled');
+            if ($('#time_entry_project_id').is(':focus')) deliverables.focus();
+            return deliverables.find('option').after(deliverables_options);
+          }
         });
       });
       $('.calendar-trigger').prev('input').keydown(function(e) {
@@ -92,11 +101,6 @@
         }
       }).keyup(function(e) {
         if (e.keyCode === 17) return global.ctrl_down = false;
-      });
-      $('select').focus(function() {
-        return $(this).attr('size', 10);
-      }).blur(function() {
-        return $(this).attr('size', 1);
       });
       return setup();
     });

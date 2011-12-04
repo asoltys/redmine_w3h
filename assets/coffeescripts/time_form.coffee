@@ -11,8 +11,8 @@ jQuery.noConflict()
     $('#time_entry_hours').focus()
     $('.quota_specified').val(false)
 
-    $('form.tabular input').keypress((e) ->
-      $('form.tabular').submit() if e.which == 13
+    $('form.tabular input').keydown((e) ->
+      $('form.tabular').submit() if e.keyCode == 13
     )
 
     $('form.tabular').submit(->
@@ -78,7 +78,6 @@ jQuery.noConflict()
         else
           $('#entry_issues').show()
           issues.removeAttr('disabled')
-          issues.focus() if $('#time_entry_project_id').is(':focus')
           issues.find('optgroup:first').html(open_issues_options)
           issues.find('optgroup:last').html(closed_issues_options)
 
@@ -92,7 +91,6 @@ jQuery.noConflict()
         else
           $('#entry_deliverables').show()
           deliverables.removeAttr('disabled')
-          deliverables.focus() if $('#time_entry_project_id').is(':focus')
           deliverables.find('option').after(deliverables_options)
       )
     )
@@ -110,12 +108,10 @@ jQuery.noConflict()
 
     $('select').keyup((e) ->
       $(this).attr('size', 10) if e.keyCode == 9
-    ).keydown((e) ->
-      $(this).attr('size', 1) if e.keyCode == 9
+    ).blur((e) ->
+      $(this).attr('size', 1)
     )
 
-
-    # bind all the click handlers
     setup()
   )
 

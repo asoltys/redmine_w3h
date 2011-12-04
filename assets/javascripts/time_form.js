@@ -9,8 +9,8 @@
       global.xhr;
       $('#time_entry_hours').focus();
       $('.quota_specified').val(false);
-      $('form.tabular input').keypress(function(e) {
-        if (e.which === 13) return $('form.tabular').submit();
+      $('form.tabular input').keydown(function(e) {
+        if (e.keyCode === 13) return $('form.tabular').submit();
       });
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
@@ -70,7 +70,6 @@
           } else {
             $('#entry_issues').show();
             issues.removeAttr('disabled');
-            if ($('#time_entry_project_id').is(':focus')) issues.focus();
             issues.find('optgroup:first').html(open_issues_options);
             issues.find('optgroup:last').html(closed_issues_options);
           }
@@ -83,7 +82,6 @@
           } else {
             $('#entry_deliverables').show();
             deliverables.removeAttr('disabled');
-            if ($('#time_entry_project_id').is(':focus')) deliverables.focus();
             return deliverables.find('option').after(deliverables_options);
           }
         });
@@ -104,8 +102,8 @@
       });
       $('select').keyup(function(e) {
         if (e.keyCode === 9) return $(this).attr('size', 10);
-      }).keydown(function(e) {
-        if (e.keyCode === 9) return $(this).attr('size', 1);
+      }).blur(function(e) {
+        return $(this).attr('size', 1);
       });
       return setup();
     });

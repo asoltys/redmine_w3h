@@ -41,6 +41,7 @@ class BulkTimeEntriesController < ApplicationController
     if request.post? 
       entries = []
       time_entry = TimeEntry.create_bulk_time_entry(params[:time_entry])
+      debugger
 
       if params[:date_from].present?
         entries = []

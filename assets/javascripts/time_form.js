@@ -102,6 +102,11 @@
       }).keyup(function(e) {
         if (e.keyCode === 17) return global.ctrl_down = false;
       });
+      $('select').keyup(function(e) {
+        if (e.keyCode === 9) return $(this).attr('size', 10);
+      }).keydown(function(e) {
+        if (e.keyCode === 9) return $(this).attr('size', 1);
+      });
       return setup();
     });
     return setup = function() {

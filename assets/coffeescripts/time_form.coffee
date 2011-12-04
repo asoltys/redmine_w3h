@@ -108,6 +108,13 @@ jQuery.noConflict()
       global.ctrl_down = false if e.keyCode == 17
     )
 
+    $('select').keyup((e) ->
+      $(this).attr('size', 10) if e.keyCode == 9
+    ).keydown((e) ->
+      $(this).attr('size', 1) if e.keyCode == 9
+    )
+
+
     # bind all the click handlers
     setup()
   )

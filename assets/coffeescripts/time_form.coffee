@@ -11,7 +11,7 @@ jQuery.noConflict()
     $('#time_entry_hours').focus()
     $('.quota_specified').val(false)
 
-    $('form.tabular input').keydown((e) ->
+    $('form.tabular input, form.tabular select').keydown((e) ->
       $('form.tabular').submit() if e.keyCode == 13
     )
 

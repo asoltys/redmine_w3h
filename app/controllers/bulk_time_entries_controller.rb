@@ -40,8 +40,13 @@ class BulkTimeEntriesController < ApplicationController
   def save
     if request.post? 
       entries = []
-      time_entry = TimeEntry.create_bulk_time_entry(params[:time_entry])
-      debugger
+
+      time_entry = TimeEntry.new(params[:time_entry])
+      time_entry.hours = nil if time_entry.hours.blank? or time_entry.hours <= 0
+      if self.class.allowed_project?(params[:time_entry][:project_id])
+        time_entry.project_id = params[:time_entry][:project_id]
+      end
+      time_entry.user = User.current
 
       if params[:date_from].present?
         entries = []
@@ -108,7 +113,7 @@ class BulkTimeEntriesController < ApplicationController
   end
 
   def load_allowed_projects
-    @projects = User.current.projects.find(:all,
+    @projects = User.current.projects.find(:all, :conditions =>
       Project.allowed_to_condition(User.current, :log_time))
   end
 

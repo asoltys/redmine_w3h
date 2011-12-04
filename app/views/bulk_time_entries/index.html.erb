@@ -11,6 +11,12 @@
   <div class="box" id="entry">
     <%= error_messages_for 'time_entry', :object => @time_entry %>
 
+    <p>
+      <label for="time_entry_project_id"><%= l(:field_project) %> <span class="required">*</span></label>
+      <% projects = options_for_select(@projects.sort{|a,b| a <=> b}.map{|p| [p.to_s, p.id]}, :selected => @first_project.id) %>
+      <%= f.select :project_id, projects %>
+    </p>
+
     <p class="single_date">
       <label for="time_entry_spent_on"><%= l(:field_spent_on) %> <span class="required">*</span></label>
       <%= f.text_field :spent_on, :size => 10 %>
@@ -55,6 +61,11 @@
       <small><a class="fill_quota"><%= l(:label_fill_quota) %></a></small>
     </p>
 
+    <p>
+      <%= label_for_field :comments, :required => false %>
+      <%= f.text_field :comments, :maxlength => 255, :style => 'width: 250px' %>
+    </p>
+
     <p class="quota" style="display: none">
       <label for="quota_specified"><%= l(:field_hours) %> <span class="required">*</span></label>
       <span id="quota_value"><%= User.current.quota %></span> <%= l(:label_per_day) %><br />
@@ -65,12 +76,6 @@
     <p id="entry_activities">
       <label for="time_entry_activity_id"><%= l(:field_activity) %> <span class="required">*</span></label>
       <%= select_tag "activity_id", options_from_collection_for_select(@first_project.activities, :id, :name) %>
-    </p>
-
-    <p>
-      <label for="time_entry_project_id"><%= l(:field_project) %> <span class="required">*</span></label>
-      <% projects = options_for_select(@projects.sort{|a,b| a <=> b}.map{|p| [p.to_s, p.id]}, :selected => @first_project.id) %>
-      <%= f.select :project_id, projects %>
     </p>
 
     <p id="entry_issues">
@@ -88,11 +93,6 @@
       <select id="time_entry_deliverable_id" name="time_entry[deliverable_id]">
         <option value=""></option>
       </select>
-    </p>
-
-    <p>
-      <%= label_for_field :comments, :required => false %>
-      <%= f.text_field :comments, :maxlength => 255, :style => 'width: 250px' %>
     </p>
 
     <% @time_entry.custom_field_values.each do |value| %>

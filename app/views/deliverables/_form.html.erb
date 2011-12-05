@@ -22,7 +22,11 @@
         <%= f.text_field :budget, :label => l(:label_budget) %>
       </p>
 
-      <%= render :partial => 'deliverables/form_custom_fields', :locals => {:f => f} %>
+      <% unless @deliverable.custom_field_values.empty? %>
+        <% @deliverable.custom_field_values.each do |value| %>
+          <p><%= custom_field_tag_with_label :deliverable, value %></p>
+        <% end %>
+      <% end %>
     </div>
 
     <div class="splitcontentright">

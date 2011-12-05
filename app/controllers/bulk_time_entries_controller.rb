@@ -7,7 +7,6 @@ class BulkTimeEntriesController < ApplicationController
   before_filter :load_first_project
   before_filter :check_for_no_projects
   before_filter :load_activities
-  before_filter :load_deliverables
 
   helper :custom_fields
   include BulkTimeEntriesHelper
@@ -19,25 +18,40 @@ class BulkTimeEntriesController < ApplicationController
     @time_entry = TimeEntry.new(:spent_on => params[:date].to_s)
   end
 
-  def load_assigned_issues
+  def load_project_data
+    deliverables = Project.find(params[:project_id]).ancestor_deliverables.sort{|a,b| a.to_s <=> b.to_s}
+    issues = get_issues(params[:project_id]).sort{|a,b| a.status.is_closed ? 1 : -1 }
+
     respond_to do |format|
-      format.json {render :json => get_issues(
-        params[:project_id]).map{|i| {
+      format.json {render :json => {
+        :issues => issues.map{|i| {
           :id => i.id, 
           :subject => i.subject,
           :closed => i.status.is_closed
-        }}.sort{|a,b| a[:closed] ? 1 : -1 }}
+        }},
+        :deliverables => deliverables.map{|i| {
+          :id => i.id,
+          :subject => i.to_s
+        }}
+      }}
     end
   end
   
   def save
     if request.post? 
       entries = []
-      time_entry = TimeEntry.create_bulk_time_entry(params[:time_entry])
+
+      time_entry = TimeEntry.new(params[:time_entry])
+      time_entry.hours = nil if time_entry.hours.blank? or time_entry.hours <= 0
+      if self.class.allowed_project?(params[:time_entry][:project_id])
+        time_entry.project_id = params[:time_entry][:project_id]
+      end
+      time_entry.user = User.current
 
       if params[:date_from].present?
         entries = []
         (params[:date_from]..params[:date_to]).each do |date|
+          next unless params[:eligible_days].include?(Date.parse(date).wday.to_s)
           t = time_entry.clone
           t.spent_on = date
           entries += [t]
@@ -98,12 +112,8 @@ class BulkTimeEntriesController < ApplicationController
     @activities = TimeEntryActivity.all
   end
 
-  def load_deliverables
-    @deliverables = @first_project.ancestor_deliverables.collect{|d| [d.to_s,d.id]}.sort{|a,b| a <=> b}
-  end
-  
   def load_allowed_projects
-    @projects = User.current.projects.find(:all,
+    @projects = User.current.projects.find(:all, :conditions =>
       Project.allowed_to_condition(User.current, :log_time))
   end
 

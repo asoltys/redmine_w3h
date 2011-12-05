@@ -7,6 +7,7 @@ module RedmineW3H
           named_scope :active, :conditions => ['status = ?', User::STATUS_ACTIVE], :order => 'firstname'
           named_scope :time_recorders, :conditions => "users.id IN (SELECT DISTINCT user_id FROM time_entries)"
           has_many :time_entries, :dependent => :delete_all
+          safe_attributes 'quota'
 
           def logged_time(day)
             entries = TimeEntry.find(:all, :conditions => ["time_entries.user_id = ? AND time_entries.spent_on = ?", id, day])

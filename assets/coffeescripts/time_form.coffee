@@ -2,19 +2,19 @@ jQuery.noConflict()
 
 # set $ to jquery instead of prototype, just in this file
 (($) ->
-  # root is where we store 'global' variables in coffeescript
-  root = exports ? this
+  global = this
 
-  # everything in here gets run on page load
   $(->
-    # make a copy of the original time entry form
-    root.entry = $('div#entries').children('div').first().clone(true, true)
+    global.ctrl_down = false
+    global.xhr
+
     $('#time_entry_hours').focus()
-    $('form.tabular input').keypress((e) ->
-      $('form.tabular').submit() if e.which == 13
+    $('.quota_specified').val(false)
+
+    $('form.tabular input, form.tabular select').keydown((e) ->
+      $('form.tabular').submit() if e.keyCode == 13
     )
 
-    # handle form submission through ajax so we don't have to reload the page
     $('form.tabular').submit(->
       $.post('/bulk_time_entries/save', $(this).serialize(), (json) ->
         $('div.box input, div.box select').removeAttr('disabled')
@@ -47,26 +47,71 @@ jQuery.noConflict()
       return false
     )
 
-    # load issues on project change
+    # load issues and deliverables on project change
     $('select[id*=project]').change(->
-      target = $(this).closest('div').find('select[id*=issue_id]')
-      target.attr('disabled', 'disabled')
-      $.getJSON('/bulk_time_entries/load_assigned_issues', {
+      if global.xhr && global.xhr.readyState != 4
+        global.xhr.abort()
+
+      issues = $(this).closest('div').find('select[id*=issue_id]')
+      issues.attr('disabled', 'disabled')
+
+      deliverables = $(this).closest('div').find('select[id*=deliverable_id]')
+      deliverables.attr('disabled', 'disabled')
+      deliverables.find('option:gt(1)').remove()
+
+      global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
         project_id: $(this).val(),
         entry_id: $(this).closest('div').attr('id')
       }, (data) ->
-        target.removeAttr('disabled')
-        open_issues = closed_issues = ''
-        $.each(data, (i, v) ->
+        open_issues_options = closed_issues_options = ''
+        $.each(data.issues, (i, v) ->
           option = "<option value='#{v.id}'>#{v.id}: #{v.subject}</option>"
-          if v.closed then closed_issues += option else open_issues += option
+          if v.closed 
+            closed_issues_options += option 
+          else 
+            open_issues_options += option
         )
-        target.find('optgroup:first').html(open_issues)
-        target.find('optgroup:last').html(closed_issues)
+        
+        if open_issues_options.length + closed_issues_options.length == 0
+          $('#entry_issues').hide() 
+          deliverables.focus()
+        else
+          $('#entry_issues').show()
+          issues.removeAttr('disabled')
+          issues.find('optgroup:first').html(open_issues_options)
+          issues.find('optgroup:last').html(closed_issues_options)
+
+        deliverables_options = ''
+        $.each(data.deliverables, (i, v) ->
+          deliverables_options += "<option value='#{v.id}'>#{v.subject}</option>"
+        )
+
+        if deliverables_options == ''
+          $('#entry_deliverables').hide()
+        else
+          $('#entry_deliverables').show()
+          deliverables.removeAttr('disabled')
+          deliverables.find('option').after(deliverables_options)
       )
     )
 
-    # bind all the click handlers
+    $('.calendar-trigger').prev('input').keydown((e) ->
+      interval = if global.ctrl_down then 'months' else 'days'
+
+      switch e.keyCode
+        when 17 then global.ctrl_down = true
+        when 38 then $(this).val(moment($(this).val(), 'YYYY-MM-DD').add(interval, 1).format('YYYY-MM-DD'))
+        when 40 then $(this).val(moment($(this).val(), 'YYYY-MM-DD').subtract(interval, 1).format('YYYY-MM-DD'))
+    ).keyup((e) ->
+      global.ctrl_down = false if e.keyCode == 17
+    )
+
+    $('select').keyup((e) ->
+      $(this).attr('size', 10) if e.keyCode == 9
+    ).blur((e) ->
+      $(this).attr('size', 1)
+    )
+
     setup()
   )
 
@@ -96,7 +141,6 @@ jQuery.noConflict()
     $('a.fill_quota').click(->
       e = $(this).closest('div.box')
       e.find('.hours').hide()
-      e.find('.hours input').val('1')
       e.find('.quota').show()
       e.find('.quota_specified').val('true')
     )

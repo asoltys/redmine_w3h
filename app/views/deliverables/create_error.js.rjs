@@ -1,2 +1,0 @@
-page.replace_html 'new-deliverable', :partial => 'form'
-page << "Budget.updateAmounts()"

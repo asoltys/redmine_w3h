@@ -52,9 +52,10 @@ en:
   label_bulk_time_add_another: Add Another
   text_bulk_time_entry_permission: You do not have permission to log time on any projects
   text_time_added_to_project: "%{count} hours added to %{target}"
-  label_specify_range: Specify Range
-  label_specify_single_date: Specify Single Date
+  label_specify_range: Range
+  label_specify_single_date: Single Date
   label_fill_quota: Fill Quota
   label_specify_hours: Specify Hours
   label_per_day: / Day
   label_every: Every
+  label_number: Number

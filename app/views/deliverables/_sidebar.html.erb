@@ -1,8 +1,0 @@
-<h3><%= l(:budget_title) %></h3>
-<% form_tag do %>
-<label for="year"><%= l(:label_fiscal_year) %>:</label>
-<%= select_tag :year, options_for_select(fiscal_years, params[:year].to_i) %> 
-  <input type="submit" value="Go">
-<% end %>
-<br />
-<%= link_to(l(:label_new_deliverable), :controller => 'deliverables', :action => 'new', :id => @project.id) if allowed_management? %><br />

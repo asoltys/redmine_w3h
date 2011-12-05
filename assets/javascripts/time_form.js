@@ -2,13 +2,15 @@
   jQuery.noConflict();
 
   (function($) {
-    var root, setup;
-    root = typeof exports !== "undefined" && exports !== null ? exports : this;
+    var global, setup;
+    global = this;
     $(function() {
-      root.entry = $('div#entries').children('div').first().clone(true, true);
+      global.ctrl_down = false;
+      global.xhr;
       $('#time_entry_hours').focus();
-      $('form.tabular input').keypress(function(e) {
-        if (e.which === 13) return $('form.tabular').submit();
+      $('.quota_specified').val(false);
+      $('form.tabular input, form.tabular select').keydown(function(e) {
+        if (e.keyCode === 13) return $('form.tabular').submit();
       });
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
@@ -40,28 +42,68 @@
         return false;
       });
       $('select[id*=project]').change(function() {
-        var target;
-        target = $(this).closest('div').find('select[id*=issue_id]');
-        target.attr('disabled', 'disabled');
-        return $.getJSON('/bulk_time_entries/load_assigned_issues', {
+        var deliverables, issues;
+        if (global.xhr && global.xhr.readyState !== 4) global.xhr.abort();
+        issues = $(this).closest('div').find('select[id*=issue_id]');
+        issues.attr('disabled', 'disabled');
+        deliverables = $(this).closest('div').find('select[id*=deliverable_id]');
+        deliverables.attr('disabled', 'disabled');
+        deliverables.find('option:gt(1)').remove();
+        return global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
-          var closed_issues, open_issues;
-          target.removeAttr('disabled');
-          open_issues = closed_issues = '';
-          $.each(data, function(i, v) {
+          var closed_issues_options, deliverables_options, open_issues_options;
+          open_issues_options = closed_issues_options = '';
+          $.each(data.issues, function(i, v) {
             var option;
             option = "<option value='" + v.id + "'>" + v.id + ": " + v.subject + "</option>";
             if (v.closed) {
-              return closed_issues += option;
+              return closed_issues_options += option;
             } else {
-              return open_issues += option;
+              return open_issues_options += option;
             }
           });
-          target.find('optgroup:first').html(open_issues);
-          return target.find('optgroup:last').html(closed_issues);
+          if (open_issues_options.length + closed_issues_options.length === 0) {
+            $('#entry_issues').hide();
+            deliverables.focus();
+          } else {
+            $('#entry_issues').show();
+            issues.removeAttr('disabled');
+            issues.find('optgroup:first').html(open_issues_options);
+            issues.find('optgroup:last').html(closed_issues_options);
+          }
+          deliverables_options = '';
+          $.each(data.deliverables, function(i, v) {
+            return deliverables_options += "<option value='" + v.id + "'>" + v.subject + "</option>";
+          });
+          if (deliverables_options === '') {
+            return $('#entry_deliverables').hide();
+          } else {
+            $('#entry_deliverables').show();
+            deliverables.removeAttr('disabled');
+            return deliverables.find('option').after(deliverables_options);
+          }
         });
+      });
+      $('.calendar-trigger').prev('input').keydown(function(e) {
+        var interval;
+        interval = global.ctrl_down ? 'months' : 'days';
+        switch (e.keyCode) {
+          case 17:
+            return global.ctrl_down = true;
+          case 38:
+            return $(this).val(moment($(this).val(), 'YYYY-MM-DD').add(interval, 1).format('YYYY-MM-DD'));
+          case 40:
+            return $(this).val(moment($(this).val(), 'YYYY-MM-DD').subtract(interval, 1).format('YYYY-MM-DD'));
+        }
+      }).keyup(function(e) {
+        if (e.keyCode === 17) return global.ctrl_down = false;
+      });
+      $('select').keyup(function(e) {
+        if (e.keyCode === 9) return $(this).attr('size', 10);
+      }).blur(function(e) {
+        return $(this).attr('size', 1);
       });
       return setup();
     });
@@ -91,7 +133,6 @@
         var e;
         e = $(this).closest('div.box');
         e.find('.hours').hide();
-        e.find('.hours input').val('1');
         e.find('.quota').show();
         return e.find('.quota_specified').val('true');
       });

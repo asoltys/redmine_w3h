@@ -1,19 +1,25 @@
-<div id="budget-summary">
-  <%= render :partial => 'budget', :object => @budget %>
-</div>
+<style>
+  table.deliverables th { text-align: left; }
+</style>
 
 <div id="budget-list">
-  <h2>Sustain Agreements</h2>
-  <%= render :partial => 'list', :locals => {:deliverables => @deliverables.select{|d| d.category == 'Sustain' }} %>
+  <div id="budget-list">
+    <% unless @deliverables.empty? %>
+      <table id="deliverable-list" class="list deliverables">
+          <thead>
+            <tr>
+              <th style="width: 60px"></th>
+              <th><%= l(:label_agreement) %></th>
+              <th><%= l(:label_number) %></th>
+              <th><%= l(:label_budget) %></th>
+              <th><%= l(:label_spent) %></th>
+              <%= Redmine::Hook.call_hook(:plugin_budget_view_deliverable_list_header, { }) %>
+            </tr>
+          </thead>
+          <tbody>
+            <%= render :partial => 'deliverable', :collection => @deliverables %>
+          </tbody>
+      </table>
+    <% end %>
+  </div>
 </div>
-
-<div id="budget-list">
-  <h2>Change Agreements</h2>
-  <%= render :partial => 'list', :locals => {:deliverables => @deliverables.select{|d| d.category == 'Change' }} %>
-</div>
-
-
-<% content_for :sidebar do %>
-  <%= render :partial => 'deliverables/sidebar' %>
-<% end %>
-

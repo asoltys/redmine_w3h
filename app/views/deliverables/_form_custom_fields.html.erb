@@ -1,5 +1,0 @@
-<% unless @deliverable.custom_field_values.empty? %>
-	<% @deliverable.custom_field_values.each do |value| %>
-		<p><%= custom_field_tag_with_label :deliverable, value %></p>
-	<% end %>
-<% end %>

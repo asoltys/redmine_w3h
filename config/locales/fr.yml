@@ -51,10 +51,11 @@ fr:
   label_bulk_time_add_another: Saisir un nouveau temps
   text_bulk_time_entry_permission: Aucun projet ne vous permet de saisir des temps
   text_time_added_to_project: "%{count} heures ajoutees au %{target}"
-  label_specify_range: Specifi&eacute;z une plage
-  label_specify_single_date: Specifi&eacute;z une date unique
+  label_specify_range: Plage
+  label_specify_single_date: Date unique
   label_fill_quota: Remplissez quotas
   label_specify_hours: Specifi&eacute;z heures 
   label_add_another: Ajouter un autre
   label_per_day: / Jour
   label_every: Chaque
+  label_number: Nombre

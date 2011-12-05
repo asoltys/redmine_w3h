@@ -1,10 +1,40 @@
 # Who, What, When, and How Much?
 
-This is a plugin for [Redmine](http://redmine.org/) tailored for [Intellectual Resources Canada](http://tbs-sct.ircan.gc.ca/) to provide additional functionality in the area of project budget management and time reporting.
+This is a plugin for [Chiliproject](http://chiliproject.org/) that provides additional functionality in the areas of project budget management and time recording.
 
-The code for this plugin was adapted from Eric Davis' [Timesheet](http://github.com/edavis10/redmine-timesheet-plugin/) and [Budget](http://github.com/edavis10/redmine-budget-plugin/) plugins
+The plugin was originally developed to support web application development teams in the Department of [Public Works and Government Services Canada](http://www.tpsgc-pwgsc.gc.ca/).  It has been adapted for use on the public-facing Treasury Board Canada website, [Intellectual Resources Canada](http://tbs-sct.ircan-rican.gc.ca/)
 
-## Terms and Conditions of Use
+The code for this plugin was adapted from a number of other Redmine/Chiliproject plugins that were originally developed by [Eric Davis](http://github.com/edavis10) of [Little Stream Software](http://littlestreamsoftware.com).  See [CREDITS](https://github.com/asoltys/redmine_w3h/blob/master/CREDITS.txt) for full details.
+
+# Installation
+
+Prerequisites:  
+
+* A working installation of Chiliproject (tested on v2.5.0)
+* Redmine Rate v1.0.0
+
+## Downloadable archive
+<code>
+cd /path/to/chiliproject/vendor/plugins
+wget https://github.com/asoltys/redmine_w3h/tarball/master
+tar xvfz redmine_w3h.tar.gz 
+rm redmine_w3h.tar.gz
+</code>
+
+## Using git
+<code>
+cd /path/to/chiliproject/vendor/plugins
+git clone https://github.com/asoltys/redmine_w3h.git
+</code>
+
+# Features
+
+* Improved time entry form allows users to enter time for multiple projects and multiple dates without refreshing the page
+* Project budget tracking module makes it possible to track project budgets through fixed price agreements.
+* Separate billable rates can be defined for users on a per-project basis and are used to calculate a running Value of Work Done total against project agreements
+* A todo dashboard gives a team-wide overview of who's working on what issues and in what order and allows users and managers to visually prioritize issues
+
+# Terms and Conditions of Use
 
 Unless otherwise noted, computer program source code of this software is covered under Crown Copyright, Government of Canada, and is distributed under the GPLv2 License.
 
@@ -12,7 +42,7 @@ The Canada wordmark and related graphics associated with this distribution are p
 
 Copyright title to all 3rd party software distributed with this software is held by the respective copyright holders as noted in those files. Users are asked to read the 3rd Party Licenses referenced with those assets.
 
-## GPLv2 License
+# GPLv2 License
 
 Copyright (C) 2010 Government of Canada
 

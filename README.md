@@ -13,10 +13,9 @@ Prerequisites:
 * [Chiliproject](http://github.com/chiliproject/chiliproject) v2.5.0
 * [Redmine Rate](https://github.com/edavis10/redmine_rate) v0.2.1
 
-## Using git
-
     cd /path/to/chiliproject/vendor/plugins  
     git clone https://github.com/asoltys/redmine_w3h.git
+    bundle exec rake db:migrate:plugins
 
 # Features
 

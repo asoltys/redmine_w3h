@@ -15,7 +15,11 @@ class BulkTimeEntriesController < ApplicationController
   
   def index
     params[:date] ||= today_with_time_zone
-    @time_entry = TimeEntry.new(:spent_on => params[:date].to_s)
+    if params[:id]
+      @time_entry = TimeEntry.find(params[:id])
+    else
+      @time_entry = TimeEntry.new(:spent_on => params[:date].to_s)
+    end
   end
 
   def load_project_data

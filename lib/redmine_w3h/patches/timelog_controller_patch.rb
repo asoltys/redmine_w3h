@@ -7,11 +7,11 @@ module RedmineW3H
           unloadable # Send unloadable so it will not be unloaded in development
 
           def new
-            redirect_to '/bulk_time_entries'
+            redirect_to :controller => :bulk_time_entries
           end
 
           def edit
-            redirect_to '/bulk_time_entries'
+            redirect_to :controller => :bulk_time_entries, :id => params[:id]
           end
         end
       end

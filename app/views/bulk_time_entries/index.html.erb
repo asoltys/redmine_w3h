@@ -10,6 +10,7 @@
 <% form_for @time_entry, :url => {:action => 'save'}, :html => {:class => 'tabular'} do |f| %>
   <div class="box" id="entry">
     <%= error_messages_for 'time_entry', :object => @time_entry %>
+    <%= f.hidden_field :id %>
 
     <p>
       <label for="time_entry_project_id"><%= l(:field_project) %> <span class="required">*</span></label>

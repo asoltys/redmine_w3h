@@ -7,6 +7,7 @@ class BulkTimeEntriesController < ApplicationController
   before_filter :load_first_project
   before_filter :check_for_no_projects
   before_filter :load_activities
+  before_filter :load_time_entry, :only => :index
 
   helper :custom_fields
   include BulkTimeEntriesHelper
@@ -15,11 +16,6 @@ class BulkTimeEntriesController < ApplicationController
   
   def index
     params[:date] ||= today_with_time_zone
-    if params[:id]
-      @time_entry = TimeEntry.find(params[:id])
-    else
-      @time_entry = TimeEntry.new(:spent_on => params[:date].to_s)
-    end
   end
 
   def load_project_data
@@ -43,49 +39,55 @@ class BulkTimeEntriesController < ApplicationController
   
   def save
     if request.post? 
-      entries = []
-
       time_entry = TimeEntry.new(params[:time_entry])
-      time_entry.hours = nil if time_entry.hours.blank? or time_entry.hours <= 0
-      if self.class.allowed_project?(params[:time_entry][:project_id])
-        time_entry.project_id = params[:time_entry][:project_id]
-      end
-      time_entry.user = User.current
+    elsif request.put?
+      time_entry = TimeEntry.find(params[:time_entry][:id])
+      time_entry.attributes = params[:time_entry]
+    else
+      raise
+    end
 
-      if params[:date_from].present?
-        entries = []
-        (params[:date_from]..params[:date_to]).each do |date|
-          next unless params[:eligible_days].include?(Date.parse(date).wday.to_s)
-          t = time_entry.clone
-          t.spent_on = date
-          entries += [t]
-        end
-      else
-        entries = [time_entry]
-      end
+    entries = []
 
-      success = true
-      entries.each do |t| 
-        if params[:quota_specified] == "true"
-          logged = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', t.spent_on]).map(&:hours).sum
-          t.hours = [0, User.current.quota - logged].max
-        end
-        success &&= t.save unless t.hours == 0
-      end
+    time_entry.hours = nil if time_entry.hours.blank? or time_entry.hours <= 0
+    if self.class.allowed_project?(params[:time_entry][:project_id])
+      time_entry.project_id = params[:time_entry][:project_id]
+    end
+    time_entry.user = User.current
 
-      errors = {}
-      if success
-        message = l(:text_time_added_to_project, 
-          :count => entries.map(&:hours).sum, 
-          :target => entries.first.project.name)
-      else
-        errors = entries.first.errors 
-        entries = []
+    if params[:date_from].present?
+      entries = []
+      (params[:date_from]..params[:date_to]).each do |date|
+        next unless params[:eligible_days].include?(Date.parse(date).wday.to_s)
+        t = time_entry.clone
+        t.spent_on = date
+        entries += [t]
       end
+    else
+      entries = [time_entry]
+    end
 
-      respond_to do |format|
-        format.json { render :json => {:entries => entries, :message => message, :errors => errors }}
+    success = true
+    entries.each do |t| 
+      if params[:quota_specified] == "true"
+        logged = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', t.spent_on]).map(&:hours).sum
+        t.hours = [0, User.current.quota - logged].max
       end
+      success &&= t.save unless t.hours == 0
+    end
+
+    errors = {}
+    if success
+      message = l(:text_time_added_to_project, 
+        :count => entries.map(&:hours).sum, 
+        :target => entries.first.project.name)
+    else
+      errors = entries.first.errors 
+      entries = []
+    end
+
+    respond_to do |format|
+      format.json { render :json => {:entries => entries, :message => message, :errors => errors }}
     end
   end
 
@@ -111,6 +113,14 @@ class BulkTimeEntriesController < ApplicationController
   end
   
   private
+
+  def load_time_entry
+    if params[:id]
+      @time_entry = TimeEntry.find(params[:id])
+    else
+      @time_entry = TimeEntry.new(:spent_on => params[:date].to_s)
+    end
+  end
 
   def load_activities
     @activities = TimeEntryActivity.all

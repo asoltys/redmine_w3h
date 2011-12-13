@@ -110,7 +110,7 @@
 <% calendar.events = [] %>
 <% def calendar.startdt=(value); @startdt = value; end; %>
 <% def calendar.enddt=(value); @enddt= value; end; %>
-<% startdt = (Date.today - 21) - (Date.today.cwday - calendar.first_wday)%7 %>
+<% startdt = (Date.today - 7) - (Date.today.cwday - calendar.first_wday)%7 %>
 <% enddt = (Date.today) + (calendar.last_wday - Date.today.cwday)%7 %>
 <% calendar.startdt = startdt %>
 <% calendar.enddt = enddt %>

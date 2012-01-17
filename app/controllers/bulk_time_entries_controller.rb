@@ -15,7 +15,6 @@ class BulkTimeEntriesController < ApplicationController
   protect_from_forgery :only => [:index, :save]
   
   def index
-    params[:date] ||= today_with_time_zone
   end
 
   def load_project_data
@@ -101,6 +100,7 @@ class BulkTimeEntriesController < ApplicationController
   private
 
   def load_time_entry
+    params[:date] ||= today_with_time_zone
     if params[:id]
       @time_entry = TimeEntry.find(params[:id])
     else

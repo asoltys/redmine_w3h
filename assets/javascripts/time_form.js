@@ -8,7 +8,6 @@
       global.ctrl_down = false;
       global.xhr;
       $('#time_entry_hours').focus();
-      $('.quota_specified').val(false);
       $('form.tabular input, form.tabular select').keydown(function(e) {
         if (e.keyCode === 13) return $('form.tabular').submit();
       });
@@ -25,12 +24,9 @@
               if (isNaN(hours)) hours = 0;
               hours += e.hours;
               link.closest('span').show();
-              link.html(hours).effect('highlight', {
+              return link.html(hours).effect('highlight', {
                 color: '#9FCF9F'
               }, 1500);
-              if (hours >= parseFloat($.trim($('#quota_value').html()))) {
-                return link.closest('span').removeClass('delinquent').show();
-              }
             });
           }
           $('label').css('color', 'black');
@@ -110,16 +106,17 @@
     return setup = function() {
       $('div.box input, div.box select').removeAttr('disabled');
       $('select[id*=project]').change();
-      $('a.show_range').click(function() {
+      $('button.show_range').click(function() {
         var e;
         e = $(this).closest('div.box');
         e.find('.single_date').hide();
         e.find('.date_from').val($('.time_entry_spent_on').val());
         e.find('.time_entry_spent_on').val('');
         e.find('.date_range').show();
-        return e.find('.date_from').focus();
+        e.find('.date_from').focus();
+        return false;
       });
-      $('a.show_single_date').click(function() {
+      $('button.show_single_date').click(function() {
         var e;
         e = $(this).closest('div.box');
         e.find('.date_range').hide();
@@ -127,23 +124,15 @@
         e.find('.time_entry_spent_on').focus();
         e.find('.time_entry_spent_on').val($('.date_from').val());
         e.find('.date_from').val('');
-        return e.find('.date_to').val('');
-      });
-      $('a.fill_quota').click(function() {
-        var e;
-        e = $(this).closest('div.box');
-        e.find('.hours').hide();
-        e.find('.quota').show();
-        return e.find('.quota_specified').val('true');
+        e.find('.date_to').val('');
+        return false;
       });
       $('a.specify_hours').click(function() {
         var e;
         e = $(this).closest('div.box');
-        e.find('.quota').hide();
         e.find('.hours').show();
         e.find('.hours input').val('');
-        e.find('.time_entry_hours').focus();
-        return e.find('.quota_specified').val('false');
+        return e.find('.time_entry_hours').focus();
       });
       return $('img.calendar-trigger').each(function() {
         return Calendar.setup({

@@ -18,7 +18,6 @@ en:
   timesheet_showing_users: 'showing time for: '
   timesheet_permalink: '(Permalink to this timesheet)'
   timesheet_group_by: Group by
-  field_quota: Quota
   field_deliverable_subject: Agreement
   field_cost: Cost
   field_vwd: Value
@@ -54,7 +53,6 @@ en:
   text_time_added_to_project: "%{count} hours added to %{target}"
   label_specify_range: Range
   label_specify_single_date: Single Date
-  label_fill_quota: Fill Quota
   label_specify_hours: Specify Hours
   label_per_day: / Day
   label_every: Every

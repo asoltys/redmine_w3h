@@ -9,7 +9,6 @@ jQuery.noConflict()
     global.xhr
 
     $('#time_entry_hours').focus()
-    $('.quota_specified').val(false)
 
     $('form.tabular input, form.tabular select').keydown((e) ->
       $('form.tabular').submit() if e.keyCode == 13
@@ -38,8 +37,6 @@ jQuery.noConflict()
             hours += e.hours
             link.closest('span').show()
             link.html(hours).effect('highlight', {color: '#9FCF9F'}, 1500)
-            if hours >= parseFloat($.trim($('#quota_value').html()))
-              link.closest('span').removeClass('delinquent').show()
           )
 
         $('label').css('color', 'black')
@@ -126,16 +123,17 @@ jQuery.noConflict()
     $('div.box input, div.box select').removeAttr('disabled')
     $('select[id*=project]').change()
 
-    $('a.show_range').click(->
+    $('button.show_range').click(->
       e = $(this).closest('div.box')
       e.find('.single_date').hide()
       e.find('.date_from').val($('.time_entry_spent_on').val())
       e.find('.time_entry_spent_on').val('')
       e.find('.date_range').show()
       e.find('.date_from').focus()
+      return false
     )
 
-    $('a.show_single_date').click(->
+    $('button.show_single_date').click(->
       e = $(this).closest('div.box')
       e.find('.date_range').hide()
       e.find('.single_date').show()
@@ -143,22 +141,14 @@ jQuery.noConflict()
       e.find('.time_entry_spent_on').val($('.date_from').val())
       e.find('.date_from').val('')
       e.find('.date_to').val('')
-    )
-
-    $('a.fill_quota').click(->
-      e = $(this).closest('div.box')
-      e.find('.hours').hide()
-      e.find('.quota').show()
-      e.find('.quota_specified').val('true')
+      return false
     )
 
     $('a.specify_hours').click(->
       e = $(this).closest('div.box')
-      e.find('.quota').hide()
       e.find('.hours').show()
       e.find('.hours input').val('')
       e.find('.time_entry_hours').focus()
-      e.find('.quota_specified').val('false')
     )
 
     $('img.calendar-trigger').each(->

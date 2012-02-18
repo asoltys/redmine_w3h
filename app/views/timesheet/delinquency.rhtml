@@ -16,7 +16,6 @@
       <th><%= l(:label_billable) %></th>
       <th><%= l(:label_non_billable) %></th>
       <th><%= l(:label_total) %></th>
-      <th><%= l(:label_missing) %></th>
       <th><%= l(:label_billable_ratio) %></th>
     </tr>
 
@@ -25,8 +24,6 @@
       <% @billable_hours = @user_entries.map(&:billable_hours).sum %>
       <% @non_billable_hours = @user_entries.map(&:non_billable_hours).sum %>
       <% @total_hours = @billable_hours + @non_billable_hours %>
-      <% @required_hours = u.quota.to_f * (@timesheet.date_from.to_date.weekdays_until(@timesheet.date_to.to_date + 1)) %>
-      <% @delinquent_hours = [@required_hours - @total_hours, 0].max %>
       <% @billable_ratio = (@total_hours > 0 ? @billable_hours / @total_hours : 0) * 100 %>
 
       <tr class="user <%= cycle("odd", "even") %>">
@@ -37,7 +34,6 @@
         <td align="center"><%= number_with_precision(@billable_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@non_billable_hours, 2) %></td>
         <td align="center"><%= number_with_precision(@total_hours, 2) %></td>
-        <td align="center"><%= number_with_precision(@delinquent_hours,2) %></td>
         <td align="center"><%= number_with_precision(@billable_ratio,2)%>%</td>
       </tr>
     <% end %>

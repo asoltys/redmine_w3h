@@ -84,10 +84,6 @@ class Timesheet
     return d
   end
 
-  def required
-    return quota * users.length unless quota.nil?
-  end
-
   def total 
     time_entries.map(&:hours).sum
   end
@@ -101,17 +97,6 @@ class Timesheet
   end
 
   private
-
-  def quota
-    if self.date_to.is_a?(String)
-      self.date_from = Date.parse(self.date_from)
-      self.date_to = Date.parse(self.date_to)
-    end
-
-    unless self.date_from.nil?
-      return (self.date_from.weekdays_until(self.date_to) + (self.date_to.weekday? ? 1 : 0)) * WORKING_HOURS
-    end
-  end
 
   def conditions
     conditions = [

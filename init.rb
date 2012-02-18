@@ -86,5 +86,3 @@ end
 require 'redmine_w3h/hooks/budget_issue_hook'
 require 'redmine_w3h/hooks/budget_project_hook'
 require 'redmine_w3h/hooks/controller_timelog_edit_before_save_hook'
-require 'redmine_w3h/hooks/view_my_account_hook'
-require 'redmine_w3h/hooks/view_users_form'

@@ -71,22 +71,6 @@ class TimesheetController < ApplicationController
   end
   alias_method :projects, :agreements
 
-  def delinquency
-    respond_to do |format|
-      format.html { render :action => 'delinquency' }
-    end
-  end
-
-  def settings
-    @user = User.current
-    if request.post?
-      @user.quota = params[:user][:quota]
-      if @user.save
-        flash[:notice] = l(:notice_account_updated)
-      end
-    end
-  end
-
   private
   def get_user
     params[:user_id] = User.current.id unless params[:user_id]

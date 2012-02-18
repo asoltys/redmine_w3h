@@ -44,7 +44,8 @@
         <span>Sat</span>
       <p>
         <label for="date_from"><%= l(:label_from) %> <span class="required">*</span></label>
-        <input type="text" class="date_from" size="10" id="date_from" name="date_from" /><%= calendar_for("date_from") %>
+        <input type="text" class="date_from" size="10" id="date_from" name="date_from" />
+        <%= calendar_for("date_from") %>
       </p>
       <p>
         <label for="date_to"><%= l(:label_to) %> <span class="required">*</span></label>
@@ -66,7 +67,7 @@
 
     <p id="entry_activities">
       <label for="time_entry_activity_id"><%= l(:field_activity) %> <span class="required">*</span></label>
-      <%= select_tag "activity_id", options_from_collection_for_select(@first_project.activities, :id, :name) %>
+      <%= select_tag "time_entry[activity_id]", options_from_collection_for_select(@first_project.activities, :id, :name) %>
     </p>
 
     <p id="entry_issues">

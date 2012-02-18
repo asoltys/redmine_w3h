@@ -18,7 +18,7 @@
       <td class="<%= day.month==calendar.month ? 'even' : 'odd' %><%= ' today' if Date.today == day %> <%= day.strftime('%Y-%m-%d') %>">
         <p class="day-num"><%= day.day %></p>	
 
-        <% if (day.weekday? && User.current.quota && User.current.quota > 0) || User.current.logged_time(day) > 0 %> 
+        <% if day.weekday? || User.current.logged_time(day) > 0 %> 
           <% style = "display: block" %>
         <% else %>
           <% style = "display: none" %>

@@ -62,10 +62,6 @@ class BulkTimeEntriesController < ApplicationController
 
       success = true
       entries.each do |t| 
-        if params[:quota_specified] == "true"
-          logged = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', t.spent_on]).map(&:hours).sum
-          t.hours = [0, User.current.quota - logged].max
-        end
         success &&= t.save unless t.hours == 0
       end
 
@@ -85,27 +81,6 @@ class BulkTimeEntriesController < ApplicationController
     end
   end
 
-  def set_hours(time_entry)
-    if params[:quota_specified] == "true"
-      existing = User.current.time_entries.find(:all, :conditions => ['spent_on = ?', time_entry.spent_on]).map(&:hours).sum
-      time_entry.hours = [0, User.current.quota - existing].max
-    end
-  end
-    
-  def add_entry
-    begin
-      spent_on = Date.parse(params[:date])
-    rescue ArgumentError
-      # Fall through
-    end
-    spent_on ||= today_with_time_zone
-    
-    @time_entry = TimeEntry.new(:spent_on => spent_on.to_s)
-    respond_to do |format|
-      format.js {}
-    end
-  end
-  
   private
 
   def load_activities

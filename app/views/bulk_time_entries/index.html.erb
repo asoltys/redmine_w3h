@@ -10,6 +10,7 @@
 <% form_for @time_entry, :url => {:action => 'save'}, :html => {:class => 'tabular'} do |f| %>
   <div class="box" id="entry">
     <%= error_messages_for 'time_entry', :object => @time_entry %>
+    <%= f.hidden_field :id %>
 
     <p>
       <label for="time_entry_project_id"><%= l(:field_project) %> <span class="required">*</span></label>
@@ -100,7 +101,7 @@
 <% calendar.events = [] %>
 <% def calendar.startdt=(value); @startdt = value; end; %>
 <% def calendar.enddt=(value); @enddt= value; end; %>
-<% startdt = (Date.today - 21) - (Date.today.cwday - calendar.first_wday)%7 %>
+<% startdt = (Date.today - 7) - (Date.today.cwday - calendar.first_wday)%7 %>
 <% enddt = (Date.today) + (calendar.last_wday - Date.today.cwday)%7 %>
 <% calendar.startdt = startdt %>
 <% calendar.enddt = enddt %>

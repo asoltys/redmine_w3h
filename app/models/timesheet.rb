@@ -52,7 +52,7 @@ class Timesheet
     if User.current.admin?
       return Project.find(:all, :order => 'name ASC')
     else
-      return User.current.projects.find(:all, :order => 'name ASC')
+      return User.current.projects.find(:all, :conditions => Project.allowed_to_condition(User.current, :view_time_entries), :order => 'name ASC')
     end
   end
 
@@ -102,7 +102,8 @@ class Timesheet
     conditions = [
       "#{TimeEntry.table_name}.project_id IN (:projects)" +
       " AND #{TimeEntry.table_name}.user_id IN (:users) " +
-      " AND #{TimeEntry.table_name}.activity_id IN (:activities)",
+      " AND #{TimeEntry.table_name}.activity_id IN (:activities)" +
+      " AND #{Project.allowed_to_condition(User.current, :view_time_entries)}",
       {
         :projects => sel_projects,
         :activities => sel_activities,

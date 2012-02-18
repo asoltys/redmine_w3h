@@ -20,7 +20,14 @@ jQuery.noConflict()
         $('div.box input, div.box select').removeAttr('disabled')
 
         if json.message
-          $("#entry").before("<div class='flash notice'>#{json.message}</div>")
+          $("#entry").before(
+            "<div class='flash notice'>
+              #{json.message}
+              <span style='float: right'>
+                <a>edit</a>
+                <a>undo</a>
+              </span>
+            </div>")
 
           # update the calendar for each day that was logged
           $.each(json.entries, (i, e) ->

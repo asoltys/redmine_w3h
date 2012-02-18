@@ -16,7 +16,7 @@
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
           $('div.box input, div.box select').removeAttr('disabled');
           if (json.message) {
-            $("#entry").before("<div class='flash notice'>" + json.message + "</div>");
+            $("#entry").before("<div class='flash notice'>              " + json.message + "              <span style='float: right'>                <a>edit</a>                <a>undo</a>              </span>            </div>");
             $.each(json.entries, function(i, e) {
               var hours, link;
               e = e.time_entry;

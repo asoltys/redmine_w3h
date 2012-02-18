@@ -52,8 +52,10 @@
           var closed_issues_options, deliverables_options, open_issues_options;
           open_issues_options = closed_issues_options = '';
           $.each(data.issues, function(i, v) {
-            var option;
-            option = "<option value='" + v.id + "'>" + v.id + ": " + v.subject + "</option>";
+            var option, subject;
+            subject = $.trim(v.subject).substring(0, 40).split(" ").slice(0, -1).join(" ");
+            if (subject.length >= 39) subject += '...';
+            option = "<option value='" + v.id + "'>" + v.id + ": " + subject + "</option>";
             if (v.closed) {
               return closed_issues_options += option;
             } else {

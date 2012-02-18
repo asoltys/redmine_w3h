@@ -69,7 +69,9 @@ jQuery.noConflict()
       }, (data) ->
         open_issues_options = closed_issues_options = ''
         $.each(data.issues, (i, v) ->
-          option = "<option value='#{v.id}'>#{v.id}: #{v.subject}</option>"
+          subject = $.trim(v.subject).substring(0, 40).split(" ").slice(0, -1).join(" ")
+          subject += '...' if subject.length >= 39
+          option = "<option value='#{v.id}'>#{v.id}: #{subject}</option>"
           if v.closed 
             closed_issues_options += option 
           else 

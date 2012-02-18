@@ -19,7 +19,10 @@ class BulkTimeEntriesController < ApplicationController
 
   def load_project_data
     deliverables = Project.find(params[:project_id]).ancestor_deliverables.sort{|a,b| a.to_s <=> b.to_s}
-    issues = get_issues(params[:project_id]).sort{|a,b| a.status.is_closed ? 1 : -1 }
+    issues = get_issues(params[:project_id])
+    issues.sort!{|a,b| a.status.is_closed ? 1 : -1 }
+    issues.sort!{|a,b| a.id <=> b.id }
+
 
     respond_to do |format|
       format.json {render :json => {

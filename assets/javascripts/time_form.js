@@ -7,6 +7,11 @@
     $(function() {
       global.ctrl_down = false;
       global.xhr;
+      $.ajaxSetup({
+        beforeSend: function(xhr) {
+          return xhr.setRequestHeader("Accept", "application/json");
+        }
+      });
       $('#time_entry_hours').focus();
       $('form.tabular input, form.tabular select').keydown(function(e) {
         if (e.keyCode === 13) return $('form.tabular').submit();

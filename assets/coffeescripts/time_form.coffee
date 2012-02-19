@@ -7,6 +7,10 @@ jQuery.noConflict()
   $(->
     global.ctrl_down = false
     global.xhr
+    $.ajaxSetup({
+      beforeSend: (xhr) ->
+        xhr.setRequestHeader("Accept", "application/json")
+    })
 
     $('#time_entry_hours').focus()
 

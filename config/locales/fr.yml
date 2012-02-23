@@ -20,6 +20,7 @@ fr:
   field_cost: Cost
   field_vwd: Value
   field_budget: Budget
+  field_overtime: Heures supplémentaires
   budget_title: Budget
   label_member_rate: Rate ($)
   label_new_deliverable: Nouveau Contrat 

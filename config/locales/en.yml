@@ -22,6 +22,7 @@ en:
   field_cost: Cost
   field_vwd: Value
   field_budget: Budget
+  field_overtime: Overtime
   budget_title: Budget
   label_member_rate: Rate ($)
   label_new_deliverable: New Agreement

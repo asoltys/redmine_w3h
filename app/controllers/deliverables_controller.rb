@@ -13,8 +13,6 @@ class DeliverablesController < ApplicationController
 
   # Main deliverable list
   def index
-    @budget = Budget.new(@deliverables, params[:year])
-
     respond_to do |format|
       format.html { render :action => 'index', :layout => !request.xhr? }
     end
@@ -33,8 +31,6 @@ class DeliverablesController < ApplicationController
     @deliverable = Deliverable.new(params[:deliverable])
     @deliverable.project = @project
 
-    @budget = Budget.new(@deliverables, @deliverable.due)
-    
     respond_to do |format|
       if @deliverable.save
         attachments = Attachment.attach_files(@deliverable, params[:attachments])
@@ -146,13 +142,13 @@ class DeliverablesController < ApplicationController
   def sort_if_needed(deliverables)
     if session[@sort_name] && %w(score spent progress labor_budget).include?(session[@sort_name][:key])
       case session[@sort_name][:key]
-      when "score":
+      when "score"
           sorted = deliverables.sort {|a,b| a.score <=> b.score}
-      when "spent":
+      when "spent"
           sorted = deliverables.sort {|a,b| a.spent <=> b.spent}
-      when "progress":
+      when "progress"
           sorted = deliverables.sort {|a,b| a.progress <=> b.progress}
-      when "labor_budget":
+      when "labor_budget"
           sorted = deliverables.sort {|a,b| a.labor_budget <=> b.labor_budget}
       end
 

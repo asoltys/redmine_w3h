@@ -17,5 +17,4 @@
   <%= content_tag(:td, h(deliverable.number)) %>
   <%= content_tag(:td, number_to_currency(deliverable.budget)) %>
   <%= content_tag(:td, link_to(number_to_currency(deliverable.spent), "/timesheet/report?timesheet[period_type]=0&timesheet[period]=all&timesheet[deliverables][]=#{deliverable.id}")) %>
-  <%= Redmine::Hook.call_hook(:plugin_budget_view_deliverable_summary_row, { :deliverable => deliverable }) %>
 </tr>

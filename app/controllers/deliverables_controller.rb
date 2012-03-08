@@ -26,7 +26,6 @@ class DeliverablesController < ApplicationController
   
   # Saves a new Deliverable
   def create
-    params[:deliverable][:invoiced] = 0 if params[:deliverable][:invoiced].nil?
 		@deliverable_custom_fields = DeliverableCustomField.find(:all, :order => "#{CustomField.table_name}.position")
     @deliverable = Deliverable.new(params[:deliverable])
     @deliverable.project = @project

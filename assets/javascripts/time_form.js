@@ -49,7 +49,7 @@
         issues.attr('disabled', 'disabled');
         deliverables = $(this).closest('div').find('select[id*=deliverable_id]');
         deliverables.attr('disabled', 'disabled');
-        deliverables.find('option:gt(1)').remove();
+        deliverables.find('option:gt(0)').remove();
         return global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')

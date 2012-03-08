@@ -33,7 +33,7 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
   td.good { color: green; }
   td.bad { color: red; }
 
-  tr.deliverable_end, tr.user_end { height: 15px; }
+  tr.deliverable_end, tr.activity_end, tr.user_end { display: none; }
 
   img.gravatar { padding: 0; margin-bottom: -5px; }
 
@@ -73,5 +73,4 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
 @media print {
   div#toggle-form, div#timesheet-form, div#controls, h2#menu, div#cn-sig { display: none; }
   img.gravatar, img.toggle, .controls { display: none; }
-  .deliverable_end, .activity_end, .user_end { display: none; }
 }

@@ -4,7 +4,6 @@
     <%= i.to_s %>
   </td>
   <td align="center"><%= number_with_precision(@entries.map(&:regular_hours).sum, :precision => 1) %></td>
-  <td align="center"><%= number_with_precision(@entries.map(&:overtime_hours).sum, :precision => 1) %></td>
   <td align="center"><%= number_to_currency(@entries.map(&:value).sum, :precision => 2) %></td>
   <td class="controls"></td>
 </tr>
@@ -17,7 +16,6 @@
       <%= a.name %>
     </td>
     <td align="center"><%= number_with_precision(@activity_entries.map(&:regular_hours).sum, :precision => 1) %></td>
-    <td align="center"><%= number_with_precision(@activity_entries.map(&:overtime_hours).sum, :precision => 1) %></td>
     <td align="center"><%= number_to_currency(@activity_entries.map(&:value).sum, :precision => 2) %></td>
     <td class="controls"></td>
   </tr>

@@ -73,7 +73,7 @@
 </div>
 
 <div id="reporting_period">
-  <span><%=l @timesheet.date_from.to_date.class %></span>
+  <span><%= @timesheet.date_from.to_date %></span>
   -
-  <span><%=l @timesheet.date_to.to_date, :format => :long %></span>
+  <span><%= @timesheet.date_to.to_date %></span>
 </div>

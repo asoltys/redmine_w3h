@@ -3,6 +3,8 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
 @media screen {
   div#timesheet-form p { padding:0px 10px; float:left; }
   .icon-timesheet { background-image: url(../../../images/csv.png); }
+  .icon-check { background-image: url(../../../images/check.png); }
+  .icon-close { background-image: url(../../../images/close.png); }
 
   div#toggle-form a { margin: 10px 0px; padding: 5px; color: white; background: #369; display: block; font-size: 18px; width: 100; text-align: center; }
   div#controls { font-size: 14px; padding: 10px; text-align: center; }

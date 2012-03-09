@@ -23,7 +23,13 @@
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
           $('div.box input, div.box select').removeAttr('disabled');
           if (json.message) {
-            $("#entry").before("<div class='flash notice'>              " + json.message + "              <span style='float: right'>                <a>edit</a>                <a>undo</a>              </span>            </div>");
+            $("#entry").before('<div class="flash notice">' + json.message + '\
+              <span style="float: right">\
+                <a class="icon icon-edit">edit</a>\
+                <a class="icon icon-del">undo</a>\
+                <a class="icon icon-check">dismiss</a>\
+              </span>\
+            </div>');
             $.each(json.entries, function(i, e) {
               var hours, link;
               e = e.time_entry;
@@ -46,13 +52,10 @@
         return false;
       });
       $('select[id*=project]').change(function() {
-        var deliverables, issues;
         if (global.xhr && global.xhr.readyState !== 4) global.xhr.abort();
-        issues = $(this).closest('div').find('select[id*=issue_id]');
-        issues.attr('disabled', 'disabled');
-        deliverables = $(this).closest('div').find('select[id*=deliverable_id]');
-        deliverables.attr('disabled', 'disabled');
-        deliverables.find('option:gt(0)').remove();
+        $('#time_entry_issue_id').attr('disabled', 'disabled');
+        $('#time_entry_deliverable_id').attr('disabled', 'disabled');
+        $('#time_entry_deliverable_id option:gt(0)').remove();
         return global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
@@ -72,12 +75,12 @@
           });
           if (open_issues_options.length + closed_issues_options.length === 0) {
             $('#entry_issues').hide();
-            deliverables.focus();
+            $('#time_entry_deliverable_id').focus();
           } else {
             $('#entry_issues').show();
-            issues.removeAttr('disabled');
-            issues.find('optgroup:first').html(open_issues_options);
-            issues.find('optgroup:last').html(closed_issues_options);
+            $('#time_entry_issue_id').removeAttr('disabled');
+            $('#time_entry_issue_id optgroup:first').html(open_issues_options);
+            $('#time_entry_issue_id optgroup:last').html(closed_issues_options);
           }
           deliverables_options = '';
           $.each(data.deliverables, function(i, v) {
@@ -87,8 +90,8 @@
             return $('#entry_deliverables').hide();
           } else {
             $('#entry_deliverables').show();
-            deliverables.removeAttr('disabled');
-            return deliverables.find('option').after(deliverables_options);
+            $('#time_entry_deliverable_id').removeAttr('disabled');
+            return $('#time_entry_deliverable_id option').after(deliverables_options);
           }
         });
       });

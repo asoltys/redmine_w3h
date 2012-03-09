@@ -1,12 +1,12 @@
 jQuery.noConflict()
-
-# set $ to jquery instead of prototype, just in this file
 (($) ->
   global = this
 
   $(->
     global.ctrl_down = false
     global.xhr
+
+    # make sure we ask for JSON explicitly
     $.ajaxSetup({
       beforeSend: (xhr) ->
         xhr.setRequestHeader("Accept", "application/json")
@@ -26,13 +26,14 @@ jQuery.noConflict()
 
         if json.message
           $("#entry").before(
-            "<div class='flash notice'>
-              #{json.message}
-              <span style='float: right'>
-                <a>edit</a>
-                <a>undo</a>
+            '<div class="flash notice">' +
+              json.message + '
+              <span style="float: right">
+                <a class="icon icon-edit">edit</a>
+                <a class="icon icon-del">undo</a>
+                <a class="icon icon-check">dismiss</a>
               </span>
-            </div>")
+            </div>')
 
           # update the calendar for each day that was logged
           $.each(json.entries, (i, e) ->
@@ -45,29 +46,31 @@ jQuery.noConflict()
             link.html(hours).effect('highlight', {color: '#9FCF9F'}, 1500)
           )
 
+        # highlight fields with validation errors
         $('label').css('color', 'black')
         $.each(json.errors, (i, error) ->
           $("#time_entry_#{error}").prev('label').css('color', 'red')
         )
       )
 
+      # disable the form until the AJAX succeeds
       $('div.box input, div.box select').attr('disabled', 'disabled')
 
-      # prevent the form from submitting normally
+      # prevent form submission
       return false
     )
 
     # load issues and deliverables on project change
     $('select[id*=project]').change(->
+
+      # if some AJAX is already underway, cancel it cuz the params be changin'
       if global.xhr && global.xhr.readyState != 4
         global.xhr.abort()
 
-      issues = $(this).closest('div').find('select[id*=issue_id]')
-      issues.attr('disabled', 'disabled')
+      $('#time_entry_issue_id').attr('disabled', 'disabled')
 
-      deliverables = $(this).closest('div').find('select[id*=deliverable_id]')
-      deliverables.attr('disabled', 'disabled')
-      deliverables.find('option:gt(0)').remove()
+      $('#time_entry_deliverable_id').attr('disabled', 'disabled')
+      $('#time_entry_deliverable_id option:gt(0)').remove()
 
       global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
         project_id: $(this).val(),
@@ -86,12 +89,12 @@ jQuery.noConflict()
         
         if open_issues_options.length + closed_issues_options.length == 0
           $('#entry_issues').hide() 
-          deliverables.focus()
+          $('#time_entry_deliverable_id').focus()
         else
           $('#entry_issues').show()
-          issues.removeAttr('disabled')
-          issues.find('optgroup:first').html(open_issues_options)
-          issues.find('optgroup:last').html(closed_issues_options)
+          $('#time_entry_issue_id').removeAttr('disabled')
+          $('#time_entry_issue_id optgroup:first').html(open_issues_options)
+          $('#time_entry_issue_id optgroup:last').html(closed_issues_options)
 
         deliverables_options = ''
         $.each(data.deliverables, (i, v) ->
@@ -102,8 +105,8 @@ jQuery.noConflict()
           $('#entry_deliverables').hide()
         else
           $('#entry_deliverables').show()
-          deliverables.removeAttr('disabled')
-          deliverables.find('option').after(deliverables_options)
+          $('#time_entry_deliverable_id').removeAttr('disabled')
+          $('#time_entry_deliverable_id option').after(deliverables_options)
       )
     )
 

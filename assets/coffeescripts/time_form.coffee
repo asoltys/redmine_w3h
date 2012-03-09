@@ -14,7 +14,7 @@ jQuery.noConflict()
 
     $('#time_entry_hours').focus()
 
-    $('form.tabular input, form.tabular select').keydown((e) ->
+    $('form.tabular input[type!=button], form.tabular select').keydown((e) ->
       if e.keyCode == 13
         $('button').unbind('click')
         $('form.tabular').submit() 

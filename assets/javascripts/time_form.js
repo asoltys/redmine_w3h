@@ -13,7 +13,7 @@
         }
       });
       $('#time_entry_hours').focus();
-      $('form.tabular input, form.tabular select').keydown(function(e) {
+      $('form.tabular input[type!=button], form.tabular select').keydown(function(e) {
         if (e.keyCode === 13) {
           $('button').unbind('click');
           return $('form.tabular').submit();

@@ -10,7 +10,7 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
   a { cursor: pointer; }
   table.list th { background: #fff; font-size: 18px; }
   tr.time_entry.odd th { background: #ddd; }
-  tr.deliverable, tr.activity, tr.user { cursor: pointer; font-weight: bold; }
+  tr.deliverable, tr.activity, tr.user { cursor: pointer; }
 
   tr.deliverable td {
     font-size: 14px;

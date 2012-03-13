@@ -25,16 +25,6 @@ jQuery.noConflict()
         $('div.box input, div.box select').removeAttr('disabled')
 
         if json.message
-          $("#entry").before(
-            '<div class="flash notice">' +
-              json.message + '
-              <span style="float: right">
-                <a class="icon icon-edit">edit</a>
-                <a class="icon icon-del">undo</a>
-                <a class="icon icon-check">dismiss</a>
-              </span>
-            </div>')
-
           # update the calendar for each day that was logged
           $.each(json.entries, (i, e) ->
             e = e.time_entry
@@ -44,7 +34,23 @@ jQuery.noConflict()
             hours += e.hours
             link.closest('span').show()
             link.html(hours).effect('highlight', {color: '#9FCF9F'}, 1500)
+
           )
+
+          ids = JSON.stringify($.map(entries, (val, i) ->
+            return val.id
+          ))
+
+          $("#entry").before('
+            <div class="flash notice">' +
+              json.message + '
+              <span style="float: right">
+                <a class="icon icon-edit">edit</a>
+                <a class="icon icon-del">undo</a>
+                <a class="icon icon-check">dismiss</a>
+              </span>
+            </div>
+          ')
 
         # highlight fields with validation errors
         $('label').css('color', 'black')

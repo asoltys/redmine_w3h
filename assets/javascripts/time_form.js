@@ -21,15 +21,9 @@
       });
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
+          var ids;
           $('div.box input, div.box select').removeAttr('disabled');
           if (json.message) {
-            $("#entry").before('<div class="flash notice">' + json.message + '\
-              <span style="float: right">\
-                <a class="icon icon-edit">edit</a>\
-                <a class="icon icon-del">undo</a>\
-                <a class="icon icon-check">dismiss</a>\
-              </span>\
-            </div>');
             $.each(json.entries, function(i, e) {
               var hours, link;
               e = e.time_entry;
@@ -42,6 +36,18 @@
                 color: '#9FCF9F'
               }, 1500);
             });
+            ids = JSON.stringify($.map(entries, function(val, i) {
+              return val.id;
+            }));
+            $("#entry").before('\
+            <div class="flash notice">' + json.message + '\
+              <span style="float: right">\
+                <a class="icon icon-edit">edit</a>\
+                <a class="icon icon-del">undo</a>\
+                <a class="icon icon-check">dismiss</a>\
+              </span>\
+            </div>\
+          ');
           }
           $('label').css('color', 'black');
           return $.each(json.errors, function(i, error) {

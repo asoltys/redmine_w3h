@@ -12,6 +12,7 @@ jQuery.noConflict()
         xhr.setRequestHeader("Accept", "application/json")
     })
 
+    $('span.logged-time').show()
     $('#time_entry_hours').focus()
 
     $('form.tabular input[type!=button], form.tabular select').keydown((e) ->

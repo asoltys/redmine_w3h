@@ -2,9 +2,9 @@
   jQuery.noConflict();
 
   (function($) {
-    var global, setup;
+    var global;
     global = this;
-    $(function() {
+    return $(function() {
       global.ctrl_down = false;
       global.xhr;
       $.ajaxSetup({
@@ -14,16 +14,17 @@
       });
       $('span.logged-time').show();
       $('#time_entry_hours').focus();
-      $('form.tabular input[type!=button], form.tabular select').keydown(function(e) {
+      $('form#new_time_entry input[type!=button], form#new_time_entry select').keydown(function(e) {
         if (e.keyCode === 13) {
           $('button').unbind('click');
-          return $('form.tabular').submit();
+          return $('form#new_time_entry').submit();
         }
       });
-      $('form.tabular').submit(function() {
+      $('form#new_time_entry').submit(function() {
+        $('form#new_time_entry input, form#new_time_entry select').attr('disabled', 'disabled');
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
           var ids;
-          $('div.box input, div.box select').removeAttr('disabled');
+          $('form#new_time_entry input, form#new_time_entry select').removeAttr('disabled');
           if (json.message) {
             $.each(json.entries, function(i, e) {
               var hours, link;
@@ -37,7 +38,7 @@
                 color: '#9FCF9F'
               }, 1500);
             });
-            ids = JSON.stringify($.map(entries, function(val, i) {
+            ids = JSON.stringify($.map(json.entries, function(val, i) {
               return val.id;
             }));
             $("#entry").before('\
@@ -55,7 +56,6 @@
             return $("#time_entry_" + error).prev('label').css('color', 'red');
           });
         });
-        $('div.box input, div.box select').attr('disabled', 'disabled');
         return false;
       });
       $('select[id*=project]').change(function() {
@@ -121,38 +121,29 @@
       }).blur(function(e) {
         return $(this).attr('size', 1);
       });
-      return setup();
-    });
-    return setup = function() {
-      $('div.box input, div.box select').removeAttr('disabled');
+      $('form#new_time_entry input, form#new_time_entry select').removeAttr('disabled');
       $('select[id*=project]').change();
       $('button.show_range').click(function() {
-        var e;
-        e = $(this).closest('div.box');
-        e.find('.single_date').hide();
-        e.find('.date_from').val($('.time_entry_spent_on').val());
-        e.find('.time_entry_spent_on').val('');
-        e.find('.date_range').show();
-        e.find('.date_from').focus();
+        $('.single_date').hide();
+        $('.date_from').val($('.time_entry_spent_on').val());
+        $('.time_entry_spent_on').val('');
+        $('.date_range').show();
+        $('.date_from').focus();
         return false;
       });
       $('button.show_single_date').click(function() {
-        var e;
-        e = $(this).closest('div.box');
-        e.find('.date_range').hide();
-        e.find('.single_date').show();
-        e.find('.time_entry_spent_on').focus();
-        e.find('.time_entry_spent_on').val($('.date_from').val());
-        e.find('.date_from').val('');
-        e.find('.date_to').val('');
+        $('.date_range').hide();
+        $('.single_date').show();
+        $('.time_entry_spent_on').focus();
+        $('.time_entry_spent_on').val($('.date_from').val());
+        $('.date_from').val('');
+        $('.date_to').val('');
         return false;
       });
       $('a.specify_hours').click(function() {
-        var e;
-        e = $(this).closest('div.box');
-        e.find('.hours').show();
-        e.find('.hours input').val('');
-        return e.find('.time_entry_hours').focus();
+        $('.hours').show();
+        $('.hours input').val('');
+        return $('.time_entry_hours').focus();
       });
       return $('img.calendar-trigger').each(function() {
         return Calendar.setup({
@@ -161,5 +152,5 @@
           button: $(this).attr('id')
         });
       });
-    };
+    });
   })(jQuery);

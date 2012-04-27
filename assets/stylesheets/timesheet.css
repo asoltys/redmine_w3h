@@ -70,15 +70,6 @@ div#reporting_period{ font-weight: bold; font-size: 14px; padding: 10px; text-al
   div.issue.closed { background: #cfc; }
   div.issue.overdue { background: #fcc; }
   a.full-calendar{ padding-left: 18px; background-image: url('/images/calendar.png'); background-repeat: no-repeat; }
-  form#new_time_entry { 
-    border: 1px solid #eee;
-    float: left;
-    width: 100%;
-    margin-bottom: 10px;
-    padding-bottom: 5px; 
-  }
-  a#prev { float: left; }
-  a#next { float: right; }
 }
 
 @media print {

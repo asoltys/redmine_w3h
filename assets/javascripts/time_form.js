@@ -126,6 +126,7 @@
       $('#show_range').click(function() {
         $('#single_date').hide();
         $('#date_from').val($('#time_entry_spent_on').val());
+        $('#date_to').val(moment($('#time_entry_spent_on').val(), 'YYYY-MM-DD').add('days', 7).format('YYYY-MM-DD'));
         $('#time_entry_spent_on').val('');
         $('#date_range').show();
         $('#date_from').focus();

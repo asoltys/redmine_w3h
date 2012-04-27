@@ -17,7 +17,7 @@
 
   <p id="single_date">
     <label for="time_entry_spent_on"><%= l(:field_spent_on) %> <span class="required">*</span></label>
-    <%= f.text_field :spent_on, :size => 10 %>
+    <%= f.text_field :spent_on, :size => 10, :autocomplete => 'off' %>
     <%= calendar_for("time_entries_spent_on") %><br />
     <button id="show_range"><%= l(:label_specify_range) %></button>
   </p>
@@ -41,12 +41,12 @@
       <span>Sat</span>
     <p>
       <label for="date_from"><%= l(:label_from) %> <span class="required">*</span></label>
-      <input type="text" class="date_from" size="10" id="date_from" name="date_from" />
+      <input type="text" class="date_from" size="10" id="date_from" name="date_from" autocomplete="off" />
       <%= calendar_for("date_from") %>
     </p>
     <p>
       <label for="date_to"><%= l(:label_to) %> <span class="required">*</span></label>
-      <input type="text" class="date_to" size="10" id="date_to" name="date_to" />
+      <input type="text" class="date_to" size="10" id="date_to" name="date_to" autocomplete="off" />
       <%= calendar_for("date_to") %><br />
       <button id="show_single_date"><%= l(:label_specify_single_date) %></button>
     </p>

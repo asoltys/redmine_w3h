@@ -7,10 +7,10 @@ jQuery.noConflict()
     global.xhr
 
     # make sure we ask for JSON explicitly
-    $.ajaxSetup({
+    $.ajaxSetup(
       beforeSend: (xhr) ->
         xhr.setRequestHeader("Accept", "application/json")
-    })
+    )
 
     $('span.logged-time').show()
     $('#time_entry_hours').focus()
@@ -38,7 +38,7 @@ jQuery.noConflict()
             hours = 0 if isNaN(hours)
             hours += e.hours
             link.closest('span').show()
-            link.html(hours).stop(true, true).effect('highlight', {color: '#9FCF9F'}, 1500)
+            link.html(hours).stop(true, true).effect('highlight', color: '#9FCF9F', 1500)
           )
 
           ids = JSON.stringify($.map(json.entries, (val, i) ->
@@ -82,10 +82,10 @@ jQuery.noConflict()
       $('#time_entry_deliverable_id').attr('disabled', 'disabled')
       $('#time_entry_deliverable_id option:gt(0)').remove()
 
-      global.xhr = $.getJSON('/bulk_time_entries/load_project_data', {
+      global.xhr = $.getJSON('/bulk_time_entries/load_project_data', 
         project_id: $(this).val(),
         entry_id: $(this).closest('div').attr('id')
-      }, (data) ->
+      , (data) ->
         open_issues_options = closed_issues_options = ''
         $.each(data.issues, (i, v) ->
           subject = $.trim(v.subject).substring(0, 40).split(" ").slice(0, -1).join(" ")
@@ -143,6 +143,7 @@ jQuery.noConflict()
     $('#show_range').click(->
       $('#single_date').hide()
       $('#date_from').val($('#time_entry_spent_on').val())
+      $('#date_to').val(moment($('#time_entry_spent_on').val(), 'YYYY-MM-DD').add('days', 7).format('YYYY-MM-DD'))
       $('#time_entry_spent_on').val('')
       $('#date_range').show()
       $('#date_from').focus()
@@ -166,11 +167,11 @@ jQuery.noConflict()
     )
 
     $('img.calendar-trigger').each(->
-      Calendar.setup({
+      Calendar.setup(
         inputField: $(this).prev('input').attr('id'),
         ifFormat: '%Y-%m-%d',
         button: $(this).attr('id')
-      })
+      )
     )
   )
 )(jQuery)

@@ -18,7 +18,8 @@
         return preventDefault(event);
       });
       $('form.tabular input[type!=button], form.tabular select').keydown(function(e) {
-        if (e.keyCode === 13) return $('button').unbind('click');
+        global.prevent_click = true;
+        if (e.keyCode === 13) return $('form.tabular').submit();
       });
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
@@ -124,6 +125,10 @@
       $('div.box input, div.box select').removeAttr('disabled');
       $('select[id*=project]').change();
       $('#show_range').click(function() {
+        if (global.prevent_click) {
+          global.prevent_click = false;
+          return false;
+        }
         $('#single_date').hide();
         $('#date_from').val($('#time_entry_spent_on').val());
         $('#date_to').val(moment($('#time_entry_spent_on').val(), 'YYYY-MM-DD').add('days', 7).format('YYYY-MM-DD'));
@@ -133,6 +138,10 @@
         return false;
       });
       $('#show_single_date').click(function() {
+        if (global.prevent_click) {
+          global.prevent_click = false;
+          return false;
+        }
         $('#date_range').hide();
         $('#single_date').show();
         $('#time_entry_spent_on').focus();

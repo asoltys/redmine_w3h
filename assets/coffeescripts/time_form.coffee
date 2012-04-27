@@ -21,8 +21,9 @@ jQuery.noConflict()
 
     # don't toggle range on enter
     $('form.tabular input[type!=button], form.tabular select').keydown((e) ->
-      if e.keyCode == 13
-        $('button').unbind('click')
+      global.prevent_click = true
+      if (e.keyCode == 13)
+        $('form.tabular').submit()
     )
 
     $('form.tabular').submit(->
@@ -141,6 +142,10 @@ jQuery.noConflict()
     $('select[id*=project]').change()
 
     $('#show_range').click(->
+      if global.prevent_click
+        global.prevent_click = false
+        return false
+
       $('#single_date').hide()
       $('#date_from').val($('#time_entry_spent_on').val())
       $('#date_to').val(moment($('#time_entry_spent_on').val(), 'YYYY-MM-DD').add('days', 7).format('YYYY-MM-DD'))
@@ -151,6 +156,10 @@ jQuery.noConflict()
     )
 
     $('#show_single_date').click(->
+      if global.prevent_click
+        global.prevent_click = false
+        return false
+
       $('#date_range').hide()
       $('#single_date').show()
       $('#time_entry_spent_on').focus()

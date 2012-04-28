@@ -14,6 +14,7 @@
       });
       $.get('/bulk_time_entries/calendar', function(response) {
         $('#next').after(response);
+        $('table.cal').hide().fadeIn();
         return $('span.logged-time').show();
       });
       $('#time_entry_hours').focus();
@@ -89,7 +90,7 @@
             $('#entry_issues').hide();
             $('#time_entry_deliverable_id').focus();
           } else {
-            $('#entry_issues').show();
+            $('#entry_issues').fadeIn();
             $('#time_entry_issue_id').removeAttr('disabled');
             $('#time_entry_issue_id optgroup:first').html(open_issues_options);
             $('#time_entry_issue_id optgroup:last').html(closed_issues_options);
@@ -101,7 +102,7 @@
           if (deliverables_options === '') {
             return $('#entry_deliverables').hide();
           } else {
-            $('#entry_deliverables').show();
+            $('#entry_deliverables').fadeIn();
             $('#time_entry_deliverable_id').removeAttr('disabled');
             return $('#time_entry_deliverable_id option').after(deliverables_options);
           }

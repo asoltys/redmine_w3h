@@ -14,6 +14,7 @@ jQuery.noConflict()
 
     $.get('/bulk_time_entries/calendar', (response) ->
       $('#next').after(response)
+      $('table.cal').hide().fadeIn()
       $('span.logged-time').show()
     )
 
@@ -108,7 +109,7 @@ jQuery.noConflict()
           $('#entry_issues').hide() 
           $('#time_entry_deliverable_id').focus()
         else
-          $('#entry_issues').show()
+          $('#entry_issues').fadeIn()
           $('#time_entry_issue_id').removeAttr('disabled')
           $('#time_entry_issue_id optgroup:first').html(open_issues_options)
           $('#time_entry_issue_id optgroup:last').html(closed_issues_options)
@@ -121,7 +122,7 @@ jQuery.noConflict()
         if deliverables_options == ''
           $('#entry_deliverables').hide()
         else
-          $('#entry_deliverables').show()
+          $('#entry_deliverables').fadeIn()
           $('#time_entry_deliverable_id').removeAttr('disabled')
           $('#time_entry_deliverable_id option').after(deliverables_options)
       )

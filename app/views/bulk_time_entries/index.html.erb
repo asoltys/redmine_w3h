@@ -68,19 +68,19 @@
     <%= select_tag "time_entry[activity_id]", options_from_collection_for_select(@first_project.activities, :id, :name) %>
   </p>
 
-  <p id="entry_issues">
+  <p id="entry_issues" style="display: none">
     <label for="time_entry_issue_id"><%= l(:field_issue) %></label>
     <select id="time_entry_issue_id" name="time_entry[issue_id]">
-      <option value=""></option>
+      <option value="">(none)</option>
       <optgroup label="<%= l(:label_open_issues) %>"></optgroup>
       <optgroup label="<%= l(:label_closed_issues) %>"></optgroup>
     </select>
   </p>
 
-  <p id="entry_deliverables">
+  <p id="entry_deliverables" style="display: none">
     <label for="time_entry_deliverable_id"><%= l(:field_deliverable) %></label>
     <select id="time_entry_deliverable_id" name="time_entry[deliverable_id]">
-      <option value=""></option>
+      <option value="">(none)</option>
     </select>
   </p>
 

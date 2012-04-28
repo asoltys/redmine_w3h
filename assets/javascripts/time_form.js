@@ -31,13 +31,14 @@
               e = e.time_entry;
               link = $('.' + e.spent_on + ' a');
               hours = parseFloat($.trim(link.html()));
-              if (isNaN(hours)) hours = 0;
+              if (isNaN(hours) || $('input[name=_method]').length > 0) hours = 0;
               hours += e.hours;
               link.closest('span').show();
-              return link.html(hours).stop(true, true).effect('highlight', {
+              return link.html(hours.toFixed(1)).stop(true, true).effect('highlight', {
                 color: '#9FCF9F'
               }, 1500);
             });
+            $('input[name=_method]').remove();
             ids = JSON.stringify($.map(json.entries, function(val, i) {
               return val.id;
             }));

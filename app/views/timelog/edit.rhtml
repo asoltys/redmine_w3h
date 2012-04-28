@@ -1,60 +1,110 @@
 <% content_for :header_tags do %>
+  <%= javascript_include_tag 'moment.min.js', :plugin => 'redmine_w3h' %>
   <%= javascript_include_tag 'time_form', :plugin => 'redmine_w3h' %>
 <% end %>
 
-<h2><%= l(:label_spent_time) %></h2>
+<h2><%= l(:label_bulk_time_entries) %></h2>
 
-<% labelled_tabular_form_for(:time_entry, @time_entry, :url => {
-                               :action => (@time_entry.new_record? ? 'create' : 'update'),
-                               :id => @time_entry,
-                               :project_id => @time_entry.project
-                             },
-                             :html => {:method => @time_entry.new_record? ? :post : :put}) do |f| %>
-<%= error_messages_for 'time_entry' %>
-<%= back_url_hidden_field_tag %>
+<% form_for @time_entry, :url => {:action => 'save'}, :html => {:class => 'tabular'} do |f| %>
+  <%= error_messages_for 'time_entry', :object => @time_entry %>
+  <%= f.hidden_field :id %>
 
-<div class="box">
-  <% if User.current.admin? %>
-    <p><%= f.select :user_id, User.active.collect{|u| [u.to_s,u.id]}, :required => true %></p>
-  <% end %>
-  <p><%= f.text_field :issue_id, :size => 6 %> <em><%= h("#{@time_entry.issue.tracker.name} ##{@time_entry.issue.id}: #{@time_entry.issue.subject}") if @time_entry.issue %></em></p>
-  <p><%= f.select :deliverable_id, [['Select One', '']] + @project.ancestor_deliverables.collect{|d| [d.to_s,d.id]}, :required => false %></p>
+  <p>
+    <label for="time_entry_project_id"><%= l(:field_project) %> <span class="required">*</span></label>
+    <% projects = options_for_select(@projects.sort{|a,b| a <=> b}.map{|p| [p.to_s, p.id]}, :selected => @first_project.id) %>
+    <%= f.select :project_id, projects %>
+  </p>
 
   <p id="single_date">
-    <%= f.text_field :spent_on, :size => 10, :required => true %><%= calendar_for('time_entry_spent_on') %>
-    <br />
-    <% if @time_entry.new_record? %>
-      <small><a href="#" id="show_range">Specify Range</a></small>
-    <% end %>
+    <label for="time_entry_spent_on"><%= l(:field_spent_on) %> <span class="required">*</span></label>
+    <%= f.text_field :spent_on, :size => 10, :autocomplete => 'off' %>
+    <%= calendar_for("time_entries_spent_on") %><br />
+    <button id="show_range"><%= l(:label_specify_range) %></button>
   </p>
 
-  <% if @time_entry.new_record? %>
-    <div id="date_range">
-      <p>
-        <label for="date_from">From Date <span class="required"> *</span></label>
-        <input type="text" id="date_from" name="date_from" size="10" /><%= calendar_for('date_from') %>
-      </p>
-      <p>
-        <label for="date_to">To Date <span class="required"> *</span></label>
-        <input type="text" id="date_to" name="date_to" size="10" /><%= calendar_for('date_to') %><br />
-        <small><a href="#" id="show_single_date">Specify Single Date</a></small>
-      </p>
-    </div>
-  <% end %>
+  <div id="date_range" style="display: none">
+    <p>
+      <label for="eligible_days"><%= l(:label_every) %></label>
+      <input type="checkbox" name="eligible_days[]" value="0" />
+      <span>Sun</span>
+      <input type="checkbox" name="eligible_days[]" value="1" checked="checked" />
+      <span>Mon</span>
+      <input type="checkbox" name="eligible_days[]" value="2" checked="checked" />
+      <span>Tues</span>
+      <input type="checkbox" name="eligible_days[]" value="3" checked="checked" />
+      <span>Wed</span>
+      <input type="checkbox" name="eligible_days[]" value="4" checked="checked" />
+      <span>Thurs</span>
+      <input type="checkbox" name="eligible_days[]" value="5" checked="checked" />
+      <span>Fri</span>
+      <input type="checkbox" name="eligible_days[]" value="6" />
+      <span>Sat</span>
+    <p>
+      <label for="date_from"><%= l(:label_from) %> <span class="required">*</span></label>
+      <input type="text" class="date_from" size="10" id="date_from" name="date_from" autocomplete="off" />
+      <%= calendar_for("date_from") %>
+    </p>
+    <p>
+      <label for="date_to"><%= l(:label_to) %> <span class="required">*</span></label>
+      <input type="text" class="date_to" size="10" id="date_to" name="date_to" autocomplete="off" />
+      <%= calendar_for("date_to") %><br />
+      <button id="show_single_date"><%= l(:label_specify_single_date) %></button>
+    </p>
+  </div>
 
   <p id="hours">
-    <%= f.text_field :hours, :size => 6, :required => true %><br />
+    <label for="time_entry_hours"><%= l(:field_hours) %> <span class="required">*</span></label>
+    <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
   </p>
 
-  <p><%= f.text_field :comments, :size => 100 %></p>
-  <p><%= f.select :activity_id, activity_collection_for_select_options(@time_entry), :required => true %></p>
-  <p><%= f.select :overtime, [['No', false], ['Yes', true]], :required => true %></p>
+  <p>
+    <%= label_for_field :comments, :required => false %>
+    <%= f.text_field :comments, :maxlength => 255, :style => 'width: 250px' %>
+  </p>
+
+  <p id="entry_activities">
+    <label for="time_entry_activity_id"><%= l(:field_activity) %> <span class="required">*</span></label>
+    <%= select_tag "time_entry[activity_id]", options_from_collection_for_select(@first_project.activities, :id, :name) %>
+  </p>
+
+  <p id="entry_issues">
+    <% @issues = get_issues @first_project.id %>
+    <label for="time_entry_issue_id"><%= l(:field_issue) %></label>
+    <select id="time_entry_issue_id" name="time_entry[issue_id]">
+      <option value=""></option>
+      <optgroup label="<%= l(:label_open_issues) %>"></optgroup>
+      <optgroup label="<%= l(:label_closed_issues) %>"></optgroup>
+    </select>
+  </p>
+
+  <p id="entry_deliverables">
+    <label for="time_entry_deliverable_id"><%= l(:field_deliverable) %></label>
+    <select id="time_entry_deliverable_id" name="time_entry[deliverable_id]">
+      <option value=""></option>
+    </select>
+  </p>
+
   <% @time_entry.custom_field_values.each do |value| %>
-    <p><%= custom_field_tag_with_label :time_entry, value %></p>
-  <% end %>
-  <%= call_hook(:view_timelog_edit_form_bottom, { :time_entry => @time_entry, :form => f }) %>
-</div>
+    <p><%= custom_field_tag_with_label "", value %></p>
+  <% end if @time_entry.respond_to?(:custom_field_values) %>
 
-<%= submit_tag l(:button_save) %>
-
+  <div>
+    <%= submit_tag l(:button_save) %>
+  </div>
 <% end %>
+
+<a id="prev">Prev</a>
+<a id="next">Next</a>
+
+<% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :month) %>
+<% calendar.events = [] %>
+<% def calendar.startdt=(value); @startdt = value; end; %>
+<% def calendar.enddt=(value); @enddt= value; end; %>
+<% startdt = (Date.today - 7) - (Date.today.cwday - calendar.first_wday)%7 %>
+<% enddt = (Date.today) + (calendar.last_wday - Date.today.cwday)%7 %>
+<% calendar.startdt = startdt %>
+<% calendar.enddt = enddt %>
+<%= render :partial => 'common/calendar', :locals => {:calendar => calendar } %>
+<a class="full-calendar" href="/issues/calendar">View Full Calendar</a>
+
+<% html_title l(:label_bulk_time_entries) %>

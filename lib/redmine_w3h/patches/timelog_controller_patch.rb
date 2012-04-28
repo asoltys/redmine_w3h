@@ -13,8 +13,7 @@ module RedmineW3H
           end
 
           def edit
-            redirect_to '/bulk_time_entries', 
-              :time_entry_id => params[:time_entry_id]
+            redirect_to "/bulk_time_entries?id=#{params[:id]}"
           end
         end
       end

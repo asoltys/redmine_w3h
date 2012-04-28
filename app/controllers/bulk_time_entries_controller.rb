@@ -17,6 +17,22 @@ class BulkTimeEntriesController < ApplicationController
   def index
   end
 
+  def calendar
+   @calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :month)
+   @calendar.events = []
+
+   def @calendar.startdt=(value); @startdt = value; end;
+   def @calendar.enddt=(value); @enddt= value; end;
+
+   startdt = params[:start].nil? ? Date.today - 7 : params[:start].to_date
+   enddt = params[:end].nil? ? Date.today : params[:end].to_date
+
+   @calendar.startdt = startdt - (startdt.cwday - @calendar.first_wday) % 7
+   @calendar.enddt = enddt + (@calendar.last_wday - enddt.cwday ) % 7
+
+   render :layout => false
+  end
+
   def load_project_data
     deliverables = @project.ancestor_deliverables.sort{|a,b| a.to_s <=> b.to_s}
     issues = @project.issues.all(:order => 'id ASC')

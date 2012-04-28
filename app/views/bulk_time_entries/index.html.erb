@@ -94,16 +94,3 @@
 
 <a id="prev">Prev</a>
 <a id="next">Next</a>
-
-<% calendar = Redmine::Helpers::Calendar.new(Date.today, current_language, :month) %>
-<% calendar.events = [] %>
-<% def calendar.startdt=(value); @startdt = value; end; %>
-<% def calendar.enddt=(value); @enddt= value; end; %>
-<% startdt = (Date.today - 7) - (Date.today.cwday - calendar.first_wday)%7 %>
-<% enddt = (Date.today) + (calendar.last_wday - Date.today.cwday)%7 %>
-<% calendar.startdt = startdt %>
-<% calendar.enddt = enddt %>
-<%= render :partial => 'common/calendar', :locals => {:calendar => calendar } %>
-<a class="full-calendar" href="/issues/calendar">View Full Calendar</a>
-
-<% html_title l(:label_bulk_time_entries) %>

@@ -58,3 +58,6 @@ fr:
   label_per_day: / Jour
   label_every: Chaque
   label_number: Nombre
+  label_add: Ajouter
+  label_fill: Remplissez &agrave;
+  label_none: (aucun)

@@ -58,3 +58,6 @@ en:
   label_per_day: / Day
   label_every: Every
   label_number: Number
+  label_add: Add
+  label_fill: Fill to
+  label_none: (none)

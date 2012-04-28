@@ -55,6 +55,10 @@
 
   <p id="hours">
     <label for="time_entry_hours"><%= l(:field_hours) %> <span class="required">*</span></label>
+    <select name="operation">
+      <option><%= l(:label_add) %></option>
+      <option><%= l(:label_fill) %></option>
+    </select>
     <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
   </p>
 
@@ -80,7 +84,7 @@
   <p id="entry_deliverables" style="display: none">
     <label for="time_entry_deliverable_id"><%= l(:field_deliverable) %></label>
     <select id="time_entry_deliverable_id" name="time_entry[deliverable_id]">
-      <option value="">(none)</option>
+      <option value=""><%= l(:label_none) %></option>
     </select>
   </p>
 

@@ -12,7 +12,11 @@ jQuery.noConflict()
         xhr.setRequestHeader("Accept", "application/json")
     )
 
-    $('span.logged-time').show()
+    $.get('/bulk_time_entries/calendar', (response) ->
+      $('#next').after(response)
+      $('span.logged-time').show()
+    )
+
     $('#time_entry_hours').focus()
 
     $('input[type=button]').click((event) ->

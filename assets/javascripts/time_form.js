@@ -12,7 +12,10 @@
           return xhr.setRequestHeader("Accept", "application/json");
         }
       });
-      $('span.logged-time').show();
+      $.get('/bulk_time_entries/calendar', function(response) {
+        $('#next').after(response);
+        return $('span.logged-time').show();
+      });
       $('#time_entry_hours').focus();
       $('input[type=button]').click(function(event) {
         return preventDefault(event);

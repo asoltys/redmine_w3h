@@ -122,11 +122,6 @@
       }).keyup(function(e) {
         if (e.keyCode === 17) return global.ctrl_down = false;
       });
-      $('select').keyup(function(e) {
-        if (e.keyCode === 9) return $(this).attr('size', 10);
-      }).blur(function(e) {
-        return $(this).attr('size', 1);
-      });
       $('div.box input, div.box select').removeAttr('disabled');
       $('select[id*=project]').change();
       $('#show_range').click(function() {

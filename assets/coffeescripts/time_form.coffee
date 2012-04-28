@@ -139,12 +139,6 @@ jQuery.noConflict()
       global.ctrl_down = false if e.keyCode == 17
     )
 
-    $('select').keyup((e) ->
-      $(this).attr('size', 10) if e.keyCode == 9
-    ).blur((e) ->
-      $(this).attr('size', 1)
-    )
-
     $('div.box input, div.box select').removeAttr('disabled')
     $('select[id*=project]').change()
 

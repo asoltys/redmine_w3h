@@ -1,7 +1,8 @@
 <% content_for :header_tags do %>
   <%= stylesheet_link_tag 'timesheet.css', :plugin => 'redmine_w3h' %>
   <%= javascript_include_tag 'moment.min.js', :plugin => 'redmine_w3h' %>
-  <%= javascript_include_tag 'time_form', :plugin => 'redmine_w3h' %>
+  <%= javascript_include_tag 'time_form.js', :plugin => 'redmine_w3h' %>
+  <%= javascript_include_tag 'jquery.flyoffpage.full.js', :plugin => 'redmine_w3h' %>
 <% end %>
 
 <h2><%= l(:label_bulk_time_entries) %></h2>
@@ -96,6 +97,3 @@
     <%= submit_tag l(:button_save) %>
   </div>
 <% end %>
-
-<a id="prev">Prev</a>
-<a id="next">Next</a>

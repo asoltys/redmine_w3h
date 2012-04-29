@@ -25,10 +25,13 @@ class BulkTimeEntriesController < ApplicationController
    def @calendar.enddt=(value); @enddt= value; end;
 
    startdt = params[:start].nil? ? Date.today - 7 : params[:start].to_date
-   enddt = params[:end].nil? ? Date.today : params[:end].to_date
+   enddt = params[:end].nil? ? startdt + 7 : params[:end].to_date
 
    @calendar.startdt = startdt - (startdt.cwday - @calendar.first_wday) % 7
    @calendar.enddt = enddt + (@calendar.last_wday - enddt.cwday ) % 7
+
+   @previous = (startdt - 7).strftime('%Y-%m-%d')
+   @next = (startdt + 7).strftime('%Y-%m-%d')
 
    render :layout => false
   end
@@ -94,7 +97,7 @@ class BulkTimeEntriesController < ApplicationController
         :count => entries.map(&:hours).sum, 
         :target => entries.first.project.name)
     else
-      errors = entries.first.errors 
+      errors = entries.first.errors
       entries = []
     end
 

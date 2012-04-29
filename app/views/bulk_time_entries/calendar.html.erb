@@ -1,1 +1,7 @@
-<%= render :partial => 'common/calendar', :locals => {:calendar => @calendar } %>
+<div id="calendar">
+  <h3 style="text-align: center"><%= @calendar.enddt.strftime('%B') %></h3>
+  <a id="previous" class="<%= @previous %>"><%= l(:label_previous) %></a>
+  <a id="next" class="<%= @next %>"><%= l(:label_next) %></a>
+
+  <%= render :partial => 'common/calendar', :locals => {:calendar => @calendar } %>
+</div>

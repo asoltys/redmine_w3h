@@ -5,6 +5,7 @@
     var global;
     global = this;
     return $(function() {
+      var displayCalendar;
       global.ctrl_down = false;
       global.xhr;
       $.ajaxSetup({
@@ -12,10 +13,20 @@
           return xhr.setRequestHeader("Accept", "application/json");
         }
       });
+      displayCalendar = function(response) {
+        $('div#calendar').remove();
+        $('form.tabular').after(response);
+        return $('span.logged-time').fadeIn();
+      };
       $.get('/bulk_time_entries/calendar', function(response) {
-        $('#next').after(response);
-        $('table.cal').hide().fadeIn();
-        return $('span.logged-time').show();
+        return displayCalendar(response);
+      });
+      $('a#previous, a#next').live('click', function() {
+        return $.get('/bulk_time_entries/calendar', {
+          start: $(this).attr('class')
+        }, function(response) {
+          return displayCalendar(response);
+        });
       });
       $('#time_entry_hours').focus();
       $('input[type=button]').click(function(event) {
@@ -57,7 +68,7 @@
           ');
           }
           $('label').css('color', 'black');
-          return $.each(json.errors, function(i, error) {
+          return $.each(json.errors[0], function(i, error) {
             return $("#time_entry_" + error).prev('label').css('color', 'red');
           });
         });
@@ -87,7 +98,7 @@
             }
           });
           if (open_issues_options.length + closed_issues_options.length === 0) {
-            $('#entry_issues').hide();
+            $('#entry_issues').fadeOut();
             $('#time_entry_deliverable_id').focus();
           } else {
             $('#entry_issues').fadeIn();
@@ -100,7 +111,7 @@
             return deliverables_options += "<option value='" + v.id + "'>" + v.subject + "</option>";
           });
           if (deliverables_options === '') {
-            return $('#entry_deliverables').hide();
+            return $('#entry_deliverables').fadeOut();
           } else {
             $('#entry_deliverables').fadeIn();
             $('#time_entry_deliverable_id').removeAttr('disabled');

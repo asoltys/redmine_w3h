@@ -12,10 +12,19 @@ jQuery.noConflict()
         xhr.setRequestHeader("Accept", "application/json")
     )
 
+    displayCalendar = (response) ->
+      $('div#calendar').remove()
+      $('form.tabular').after(response)
+      $('span.logged-time').fadeIn()
+
     $.get('/bulk_time_entries/calendar', (response) ->
-      $('#next').after(response)
-      $('table.cal').hide().fadeIn()
-      $('span.logged-time').show()
+      displayCalendar(response)
+    )
+
+    $('a#previous, a#next').live('click', ->
+      $.get('/bulk_time_entries/calendar', start: $(this).attr('class'), (response) ->
+        displayCalendar(response)
+      )
     )
 
     $('#time_entry_hours').focus()
@@ -66,7 +75,7 @@ jQuery.noConflict()
 
         # highlight fields with validation errors
         $('label').css('color', 'black')
-        $.each(json.errors, (i, error) ->
+        $.each(json.errors[0], (i, error) ->
           $("#time_entry_#{error}").prev('label').css('color', 'red')
         )
       )
@@ -106,7 +115,7 @@ jQuery.noConflict()
         )
         
         if open_issues_options.length + closed_issues_options.length == 0
-          $('#entry_issues').hide() 
+          $('#entry_issues').fadeOut() 
           $('#time_entry_deliverable_id').focus()
         else
           $('#entry_issues').fadeIn()
@@ -120,7 +129,7 @@ jQuery.noConflict()
         )
 
         if deliverables_options == ''
-          $('#entry_deliverables').hide()
+          $('#entry_deliverables').fadeOut()
         else
           $('#entry_deliverables').fadeIn()
           $('#time_entry_deliverable_id').removeAttr('disabled')

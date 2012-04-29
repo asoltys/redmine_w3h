@@ -33,8 +33,10 @@
         return preventDefault(event);
       });
       $('form.tabular input[type!=button], form.tabular select').keydown(function(e) {
-        global.prevent_click = true;
-        if (e.keyCode === 13) return $('form.tabular').submit();
+        if (e.keyCode === 13) {
+          global.prevent_click = true;
+          return $('form.tabular').submit();
+        }
       });
       $('form.tabular').submit(function() {
         $.post('/bulk_time_entries/save', $(this).serialize(), function(json) {
@@ -57,18 +59,12 @@
             ids = JSON.stringify($.map(json.entries, function(val, i) {
               return val.id;
             }));
-            $("#entry").before('\
-            <div class="flash notice">' + json.message + '\
-              <span style="float: right">\
-                <a class="icon icon-edit">edit</a>\
-                <a class="icon icon-del">undo</a>\
-                <a class="icon icon-check">dismiss</a>\
-              </span>\
-            </div>\
-          ');
+            $('div.flash').remove();
+            $('form.tabular').before('<div class="flash notice">' + json.message + '</div>');
+            $('div.flash').hide().fadeIn();
           }
           $('label').css('color', 'black');
-          return $.each(json.errors[0], function(i, error) {
+          return $.each(json.errors, function(i, error) {
             return $("#time_entry_" + error).prev('label').css('color', 'red');
           });
         });

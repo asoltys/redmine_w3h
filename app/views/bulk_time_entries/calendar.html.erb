@@ -1,5 +1,5 @@
 <div id="calendar">
-  <h3 style="text-align: center"><%= @calendar.enddt.strftime('%B') %></h3>
+  <h3 style="text-align: center; border-bottom: 0; margin-bottom: -20px;"><%= @calendar.enddt.strftime('%B') %></h3>
   <a id="previous" class="<%= @previous %>"><%= l(:label_previous) %></a>
   <a id="next" class="<%= @next %>"><%= l(:label_next) %></a>
 

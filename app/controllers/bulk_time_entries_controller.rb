@@ -30,8 +30,8 @@ class BulkTimeEntriesController < ApplicationController
    @calendar.startdt = startdt - (startdt.cwday - @calendar.first_wday) % 7
    @calendar.enddt = enddt + (@calendar.last_wday - enddt.cwday ) % 7
 
-   @previous = (startdt - 7).strftime('%Y-%m-%d')
-   @next = (startdt + 7).strftime('%Y-%m-%d')
+   @previous = (startdt - 14).strftime('%Y-%m-%d')
+   @next = (startdt + 14).strftime('%Y-%m-%d')
 
    render :layout => false
   end

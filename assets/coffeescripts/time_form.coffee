@@ -35,8 +35,8 @@ jQuery.noConflict()
 
     # don't toggle range on enter
     $('form.tabular input[type!=button], form.tabular select').keydown((e) ->
-      global.prevent_click = true
       if (e.keyCode == 13)
+        global.prevent_click = true
         $('form.tabular').submit()
     )
 
@@ -62,20 +62,17 @@ jQuery.noConflict()
             return val.id
           ))
 
-          $("#entry").before('
-            <div class="flash notice">' +
-              json.message + '
-              <span style="float: right">
-                <a class="icon icon-edit">edit</a>
-                <a class="icon icon-del">undo</a>
-                <a class="icon icon-check">dismiss</a>
-              </span>
-            </div>
-          ')
+          $('div.flash').remove()
+          $('form.tabular').before(
+            '<div class="flash notice">' +
+              json.message + 
+            '</div>'
+          )
+          $('div.flash').hide().fadeIn()
 
         # highlight fields with validation errors
         $('label').css('color', 'black')
-        $.each(json.errors[0], (i, error) ->
+        $.each(json.errors, (i, error) ->
           $("#time_entry_#{error}").prev('label').css('color', 'red')
         )
       )

@@ -75,7 +75,7 @@
   <p id="entry_issues" style="display: none">
     <label for="time_entry_issue_id"><%= l(:field_issue) %></label>
     <select id="time_entry_issue_id" name="time_entry[issue_id]">
-      <option value="">(none)</option>
+      <option value=""><%= l(:label_none) %></option>
       <optgroup label="<%= l(:label_open_issues) %>"></optgroup>
       <optgroup label="<%= l(:label_closed_issues) %>"></optgroup>
     </select>

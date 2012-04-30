@@ -56,8 +56,8 @@
   <p id="hours">
     <label for="time_entry_hours"><%= l(:field_hours) %> <span class="required">*</span></label>
     <select name="operation">
-      <option><%= l(:label_add) %></option>
-      <option><%= l(:label_fill) %></option>
+      <option value="add"><%= l(:label_add) %></option>
+      <option value="fill"><%= l(:label_fill) %></option>
     </select>
     <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
   </p>

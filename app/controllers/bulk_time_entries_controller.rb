@@ -88,6 +88,11 @@ class BulkTimeEntriesController < ApplicationController
 
     success = true
     entries.each do |t| 
+      if params[:operation] == 'fill'
+        existing_hours = TimeEntry.find(:all, 
+          :conditions => ["user_id = ? AND spent_on = ?", User.current.id, t.spent_on]).map(&:hours).sum
+        t.hours = [t.hours - existing_hours, 0].max
+      end
       success &&= t.save unless t.hours == 0
     end
 

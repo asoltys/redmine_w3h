@@ -51,7 +51,7 @@ en:
   label_bulk_time_entries: Time Entry
   label_bulk_time_add_another: Add Another
   text_bulk_time_entry_permission: You do not have permission to log time on any projects
-  text_time_added_to_project: "%{count} hours added to %{target}"
+  text_time_added_to_project: "%{count} hour(s) submitted"
   label_specify_range: Range
   label_specify_single_date: Single Date
   label_specify_hours: Specify Hours
@@ -61,3 +61,4 @@ en:
   label_add: Add
   label_fill: Fill to
   label_none: (none)
+  label_change_from: Change from

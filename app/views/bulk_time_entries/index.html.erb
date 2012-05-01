@@ -55,10 +55,13 @@
 
   <p id="hours">
     <label for="time_entry_hours"><%= l(:field_hours) %> <span class="required">*</span></label>
-    <select name="operation">
-      <option value="add"><%= l(:label_add) %></option>
-      <option value="fill"><%= l(:label_fill) %></option>
+    <select id="operation" name="operation">
+      <option class="add" value="add"><%= l(:label_add) %></option>
+      <option class="add" value="fill"><%= l(:label_fill) %></option>
+      <option class="edit" value="change"><%= l(:label_change_from) %></option>
     </select>
+    <input id="original_hours" size="6" name="original_hours" type="text" value="<%= @time_entry.hours %>" style="display: none" />
+    <span id="to" style="display: none"><%= l(:label_to).downcase %></span>
     <%= f.text_field :hours, :size => 6, :maxlength => 6 %>
   </p>
 

@@ -5,7 +5,7 @@
     var global;
     global = this;
     return $(function() {
-      var displayCalendar;
+      var add_operations, displayCalendar, editMode, edit_operations, toggleEditMode;
       global.ctrl_down = false;
       global.xhr;
       $.ajaxSetup({
@@ -32,6 +32,21 @@
       $('input[type=button]').click(function(event) {
         return preventDefault(event);
       });
+      editMode = function() {
+        return $('input[name=_method]').length > 0;
+      };
+      add_operations = $('#operation option.add').clone();
+      edit_operations = $('#operation option.edit').clone();
+      toggleEditMode = function() {
+        $('#original_hours').toggle();
+        $('#to').toggle();
+        if ($('#original_hours').is(':visible')) {
+          return $('#operation').html(edit_operations);
+        } else {
+          return $('#operation').html(add_operations);
+        }
+      };
+      if (editMode()) toggleEditMode();
       $('form.tabular input[type!=button], form.tabular select').keydown(function(e) {
         if (e.keyCode === 13) {
           global.prevent_click = true;
@@ -48,13 +63,15 @@
               e = e.time_entry;
               link = $('.' + e.spent_on + ' a');
               hours = parseFloat($.trim(link.html()));
-              if (isNaN(hours) || $('input[name=_method]').length > 0) hours = 0;
+              if (isNaN(hours)) hours = 0;
+              if (editMode()) hours -= parseFloat($('#original_hours').val());
               hours += e.hours;
               link.closest('span').show();
               return link.html(hours.toFixed(1)).stop(true, true).effect('highlight', {
                 color: '#9FCF9F'
               }, 1500);
             });
+            if (editMode()) toggleEditMode();
             $('input[name=_method]').remove();
             ids = JSON.stringify($.map(json.entries, function(val, i) {
               return val.id;

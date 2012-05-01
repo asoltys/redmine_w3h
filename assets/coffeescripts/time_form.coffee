@@ -33,6 +33,23 @@ jQuery.noConflict()
       preventDefault(event)
     )
 
+    editMode = ->
+      $('input[name=_method]').length > 0
+
+    add_operations = $('#operation option.add').clone()
+    edit_operations = $('#operation option.edit').clone()
+
+    toggleEditMode = ->
+        $('#original_hours').toggle()
+        $('#to').toggle()
+
+        if $('#original_hours').is(':visible')
+          $('#operation').html(edit_operations)
+        else
+          $('#operation').html(add_operations)
+
+    toggleEditMode() if editMode()
+
     # don't toggle range on enter
     $('form.tabular input[type!=button], form.tabular select').keydown((e) ->
       if (e.keyCode == 13)
@@ -50,12 +67,15 @@ jQuery.noConflict()
             e = e.time_entry
             link = $('.' + e.spent_on + ' a')
             hours = parseFloat($.trim(link.html()))
-            hours = 0 if isNaN(hours) or $('input[name=_method]').length > 0
+            hours = 0 if isNaN(hours) 
+            if editMode()
+              hours -= parseFloat($('#original_hours').val())
             hours += e.hours
             link.closest('span').show()
             link.html(hours.toFixed(1)).stop(true, true).effect('highlight', color: '#9FCF9F', 1500)
           )
 
+          toggleEditMode() if editMode()
           $('input[name=_method]').remove()
 
           ids = JSON.stringify($.map(json.entries, (val, i) ->

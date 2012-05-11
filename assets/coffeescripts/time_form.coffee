@@ -33,9 +33,6 @@ jQuery.noConflict()
       preventDefault(event)
     )
 
-    editMode = ->
-      $('input[name=_method]').length > 0
-
     add_operations = $('#operation option.add').clone()
     edit_operations = $('#operation option.edit').clone()
 
@@ -43,12 +40,13 @@ jQuery.noConflict()
         $('#original_hours').toggle()
         $('#to').toggle()
 
-        if $('#original_hours').is(':visible')
+        if $('input[name=_method]').length > 0
           $('#operation').html(edit_operations)
         else
           $('#operation').html(add_operations)
 
-    toggleEditMode() if editMode()
+    $('#original_hours').hide()
+    toggleEditMode()
 
     # don't toggle range on enter
     $('form.tabular input[type!=button], form.tabular select').keydown((e) ->
@@ -68,14 +66,14 @@ jQuery.noConflict()
             link = $('.' + e.spent_on + ' a')
             hours = parseFloat($.trim(link.html()))
             hours = 0 if isNaN(hours) 
-            if editMode()
+            if $('input[name=_method]').length > 0
               hours -= parseFloat($('#original_hours').val())
             hours += e.hours
             link.closest('span').show()
             link.html(hours.toFixed(1)).stop(true, true).effect('highlight', color: '#9FCF9F', 1500)
           )
 
-          toggleEditMode() if editMode()
+          toggleEditMode() if $('input[name=_method]').length > 0
           $('input[name=_method]').remove()
 
           ids = JSON.stringify($.map(json.entries, (val, i) ->

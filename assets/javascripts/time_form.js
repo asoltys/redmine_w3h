@@ -35,15 +35,15 @@
       add_operations = $('#operation option.add').clone();
       edit_operations = $('#operation option.edit').clone();
       toggleEditMode = function() {
-        $('#original_hours').toggle();
-        $('#to').toggle();
         if ($('input[name=_method]').length > 0) {
+          $('#original_hours').show();
+          $('#to').show();
           return $('#operation').html(edit_operations);
         } else {
+          $('#original_hours').hide();
           return $('#operation').html(add_operations);
         }
       };
-      $('#original_hours').hide();
       toggleEditMode();
       $('form.tabular input[type!=button], form.tabular select').keydown(function(e) {
         if (e.keyCode === 13) {
@@ -71,8 +71,9 @@
                 color: '#9FCF9F'
               }, 1500);
             });
-            if ($('input[name=_method]').length > 0) toggleEditMode();
             $('input[name=_method]').remove();
+            toggleEditMode();
+            $('#time_entry_hours').val('');
             ids = JSON.stringify($.map(json.entries, function(val, i) {
               return val.id;
             }));

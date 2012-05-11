@@ -37,15 +37,14 @@ jQuery.noConflict()
     edit_operations = $('#operation option.edit').clone()
 
     toggleEditMode = ->
-        $('#original_hours').toggle()
-        $('#to').toggle()
+      if $('input[name=_method]').length > 0
+        $('#original_hours').show()
+        $('#to').show()
+        $('#operation').html(edit_operations)
+      else
+        $('#original_hours').hide()
+        $('#operation').html(add_operations)
 
-        if $('input[name=_method]').length > 0
-          $('#operation').html(edit_operations)
-        else
-          $('#operation').html(add_operations)
-
-    $('#original_hours').hide()
     toggleEditMode()
 
     # don't toggle range on enter
@@ -73,8 +72,9 @@ jQuery.noConflict()
             link.html(hours.toFixed(1)).stop(true, true).effect('highlight', color: '#9FCF9F', 1500)
           )
 
-          toggleEditMode() if $('input[name=_method]').length > 0
           $('input[name=_method]').remove()
+          toggleEditMode()
+          $('#time_entry_hours').val('')
 
           ids = JSON.stringify($.map(json.entries, (val, i) ->
             return val.id

@@ -39,11 +39,6 @@ class TimesheetController < ApplicationController
   end
 
   def daily
-    if @timesheet.avl_projects.empty?
-      render :action => 'no_projects'
-      return
-    end
-
     respond_to do |format|
       format.html { render :action => 'daily' }
     end

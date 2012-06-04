@@ -126,8 +126,14 @@
             $('#time_entry_issue_id optgroup:last').html(closed_issues_options);
           }
           deliverables_options = '';
-          $.each(data.deliverables, function(i, v) {
-            return deliverables_options += "<option value='" + v.id + "'>" + v.subject + "</option>";
+          $.each(data.deliverables, function() {
+            var option;
+            option = "<option value='" + this.id + "'";
+            if (this.id === global.time_entry.deliverable.id) {
+              option += " selected='selected'";
+            }
+            option += ">" + this.subject + "</option>";
+            return deliverables_options += option;
           });
           if (deliverables_options === '') {
             return $('#entry_deliverables').fadeOut();
@@ -154,8 +160,9 @@
       });
       $('div.box input, div.box select').removeAttr('disabled');
       if ($('#time_entry_id').length > 0) {
-        $.get("/time_entries/" + ($('#time_entry_id').val()) + ".json", function(blubber) {
-          global.time_entry = blubber.time_entry;
+        $.get("/time_entries/" + ($('#time_entry_id').val()) + ".json", function(json) {
+          global.time_entry = json.time_entry;
+          $('#time_entry_project_id').val(global.time_entry.project.id);
           return $('select[id*=project]').change();
         });
       } else {

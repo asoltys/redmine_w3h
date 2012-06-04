@@ -147,8 +147,14 @@ jQuery.noConflict()
           $('#time_entry_issue_id optgroup:last').html(closed_issues_options)
 
         deliverables_options = ''
-        $.each(data.deliverables, (i, v) ->
-          deliverables_options += "<option value='#{v.id}'>#{v.subject}</option>"
+        $.each(data.deliverables, ->
+          option = "<option value='#{this.id}'"
+
+          if this.id == global.time_entry.deliverable.id
+            option += " selected='selected'"
+
+          option += ">#{this.subject}</option>"
+          deliverables_options += option
         )
 
         if deliverables_options == ''
@@ -174,8 +180,9 @@ jQuery.noConflict()
     $('div.box input, div.box select').removeAttr('disabled')
 
     if $('#time_entry_id').length > 0
-      $.get("/time_entries/#{$('#time_entry_id').val()}.json", (blubber) ->
-        global.time_entry = blubber.time_entry
+      $.get("/time_entries/#{$('#time_entry_id').val()}.json", (json) ->
+        global.time_entry = json.time_entry
+        $('#time_entry_project_id').val(global.time_entry.project.id) 
         $('select[id*=project]').change()
       )
     else

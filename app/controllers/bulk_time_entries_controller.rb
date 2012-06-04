@@ -106,6 +106,8 @@ class BulkTimeEntriesController < ApplicationController
       entries = []
     end
 
+    debugger
+
     respond_to do |format|
       format.json { render :json => {:entries => entries, :message => message, :errors => errors }}
     end

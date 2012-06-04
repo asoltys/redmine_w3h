@@ -105,7 +105,7 @@
             subject = $.trim(this.subject).substring(0, 40).split(" ").slice(0, -1).join(" ");
             if (subject.length >= 39) subject += '...';
             option = "<option value='" + this.id + "'";
-            if (this.id === global.time_entry.issue.id) {
+            if ((global.time_entry != null) && this.id === global.time_entry.issue.id) {
               option += " selected='selected'";
             }
             option += ">" + this.id + ": " + subject + "</option>";
@@ -129,7 +129,7 @@
           $.each(data.deliverables, function() {
             var option;
             option = "<option value='" + this.id + "'";
-            if (this.id === global.time_entry.deliverable.id) {
+            if ((global.time_entry != null) && this.id === global.time_entry.deliverable.id) {
               option += " selected='selected'";
             }
             option += ">" + this.subject + "</option>";

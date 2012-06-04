@@ -125,7 +125,7 @@ jQuery.noConflict()
           subject += '...' if subject.length >= 39
           option = "<option value='#{this.id}'"
 
-          if this.id == global.time_entry.issue.id
+          if global.time_entry? && this.id == global.time_entry.issue.id
             option += " selected='selected'"
 
           option += ">#{this.id}: #{subject}</option>"
@@ -150,7 +150,7 @@ jQuery.noConflict()
         $.each(data.deliverables, ->
           option = "<option value='#{this.id}'"
 
-          if this.id == global.time_entry.deliverable.id
+          if global.time_entry? && this.id == global.time_entry.deliverable.id
             option += " selected='selected'"
 
           option += ">#{this.subject}</option>"

@@ -27,7 +27,7 @@ jQuery.noConflict()
       )
     )
 
-    $('#time_entry_hours').focus()
+    $('#time_entry_hours').focus().val('')
 
     $('input[type=button]').click((event) ->
       preventDefault(event)
@@ -122,7 +122,13 @@ jQuery.noConflict()
         $.each(data.issues, (i, v) ->
           subject = $.trim(v.subject).substring(0, 40).split(" ").slice(0, -1).join(" ")
           subject += '...' if subject.length >= 39
-          option = "<option value='#{v.id}'>#{v.id}: #{subject}</option>"
+          option = "<option value='#{v.id}'"
+
+          if v.id == global.time_entry.issue_id
+            option += " selected='selected'"
+
+          option += ">#{v.id}: #{subject}</option>"
+
           if v.closed 
             closed_issues_options += option 
           else 
@@ -164,7 +170,15 @@ jQuery.noConflict()
     )
 
     $('div.box input, div.box select').removeAttr('disabled')
-    $('select[id*=project]').change()
+
+    if $('#time_entry_id').length > 0
+      $.get("/time_entries/#{$('#time_entry_id').val()}.json", (data) ->
+        global.time_entry = data.time_entry
+        $('#time_entry_project_id').
+        $('select[id*=project]').change()
+      )
+    else
+      $('select[id*=project]').change()
 
     $('#show_range').click(->
       if global.prevent_click

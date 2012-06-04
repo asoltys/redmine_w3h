@@ -28,7 +28,7 @@
           return displayCalendar(response);
         });
       });
-      $('#time_entry_hours').focus();
+      $('#time_entry_hours').focus().val('');
       $('input[type=button]').click(function(event) {
         return preventDefault(event);
       });
@@ -104,7 +104,11 @@
             var option, subject;
             subject = $.trim(v.subject).substring(0, 40).split(" ").slice(0, -1).join(" ");
             if (subject.length >= 39) subject += '...';
-            option = "<option value='" + v.id + "'>" + v.id + ": " + subject + "</option>";
+            option = "<option value='" + v.id + "'";
+            if (v.id === global.time_entry.issue_id) {
+              option += " selected='selected'";
+            }
+            option += ">" + v.id + ": " + subject + "</option>";
             if (v.closed) {
               return closed_issues_options += option;
             } else {
@@ -148,7 +152,14 @@
         if (e.keyCode === 17) return global.ctrl_down = false;
       });
       $('div.box input, div.box select').removeAttr('disabled');
-      $('select[id*=project]').change();
+      if ($('#time_entry_id').length > 0) {
+        $.get("/time_entries/" + ($('#time_entry_id').val()) + ".json", function(data) {
+          global.time_entry = data.time_entry;
+          return $('#time_entry_project_id').$('select[id*=project]').change();
+        });
+      } else {
+        $('select[id*=project]').change();
+      }
       $('#show_range').click(function() {
         if (global.prevent_click) {
           global.prevent_click = false;

@@ -7,9 +7,7 @@ module RedmineW3H
           unloadable # Send unloadable so it will not be unloaded in development
 
           def new
-            redirect_to '/bulk_time_entries', 
-              :project_id => params[:project_id], 
-              :issue_id => params[:issue_id]
+            redirect_to "/bulk_time_entries?issue_id=#{params[:issue_id]}"
           end
 
           def edit

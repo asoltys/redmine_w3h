@@ -106,10 +106,24 @@ class BulkTimeEntriesController < ApplicationController
       entries = []
     end
 
-    debugger
-
     respond_to do |format|
       format.json { render :json => {:entries => entries, :message => message, :errors => errors }}
+    end
+  end
+
+  def time_entry 
+    @issue = Issue.find(params[:issue_id])
+    @time_entry = TimeEntry.new(
+      :project_id => @issue.project_id,
+      :issue_id => @issue.id,
+      :deliverable_id => @issue.deliverable_id
+    )
+    @time_entry.user = User.current
+    @time_entry.spent_on = Date.today
+    @time_entry.project = Project.find(@issue.project_id)
+
+    respond_to do |format|
+      format.api
     end
   end
 
@@ -128,6 +142,8 @@ class BulkTimeEntriesController < ApplicationController
     else
       @time_entry = TimeEntry.new(:spent_on => params[:date].to_s)
     end
+
+    @time_entry.issue_id = params[:issue_id]
   end
 
   def load_activities

@@ -1,3 +1,5 @@
+(function() {
+  var getParameterByName;
 
   jQuery.noConflict();
 
@@ -5,7 +7,7 @@
     var global;
     global = this;
     return $(function() {
-      var add_operations, displayCalendar, edit_operations, toggleEditMode;
+      var add_operations, displayCalendar, edit_operations, issue_id, toggleEditMode;
       global.ctrl_down = false;
       global.xhr;
       $.ajaxSetup({
@@ -98,12 +100,13 @@
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
-          var closed_issues_options, deliverables_options, myloop, open_issues_options;
+          var closed_issues_options, deliverables_options, open_issues_options;
           open_issues_options = closed_issues_options = '';
-          myloop = function() {
-            var option, subject;
+          $.each(data.issues, function() {
+            var option, subject, truncated;
+            truncated = this.subject.length >= 39;
             subject = $.trim(this.subject).substring(0, 40).split(" ").slice(0, -1).join(" ");
-            if (subject.length >= 39) subject += '...';
+            if (truncated) subject += '...';
             option = "<option value='" + this.id + "'";
             if ((global.time_entry != null) && this.id === global.time_entry.issue.id) {
               option += " selected='selected'";
@@ -114,8 +117,7 @@
             } else {
               return open_issues_options += option;
             }
-          };
-          $.each(data.issues, myloop);
+          });
           if (open_issues_options.length + closed_issues_options.length === 0) {
             $('#entry_issues').fadeOut();
             $('#time_entry_deliverable_id').focus();
@@ -159,14 +161,23 @@
         if (e.keyCode === 17) return global.ctrl_down = false;
       });
       $('div.box input, div.box select').removeAttr('disabled');
-      if ($('#time_entry_id').length > 0) {
+      if ($('input[name=_method]').length > 0) {
         $.get("/time_entries/" + ($('#time_entry_id').val()) + ".json", function(json) {
           global.time_entry = json.time_entry;
           $('#time_entry_project_id').val(global.time_entry.project.id);
           return $('select[id*=project]').change();
         });
       } else {
-        $('select[id*=project]').change();
+        issue_id = getParameterByName('issue_id');
+        if (issue_id !== '') {
+          $.get("/issues/" + issue_id + "/time_entry.json", function(json) {
+            global.time_entry = json.time_entry;
+            $('#time_entry_project_id').val(json.time_entry.project.id);
+            return $('select[id*=project]').change();
+          });
+        } else {
+          $('select[id*=project]').change();
+        }
       }
       $('#show_range').click(function() {
         if (global.prevent_click) {
@@ -208,3 +219,18 @@
       });
     });
   })(jQuery);
+
+  getParameterByName = function(name) {
+    var regex, regexS, results;
+    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+    regexS = "[\\?&]" + name + "=([^&#]*)";
+    regex = new RegExp(regexS);
+    results = regex.exec(window.location.search);
+    if (results === null) {
+      return "";
+    } else {
+      return decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+  };
+
+}).call(this);

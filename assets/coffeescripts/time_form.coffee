@@ -120,9 +120,10 @@ jQuery.noConflict()
       , (data) ->
         open_issues_options = closed_issues_options = ''
 
-        myloop = ->
+        $.each(data.issues, ->
+          truncated = this.subject.length >= 39
           subject = $.trim(this.subject).substring(0, 40).split(" ").slice(0, -1).join(" ")
-          subject += '...' if subject.length >= 39
+          subject += '...' if truncated
           option = "<option value='#{this.id}'"
 
           if global.time_entry? && this.id == global.time_entry.issue.id
@@ -133,9 +134,7 @@ jQuery.noConflict()
           if this.closed 
             closed_issues_options += option 
           else 
-            open_issues_options += option
-
-        $.each(data.issues, myloop)
+            open_issues_options += option)
         
         if open_issues_options.length + closed_issues_options.length == 0
           $('#entry_issues').fadeOut() 
@@ -179,14 +178,22 @@ jQuery.noConflict()
 
     $('div.box input, div.box select').removeAttr('disabled')
 
-    if $('#time_entry_id').length > 0
+    if $('input[name=_method]').length > 0
       $.get("/time_entries/#{$('#time_entry_id').val()}.json", (json) ->
         global.time_entry = json.time_entry
         $('#time_entry_project_id').val(global.time_entry.project.id) 
         $('select[id*=project]').change()
       )
     else
-      $('select[id*=project]').change()
+      issue_id = getParameterByName('issue_id')
+      if issue_id != ''
+        $.get("/issues/#{issue_id}/time_entry.json", (json) ->
+          global.time_entry = json.time_entry
+          $('#time_entry_project_id').val(json.time_entry.project.id) 
+          $('select[id*=project]').change()
+        )
+      else
+        $('select[id*=project]').change()
 
     $('#show_range').click(->
       if global.prevent_click
@@ -231,3 +238,13 @@ jQuery.noConflict()
     )
   )
 )(jQuery)
+
+getParameterByName = (name) ->
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]")
+  regexS = "[\\?&]" + name + "=([^&#]*)"
+  regex = new RegExp(regexS)
+  results = regex.exec(window.location.search)
+  if(results == null)
+    return ""
+  else
+    return decodeURIComponent(results[1].replace(/\+/g, " "))

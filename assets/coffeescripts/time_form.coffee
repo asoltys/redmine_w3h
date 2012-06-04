@@ -119,21 +119,23 @@ jQuery.noConflict()
         entry_id: $(this).closest('div').attr('id')
       , (data) ->
         open_issues_options = closed_issues_options = ''
-        $.each(data.issues, (i, v) ->
-          subject = $.trim(v.subject).substring(0, 40).split(" ").slice(0, -1).join(" ")
-          subject += '...' if subject.length >= 39
-          option = "<option value='#{v.id}'"
 
-          if v.id == global.time_entry.issue_id
+        myloop = ->
+          subject = $.trim(this.subject).substring(0, 40).split(" ").slice(0, -1).join(" ")
+          subject += '...' if subject.length >= 39
+          option = "<option value='#{this.id}'"
+
+          if this.id == global.time_entry.issue.id
             option += " selected='selected'"
 
-          option += ">#{v.id}: #{subject}</option>"
+          option += ">#{this.id}: #{subject}</option>"
 
-          if v.closed 
+          if this.closed 
             closed_issues_options += option 
           else 
             open_issues_options += option
-        )
+
+        $.each(data.issues, myloop)
         
         if open_issues_options.length + closed_issues_options.length == 0
           $('#entry_issues').fadeOut() 
@@ -172,9 +174,8 @@ jQuery.noConflict()
     $('div.box input, div.box select').removeAttr('disabled')
 
     if $('#time_entry_id').length > 0
-      $.get("/time_entries/#{$('#time_entry_id').val()}.json", (data) ->
-        global.time_entry = data.time_entry
-        $('#time_entry_project_id').
+      $.get("/time_entries/#{$('#time_entry_id').val()}.json", (blubber) ->
+        global.time_entry = blubber.time_entry
         $('select[id*=project]').change()
       )
     else

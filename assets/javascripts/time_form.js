@@ -98,23 +98,24 @@
           project_id: $(this).val(),
           entry_id: $(this).closest('div').attr('id')
         }, function(data) {
-          var closed_issues_options, deliverables_options, open_issues_options;
+          var closed_issues_options, deliverables_options, myloop, open_issues_options;
           open_issues_options = closed_issues_options = '';
-          $.each(data.issues, function(i, v) {
+          myloop = function() {
             var option, subject;
-            subject = $.trim(v.subject).substring(0, 40).split(" ").slice(0, -1).join(" ");
+            subject = $.trim(this.subject).substring(0, 40).split(" ").slice(0, -1).join(" ");
             if (subject.length >= 39) subject += '...';
-            option = "<option value='" + v.id + "'";
-            if (v.id === global.time_entry.issue_id) {
+            option = "<option value='" + this.id + "'";
+            if (this.id === global.time_entry.issue.id) {
               option += " selected='selected'";
             }
-            option += ">" + v.id + ": " + subject + "</option>";
-            if (v.closed) {
+            option += ">" + this.id + ": " + subject + "</option>";
+            if (this.closed) {
               return closed_issues_options += option;
             } else {
               return open_issues_options += option;
             }
-          });
+          };
+          $.each(data.issues, myloop);
           if (open_issues_options.length + closed_issues_options.length === 0) {
             $('#entry_issues').fadeOut();
             $('#time_entry_deliverable_id').focus();
@@ -153,9 +154,9 @@
       });
       $('div.box input, div.box select').removeAttr('disabled');
       if ($('#time_entry_id').length > 0) {
-        $.get("/time_entries/" + ($('#time_entry_id').val()) + ".json", function(data) {
-          global.time_entry = data.time_entry;
-          return $('#time_entry_project_id').$('select[id*=project]').change();
+        $.get("/time_entries/" + ($('#time_entry_id').val()) + ".json", function(blubber) {
+          global.time_entry = blubber.time_entry;
+          return $('select[id*=project]').change();
         });
       } else {
         $('select[id*=project]').change();

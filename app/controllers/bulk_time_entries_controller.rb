@@ -93,6 +93,12 @@ class BulkTimeEntriesController < ApplicationController
           :conditions => ["user_id = ? AND spent_on = ?", User.current.id, t.spent_on]).map(&:hours).sum
         t.hours = [t.hours - existing_hours, 0].max
       end
+
+      begin
+        t.save
+      rescue
+      end
+
       success &&= t.save unless t.hours == 0
     end
 

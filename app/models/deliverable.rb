@@ -43,6 +43,6 @@ class Deliverable < ActiveRecord::Base
 
   def fiscal_year
     return Date.today.year if due.nil?
-    (due - 4.months).year
+    (due - 3.months).year
   end
 end
